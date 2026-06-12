@@ -1,0 +1,9 @@
+name = "maison-vacances"
+main = "worker.js"
+compatibility_date = "2024-01-01"
+
+[[kv_namespaces]]
+binding = "BOOKINGS"
+id = "REPLACE_WITH_YOUR_KV_NAMESPACE_ID"
+# Pour créer : wrangler kv:namespace create BOOKINGS
+# Remplacer id ci-dessus avec l'id affiché

@@ -1,0 +1,470 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Maison des Vacances</title>
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#4f8ef7">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <style>
+    :root {
+      --bg:     #ffffff;
+      --bg2:    #f2f2f7;
+      --text:   #1a1a2e;
+      --text2:  #666;
+      --text3:  #aaa;
+      --border: #e5e5ea;
+      --blue:   #4f8ef7;
+      --red:    #ef4444;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg:     #1c1c1e;
+        --bg2:    #2c2c2e;
+        --text:   #f0f0f5;
+        --text2:  #9a9a9e;
+        --text3:  #555;
+        --border: #3a3a3c;
+      }
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body {
+      height: 100%; overflow: hidden;
+      background: var(--bg); color: var(--text);
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      -webkit-text-size-adjust: 100%;
+    }
+    body {
+      display: flex; flex-direction: column;
+      height: 100dvh;
+      overscroll-behavior: none;
+    }
+
+    /* ── Header ── */
+    .hdr {
+      display: flex; align-items: center;
+      padding: 0 14px; gap: 8px;
+      height: 56px; flex-shrink: 0;
+      border-bottom: 1px solid var(--border);
+    }
+    .hdr-title {
+      flex: 1; text-align: center;
+      font-size: 17px; font-weight: 700;
+      letter-spacing: -.01em;
+    }
+    .hdr-nav {
+      width: 34px; height: 34px;
+      background: var(--bg2); border: none; border-radius: 9px;
+      color: var(--text); font-size: 20px; line-height: 1;
+      cursor: pointer; display: flex; align-items: center; justify-content: center;
+    }
+    .hdr-btn {
+      padding: 7px 13px;
+      background: var(--blue); color: #fff;
+      border: none; border-radius: 9px;
+      font-size: 14px; font-weight: 600;
+      cursor: pointer;
+    }
+
+    /* ── Calendar ── */
+    .cal-outer {
+      flex: 1; display: flex; flex-direction: column;
+      padding: 6px 8px 8px; min-height: 0;
+    }
+    .dow-row {
+      display: grid; grid-template-columns: repeat(7, 1fr);
+      margin-bottom: 4px;
+    }
+    .dow-cell {
+      text-align: center; font-size: 11px; font-weight: 500;
+      color: var(--text3); text-transform: uppercase; letter-spacing: .05em;
+      padding: 2px 0;
+    }
+    .dow-cell.we { color: var(--blue); opacity: .65; }
+
+    .cal-grid {
+      flex: 1; min-height: 0;
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      grid-template-rows: repeat(6, 1fr);
+      border-top: 1px solid var(--border);
+      border-left: 1px solid var(--border);
+      border-radius: 12px;
+      overflow: hidden;
+    }
+    .dc {
+      border-right: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+      padding: 3px 3px 2px;
+      display: flex; flex-direction: column; gap: 1px;
+      overflow: hidden; cursor: pointer;
+      min-height: 0;
+    }
+    .dc:nth-child(7n)   { border-right: none; }
+    .dc:nth-last-child(-n+7) { border-bottom: none; }
+    .dc:hover { background: rgba(79,142,247,.06); }
+
+    .dn {
+      width: 22px; height: 22px;
+      display: flex; align-items: center; justify-content: center;
+      border-radius: 50%; font-size: 12px; font-weight: 500;
+      flex-shrink: 0;
+    }
+    .dn.today  { background: var(--blue); color: #fff !important; }
+    .dn.ov     { color: var(--text3); font-weight: 400; }
+    .dn.we     { color: var(--blue); }
+
+    .bk {
+      font-size: 9px; font-weight: 600;
+      padding: 0 4px; min-height: 13px; line-height: 13px;
+      border-radius: 3px; color: #fff;
+      overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+      flex-shrink: 0; cursor: pointer;
+    }
+    .bk-more {
+      font-size: 9px; color: var(--text3); padding-left: 2px; flex-shrink: 0;
+    }
+
+    /* ── Modal overlay ── */
+    .overlay {
+      position: fixed; inset: 0;
+      background: rgba(0,0,0,.45);
+      display: flex; align-items: flex-end;
+      z-index: 200; opacity: 0; pointer-events: none;
+      transition: opacity .2s;
+    }
+    .overlay.open { opacity: 1; pointer-events: auto; }
+    .sheet {
+      width: 100%; max-height: 88dvh;
+      background: var(--bg);
+      border-radius: 20px 20px 0 0;
+      padding: 16px 20px calc(22px + env(safe-area-inset-bottom));
+      overflow-y: auto;
+      transform: translateY(100%);
+      transition: transform .25s cubic-bezier(.32,1,.23,1);
+    }
+    .overlay.open .sheet { transform: translateY(0); }
+    .sheet-grip {
+      width: 38px; height: 4px; border-radius: 2px;
+      background: var(--border); margin: -4px auto 14px;
+    }
+    .sheet-title { font-size: 18px; font-weight: 700; margin-bottom: 18px; }
+
+    /* ── Form ── */
+    .ff { margin-bottom: 13px; }
+    .fl {
+      font-size: 11px; font-weight: 600;
+      color: var(--text2); text-transform: uppercase; letter-spacing: .06em;
+      display: block; margin-bottom: 5px;
+    }
+    .fi {
+      width: 100%; padding: 11px 13px;
+      border: 1.5px solid var(--border); border-radius: 10px;
+      background: var(--bg2); color: var(--text);
+      font-size: 15px; outline: none;
+      -webkit-appearance: none;
+      transition: border-color .15s;
+    }
+    .fi:focus { border-color: var(--blue); }
+
+    .swatches { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; }
+    .sw {
+      width: 30px; height: 30px; border-radius: 50%;
+      border: 2.5px solid transparent; cursor: pointer;
+      transition: transform .1s, border-color .1s;
+    }
+    .sw.on { border-color: var(--text); transform: scale(1.18); }
+
+    .btns { display: flex; gap: 10px; margin-top: 20px; }
+    .btn {
+      flex: 1; padding: 13px; border: none; border-radius: 12px;
+      font-size: 15px; font-weight: 600; cursor: pointer;
+    }
+    .btn-c { background: var(--bg2); color: var(--text); }
+    .btn-p { background: var(--blue); color: #fff; }
+    .btn-d { background: var(--red); color: #fff; }
+
+    /* ── Day detail list ── */
+    .bk-row {
+      display: flex; align-items: center; gap: 12px;
+      padding: 11px 0; border-bottom: 1px solid var(--border);
+    }
+    .bk-dot { width: 11px; height: 11px; border-radius: 50%; flex-shrink: 0; }
+    .bk-info { flex: 1; min-width: 0; }
+    .bk-name { font-size: 15px; font-weight: 600; }
+    .bk-dates { font-size: 12px; color: var(--text2); margin-top: 2px; }
+    .bk-del {
+      padding: 5px 11px; background: var(--red); color: #fff;
+      border: none; border-radius: 7px;
+      font-size: 12px; font-weight: 600; cursor: pointer; flex-shrink: 0;
+    }
+    .empty { color: var(--text3); font-size: 14px; text-align: center; padding: 20px 0; }
+
+    /* ── Loader ── */
+    .loader {
+      position: fixed; inset: 0; background: var(--bg);
+      display: flex; align-items: center; justify-content: center;
+      color: var(--text3); font-size: 14px;
+      z-index: 300; transition: opacity .3s;
+    }
+    .loader.gone { opacity: 0; pointer-events: none; }
+  </style>
+</head>
+<body>
+
+<div class="loader" id="loader">Chargement…</div>
+
+<div class="hdr">
+  <button class="hdr-nav" onclick="nav(-1)">‹</button>
+  <div class="hdr-title" id="month-lbl"></div>
+  <button class="hdr-nav" onclick="nav(1)">›</button>
+  <button class="hdr-btn" onclick="openCreate(null)">Réserver</button>
+</div>
+
+<div class="cal-outer">
+  <div class="dow-row" id="dow"></div>
+  <div class="cal-grid" id="grid"></div>
+</div>
+
+<!-- Create modal -->
+<div class="overlay" id="m-create" onclick="bgClose(event,'m-create')">
+  <div class="sheet">
+    <div class="sheet-grip"></div>
+    <div class="sheet-title">Nouvelle réservation</div>
+    <div class="ff">
+      <label class="fl">Qui / Description</label>
+      <input class="fi" id="f-desc" type="text" placeholder="Famille Martin…" autocomplete="off" autocorrect="off">
+    </div>
+    <div class="ff">
+      <label class="fl">Arrivée</label>
+      <input class="fi" id="f-start" type="date">
+    </div>
+    <div class="ff">
+      <label class="fl">Départ</label>
+      <input class="fi" id="f-end" type="date">
+    </div>
+    <div class="ff">
+      <label class="fl">Couleur</label>
+      <div class="swatches" id="swatches"></div>
+    </div>
+    <div class="btns">
+      <button class="btn btn-c" onclick="close1('m-create')">Annuler</button>
+      <button class="btn btn-p" onclick="submitCreate()">Réserver</button>
+    </div>
+  </div>
+</div>
+
+<!-- Day detail modal -->
+<div class="overlay" id="m-day" onclick="bgClose(event,'m-day')">
+  <div class="sheet">
+    <div class="sheet-grip"></div>
+    <div class="sheet-title" id="day-title"></div>
+    <div id="day-body"></div>
+    <div class="btns" style="margin-top:14px">
+      <button class="btn btn-c" onclick="close1('m-day')">Fermer</button>
+      <button class="btn btn-p" onclick="createFromDay()">+ Réserver</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ── CONFIG ─────────────────────────────────────────────
+// Remplacez par l'URL de votre Worker après déploiement :
+const API = 'https://maison-vacances.arthur-lebreton94.workers.dev';
+// ───────────────────────────────────────────────────────
+
+const MONTHS = ['Janvier','Février','Mars','Avril','Mai','Juin','Juillet','Août','Septembre','Octobre','Novembre','Décembre'];
+const MSHO   = ['Jan','Fév','Mar','Avr','Mai','Jun','Jul','Aoû','Sep','Oct','Nov','Déc'];
+const DOW    = ['Lun','Mar','Mer','Jeu','Ven','Sam','Dim'];
+const COLORS = ['#4f8ef7','#22c55e','#f97316','#ec4899','#8b5cf6','#eab308','#ef4444','#06b6d4'];
+
+let cY = new Date().getFullYear(), cM = new Date().getMonth();
+let bookings = [], activeColor = COLORS[0], dayCx = null;
+const TODAY = ymd(new Date());
+
+function ymd(d) {
+  return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');
+}
+function parseD(s) { const [y,m,d]=s.split('-').map(Number); return new Date(y,m-1,d); }
+function fmtD(s) {
+  const d=parseD(s);
+  return d.getDate()+' '+MSHO[d.getMonth()]+(d.getFullYear()!==cY?' '+d.getFullYear():'');
+}
+function esc(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+
+// DOW header
+(()=>{
+  const row=document.getElementById('dow');
+  DOW.forEach((d,i)=>{
+    const c=document.createElement('div');
+    c.className='dow-cell'+(i>=5?' we':'');
+    c.textContent=d;
+    row.appendChild(c);
+  });
+})();
+
+// Color swatches
+(()=>{
+  const box=document.getElementById('swatches');
+  COLORS.forEach(c=>{
+    const s=document.createElement('div');
+    s.className='sw'+(c===activeColor?' on':'');
+    s.style.background=c;
+    s.onclick=()=>{ activeColor=c; box.querySelectorAll('.sw').forEach(x=>x.classList.remove('on')); s.classList.add('on'); };
+    box.appendChild(s);
+  });
+})();
+
+async function load() {
+  try {
+    const r = await fetch(API+'/bookings');
+    if (!r.ok) throw 0;
+    bookings = await r.json();
+  } catch { bookings=[]; }
+  document.getElementById('loader').classList.add('gone');
+  render();
+}
+
+function nav(d){ cM+=d; if(cM>11){cM=0;cY++;} if(cM<0){cM=11;cY--;} render(); }
+
+function render() {
+  document.getElementById('month-lbl').textContent = MONTHS[cM]+' '+cY;
+  const grid = document.getElementById('grid');
+  grid.innerHTML = '';
+
+  const first = new Date(cY,cM,1);
+  const last  = new Date(cY,cM+1,0);
+  let sdow = (first.getDay()+6)%7; // Mon=0
+
+  const cells = [];
+  // Leading prev-month days
+  const prevLast = new Date(cY,cM,0);
+  for(let i=sdow;i>0;i--){
+    cells.push({ date:new Date(prevLast.getFullYear(),prevLast.getMonth(),prevLast.getDate()-i+1), ov:true });
+  }
+  // Current month
+  for(let d=1;d<=last.getDate();d++) cells.push({ date:new Date(cY,cM,d), ov:false });
+  // Trailing next-month days
+  const nxt=new Date(cY,cM+1,1);
+  for(let d=1;cells.length<42;d++) cells.push({ date:new Date(nxt.getFullYear(),nxt.getMonth(),d), ov:true });
+
+  cells.forEach((cell,idx)=>{
+    const ds  = ymd(cell.date);
+    const dow = cell.date.getDay(); // 0=Sun 6=Sat
+    const we  = dow===0||dow===6;
+    const bks = bookings.filter(b=>b.start<=ds&&b.end>=ds);
+
+    const div=document.createElement('div');
+    div.className='dc';
+    div.onclick=(e)=>{ if(!e.target.classList.contains('bk')) openDay(ds); };
+
+    // Day number
+    const dn=document.createElement('div');
+    dn.className='dn'+(ds===TODAY?' today':cell.ov?' ov':we?' we':'');
+    dn.textContent=cell.date.getDate();
+    if(cell.ov) dn.style.opacity='0.35';
+    div.appendChild(dn);
+
+    // Booking chips — show text on first visible day of each booking (start or Monday)
+    const maxShow = bks.length<=3?3:2;
+    bks.slice(0,maxShow).forEach(b=>{
+      const chip=document.createElement('div');
+      chip.className='bk';
+      chip.style.background=b.color;
+      const isFirstVisible = b.start===ds || cell.date.getDay()===1 /* Mon */;
+      chip.textContent = isFirstVisible ? esc(b.description||'?') : '​';
+      chip.onclick=(e)=>{ e.stopPropagation(); openDay(ds); };
+      div.appendChild(chip);
+    });
+    if(bks.length>maxShow){
+      const m=document.createElement('div');
+      m.className='bk-more';
+      m.textContent='+'+( bks.length-maxShow);
+      div.appendChild(m);
+    }
+
+    grid.appendChild(div);
+  });
+}
+
+function openDay(ds) {
+  dayCx=ds;
+  const d=parseD(ds);
+  document.getElementById('day-title').textContent =
+    DOW[(d.getDay()+6)%7]+' '+d.getDate()+' '+MONTHS[d.getMonth()];
+
+  const bks=bookings.filter(b=>b.start<=ds&&b.end>=ds);
+  const body=document.getElementById('day-body');
+  body.innerHTML='';
+
+  if(!bks.length){
+    body.innerHTML='<div class="empty">Aucune réservation</div>';
+  } else {
+    bks.forEach(b=>{
+      const row=document.createElement('div');
+      row.className='bk-row';
+      row.innerHTML=`<div class="bk-dot" style="background:${b.color}"></div>
+        <div class="bk-info">
+          <div class="bk-name">${esc(b.description||'—')}</div>
+          <div class="bk-dates">${fmtD(b.start)} → ${fmtD(b.end)}</div>
+        </div>`;
+      const del=document.createElement('button');
+      del.className='bk-del';
+      del.textContent='Supprimer';
+      del.onclick=()=>doDelete(b.id);
+      row.appendChild(del);
+      body.appendChild(row);
+    });
+  }
+  open1('m-day');
+}
+
+function openCreate(ds) {
+  document.getElementById('f-desc').value='';
+  document.getElementById('f-start').value=ds||TODAY;
+  document.getElementById('f-end').value=ds||TODAY;
+  open1('m-create');
+}
+function createFromDay(){ close1('m-day'); openCreate(dayCx); }
+
+async function submitCreate() {
+  const start=document.getElementById('f-start').value;
+  const end  =document.getElementById('f-end').value;
+  const desc =document.getElementById('f-desc').value.trim();
+  if(!desc){ document.getElementById('f-desc').focus(); return; }
+  if(!start||!end) return;
+  if(end<start){ document.getElementById('f-end').value=start; return; }
+  try {
+    const r=await fetch(API+'/bookings',{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({start,end,description:desc,color:activeColor})
+    });
+    if(!r.ok) throw 0;
+    close1('m-create');
+    await load();
+  } catch { alert('Erreur. Vérifiez votre connexion.'); }
+}
+
+async function doDelete(id) {
+  if(!confirm('Supprimer cette réservation ?')) return;
+  try {
+    await fetch(API+'/bookings/'+id,{method:'DELETE'});
+    close1('m-day');
+    await load();
+  } catch { alert('Erreur. Vérifiez votre connexion.'); }
+}
+
+function open1(id){ document.getElementById(id).classList.add('open'); }
+function close1(id){ document.getElementById(id).classList.remove('open'); }
+function bgClose(e,id){ if(e.target.classList.contains('overlay')) close1(id); }
+
+// Service worker
+if('serviceWorker' in navigator) navigator.serviceWorker.register('sw.js');
+
+load();
+</script>
+</body>
+</html>
