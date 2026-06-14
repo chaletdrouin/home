@@ -41,6 +41,11 @@
       background: var(--bg);
       position: sticky; top: 0; z-index: 50;
     }
+    .hdr-brand {
+      text-align: center;
+      font-size: 13px; font-weight: 600;
+      color: var(--text2); letter-spacing: .04em; text-transform: uppercase;
+    }
     .hdr-nav-row {
       display: flex; align-items: center; gap: 8px;
     }
@@ -218,6 +223,7 @@
 <div class="loader" id="loader">Chargement…</div>
 
 <div class="hdr">
+  <div class="hdr-brand">Chalet Drouin</div>
   <div class="hdr-nav-row">
     <button class="hdr-nav" onclick="nav(-1)">‹</button>
     <div class="hdr-title" id="month-lbl"></div>
