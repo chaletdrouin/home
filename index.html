@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <title>Maison des Vacances</title>
+  <title>Chalet Drouin</title>
   <link rel="manifest" href="manifest.json">
   <meta name="theme-color" content="#4f8ef7">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -44,10 +44,15 @@
 
     /* ── Header ── */
     .hdr {
-      display: flex; align-items: center;
-      padding: 0 14px; gap: 8px;
-      height: 56px; flex-shrink: 0;
+      display: flex; flex-direction: column;
+      padding: 10px 14px; gap: 8px;
+      flex-shrink: 0;
       border-bottom: 1px solid var(--border);
+      background: var(--bg);
+      position: sticky; top: 0; z-index: 50;
+    }
+    .hdr-nav-row {
+      display: flex; align-items: center; gap: 8px;
     }
     .hdr-title {
       flex: 1; text-align: center;
@@ -60,12 +65,18 @@
       color: var(--text); font-size: 20px; line-height: 1;
       cursor: pointer; display: flex; align-items: center; justify-content: center;
     }
+    .hdr-actions {
+      display: flex; gap: 8px;
+    }
     .hdr-btn {
-      padding: 7px 13px;
+      flex: 1; padding: 8px 4px;
       background: var(--blue); color: #fff;
       border: none; border-radius: 9px;
-      font-size: 14px; font-weight: 600;
+      font-size: 13px; font-weight: 600;
       cursor: pointer;
+    }
+    .hdr-btn--sec {
+      background: var(--bg2); color: var(--text);
     }
 
     /* ── Calendar ── */
@@ -217,10 +228,16 @@
 <div class="loader" id="loader">Chargement…</div>
 
 <div class="hdr">
-  <button class="hdr-nav" onclick="nav(-1)">‹</button>
-  <div class="hdr-title" id="month-lbl"></div>
-  <button class="hdr-nav" onclick="nav(1)">›</button>
-  <button class="hdr-btn" onclick="openCreate(null)">Réserver</button>
+  <div class="hdr-nav-row">
+    <button class="hdr-nav" onclick="nav(-1)">‹</button>
+    <div class="hdr-title" id="month-lbl"></div>
+    <button class="hdr-nav" onclick="nav(1)">›</button>
+  </div>
+  <div class="hdr-actions">
+    <button class="hdr-btn" onclick="openCreate(null)">Réserver</button>
+    <button class="hdr-btn hdr-btn--sec" onclick="openSettings()">Paramètres</button>
+    <button class="hdr-btn hdr-btn--sec" onclick="openInventory()">Inventaire</button>
+  </div>
 </div>
 
 <div class="cal-outer">
@@ -419,6 +436,14 @@ function openDay(ds) {
     });
   }
   open1('m-day');
+}
+
+function openSettings() {
+  alert('Paramètres – à venir');
+}
+
+function openInventory() {
+  alert('Inventaire – à venir');
 }
 
 function openCreate(ds) {
