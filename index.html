@@ -27,39 +27,55 @@
       -webkit-text-size-adjust: 100%;
     }
     body {
-      display: flex; flex-direction: column;
+      display: flex; flex-direction: row;
       height: 100dvh;
       overscroll-behavior: none;
+    }
+    .main {
+      flex: 1; min-width: 0;
+      display: flex; flex-direction: column;
+    }
+
+    /* ── Sidebar ── */
+    .sidebar {
+      width: 210px; flex-shrink: 0;
+      display: flex; flex-direction: column;
+      background: var(--bg2);
+      border-right: 1px solid var(--border);
+      padding: 20px 10px;
+      gap: 2px;
+    }
+    .sidebar-brand {
+      font-size: 15px; font-weight: 700;
+      color: var(--text); letter-spacing: -.01em;
+      padding: 4px 12px 20px;
+    }
+    .nav-item {
+      display: flex; align-items: center; gap: 10px;
+      padding: 10px 12px; border-radius: 10px;
+      font-size: 14px; font-weight: 500; color: var(--text2);
+      cursor: pointer; border: none; background: none; width: 100%;
+      text-align: left; transition: background .1s, color .1s;
+    }
+    .nav-item:hover { background: rgba(255,255,255,.06); color: var(--text); }
+    .nav-item.active { background: rgba(79,142,247,.15); color: var(--blue); }
+    .nav-icon {
+      width: 18px; height: 18px; flex-shrink: 0;
+      stroke: currentColor; fill: none; stroke-width: 2;
+      stroke-linecap: round; stroke-linejoin: round;
     }
 
     /* ── Header ── */
     .hdr {
       display: flex; flex-direction: column;
-      padding: 10px 14px; gap: 8px;
+      padding: 10px 14px; gap: 6px;
       flex-shrink: 0;
       border-bottom: 1px solid var(--border);
       background: var(--bg);
-      position: sticky; top: 0; z-index: 50;
     }
-    .hdr-top {
-      display: flex; align-items: center; justify-content: space-between; gap: 8px;
-    }
-    .hdr-brand {
-      font-size: 16px; font-weight: 700;
-      letter-spacing: -.01em;
-    }
-    .hdr-actions {
-      display: flex; gap: 6px;
-    }
-    .hdr-btn {
-      padding: 5px 10px;
-      background: var(--blue); color: #fff;
-      border: none; border-radius: 8px;
-      font-size: 12px; font-weight: 600;
-      cursor: pointer;
-    }
-    .hdr-btn--sec {
-      background: var(--bg2); color: var(--text);
+    .hdr-brand-mobile {
+      display: none;
+      font-size: 15px; font-weight: 700; letter-spacing: -.01em;
     }
     .hdr-nav-row {
       display: flex; align-items: center; gap: 8px;
@@ -74,6 +90,27 @@
       background: var(--bg2); border: none; border-radius: 8px;
       color: var(--text); font-size: 18px; line-height: 1;
       cursor: pointer; display: flex; align-items: center; justify-content: center;
+    }
+
+    /* ── Mobile ── */
+    @media (max-width: 639px) {
+      body { flex-direction: column; }
+      .main { order: 1; flex: 1; min-height: 0; }
+      .sidebar {
+        order: 2; width: 100%;
+        flex-direction: row;
+        padding: 8px 8px calc(8px + env(safe-area-inset-bottom));
+        border-right: none; border-top: 1px solid var(--border);
+        gap: 0;
+      }
+      .sidebar-brand { display: none; }
+      .nav-item {
+        flex: 1; flex-direction: column; justify-content: center;
+        padding: 6px 4px; gap: 3px;
+        font-size: 10px; text-align: center; border-radius: 8px;
+      }
+      .nav-icon { width: 22px; height: 22px; }
+      .hdr-brand-mobile { display: block; }
     }
 
     /* ── Calendar ── */
@@ -223,25 +260,39 @@
 
 <div class="loader" id="loader">Chargement…</div>
 
-<div class="hdr">
-  <div class="hdr-top">
-    <div class="hdr-brand">Chalet Drouin</div>
-    <div class="hdr-actions">
-      <button class="hdr-btn" onclick="openCreate(null)">Réserver</button>
-      <button class="hdr-btn hdr-btn--sec" onclick="openSettings()">Paramètres</button>
-      <button class="hdr-btn hdr-btn--sec" onclick="openInventory()">Inventaire</button>
+<nav class="sidebar">
+  <div class="sidebar-brand">Chalet Drouin</div>
+  <button class="nav-item active">
+    <svg class="nav-icon" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+    Calendrier
+  </button>
+  <button class="nav-item" onclick="openCreate(null)">
+    <svg class="nav-icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg>
+    Réserver
+  </button>
+  <button class="nav-item" onclick="openInventory()">
+    <svg class="nav-icon" viewBox="0 0 24 24"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>
+    Inventaire
+  </button>
+  <button class="nav-item" onclick="openSettings()">
+    <svg class="nav-icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+    Paramètres
+  </button>
+</nav>
+
+<div class="main">
+  <div class="hdr">
+    <div class="hdr-brand-mobile">Chalet Drouin</div>
+    <div class="hdr-nav-row">
+      <button class="hdr-nav" onclick="nav(-1)">‹</button>
+      <div class="hdr-title" id="month-lbl"></div>
+      <button class="hdr-nav" onclick="nav(1)">›</button>
     </div>
   </div>
-  <div class="hdr-nav-row">
-    <button class="hdr-nav" onclick="nav(-1)">‹</button>
-    <div class="hdr-title" id="month-lbl"></div>
-    <button class="hdr-nav" onclick="nav(1)">›</button>
+  <div class="cal-outer">
+    <div class="dow-row" id="dow"></div>
+    <div class="cal-grid" id="grid"></div>
   </div>
-</div>
-
-<div class="cal-outer">
-  <div class="dow-row" id="dow"></div>
-  <div class="cal-grid" id="grid"></div>
 </div>
 
 <!-- Create modal -->
