@@ -87,10 +87,10 @@
     }
     .dow-cell {
       text-align: center; font-size: 11px; font-weight: 500;
-      color: var(--text3); text-transform: uppercase; letter-spacing: .05em;
+      color: var(--text3); opacity: .5;
+      text-transform: uppercase; letter-spacing: .05em;
       padding: 2px 0;
     }
-    .dow-cell.we { color: var(--blue); opacity: .65; }
 
     .cal-grid {
       flex: 1; min-height: 0;
@@ -121,8 +121,7 @@
       flex-shrink: 0;
     }
     .dn.today  { background: var(--blue); color: #fff !important; }
-    .dn.ov     { color: var(--text3); font-weight: 400; }
-    .dn.we     { color: var(--blue); }
+    .dn.ov     { color: var(--text3); font-weight: 400; opacity: .3; }
 
     .bk {
       font-size: 9px; font-weight: 600;
@@ -379,9 +378,8 @@ function render() {
 
     // Day number
     const dn=document.createElement('div');
-    dn.className='dn'+(ds===TODAY?' today':cell.ov?' ov':we?' we':'');
+    dn.className='dn'+(ds===TODAY?' today':cell.ov?' ov':'');
     dn.textContent=cell.date.getDate();
-    if(cell.ov) dn.style.opacity='0.35';
     div.appendChild(dn);
 
     // Booking chips — show text on first visible day of each booking (start or Monday)
