@@ -41,37 +41,39 @@
       background: var(--bg);
       position: sticky; top: 0; z-index: 50;
     }
+    .hdr-top {
+      display: flex; align-items: center; justify-content: space-between; gap: 8px;
+    }
     .hdr-brand {
-      text-align: center;
-      font-size: 13px; font-weight: 600;
-      color: var(--text2); letter-spacing: .04em; text-transform: uppercase;
+      font-size: 16px; font-weight: 700;
+      letter-spacing: -.01em;
+    }
+    .hdr-actions {
+      display: flex; gap: 6px;
+    }
+    .hdr-btn {
+      padding: 5px 10px;
+      background: var(--blue); color: #fff;
+      border: none; border-radius: 8px;
+      font-size: 12px; font-weight: 600;
+      cursor: pointer;
+    }
+    .hdr-btn--sec {
+      background: var(--bg2); color: var(--text);
     }
     .hdr-nav-row {
       display: flex; align-items: center; gap: 8px;
     }
     .hdr-title {
       flex: 1; text-align: center;
-      font-size: 17px; font-weight: 700;
-      letter-spacing: -.01em;
+      font-size: 15px; font-weight: 600;
+      letter-spacing: -.01em; color: var(--text2);
     }
     .hdr-nav {
-      width: 34px; height: 34px;
-      background: var(--bg2); border: none; border-radius: 9px;
-      color: var(--text); font-size: 20px; line-height: 1;
+      width: 30px; height: 30px;
+      background: var(--bg2); border: none; border-radius: 8px;
+      color: var(--text); font-size: 18px; line-height: 1;
       cursor: pointer; display: flex; align-items: center; justify-content: center;
-    }
-    .hdr-actions {
-      display: flex; gap: 8px;
-    }
-    .hdr-btn {
-      flex: 1; padding: 8px 4px;
-      background: var(--blue); color: #fff;
-      border: none; border-radius: 9px;
-      font-size: 13px; font-weight: 600;
-      cursor: pointer;
-    }
-    .hdr-btn--sec {
-      background: var(--bg2); color: var(--text);
     }
 
     /* ── Calendar ── */
@@ -223,16 +225,18 @@
 <div class="loader" id="loader">Chargement…</div>
 
 <div class="hdr">
-  <div class="hdr-brand">Chalet Drouin</div>
+  <div class="hdr-top">
+    <div class="hdr-brand">Chalet Drouin</div>
+    <div class="hdr-actions">
+      <button class="hdr-btn" onclick="openCreate(null)">Réserver</button>
+      <button class="hdr-btn hdr-btn--sec" onclick="openSettings()">Paramètres</button>
+      <button class="hdr-btn hdr-btn--sec" onclick="openInventory()">Inventaire</button>
+    </div>
+  </div>
   <div class="hdr-nav-row">
     <button class="hdr-nav" onclick="nav(-1)">‹</button>
     <div class="hdr-title" id="month-lbl"></div>
     <button class="hdr-nav" onclick="nav(1)">›</button>
-  </div>
-  <div class="hdr-actions">
-    <button class="hdr-btn" onclick="openCreate(null)">Réserver</button>
-    <button class="hdr-btn hdr-btn--sec" onclick="openSettings()">Paramètres</button>
-    <button class="hdr-btn hdr-btn--sec" onclick="openInventory()">Inventaire</button>
   </div>
 </div>
 
