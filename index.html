@@ -235,21 +235,16 @@
       padding: 0; padding-left: 4px;
       min-height: 18px; line-height: 18px;
       color: #fff;
-      overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+      overflow: hidden;
       flex-shrink: 1; cursor: pointer;
       margin: 0 -4px 0 -3px;
       position: relative; z-index: 1;
       border-radius: 0;
     }
-    .bk-label {
-      position: absolute; left: 4px; top: 0;
-      line-height: 18px; white-space: nowrap;
-      pointer-events: none; z-index: 2;
-    }
     .bk-start {
       margin-left: 0;
       border-radius: 4px 0 0 4px;
-      overflow: visible;
+      overflow: visible; white-space: nowrap;
     }
     .bk-end {
       margin-right: 0;
@@ -1001,15 +996,7 @@ function renderGrid() {
           const isEnd=bk.end===ds||col===6;
           if(isStart)chip.classList.add('bk-start');
           if(isEnd)chip.classList.add('bk-end');
-          if(isStart&&bk.description){
-            const endCol=week.findIndex((c,i)=>i>=col&&(ymd(c.date)===bk.end||i===6));
-            const span=endCol-col+1;
-            const lbl=document.createElement('span');
-            lbl.className='bk-label';
-            lbl.style.width='calc('+span+' * (100% + 7px) - 11px)';
-            lbl.textContent=esc(bk.description);
-            chip.appendChild(lbl);
-          }
+          if(isStart) chip.textContent=esc(bk.description||'');
           chip.onclick=(e)=>{e.stopPropagation();openDay(ds);};
           div.appendChild(chip);
         } else {
