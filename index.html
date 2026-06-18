@@ -427,19 +427,26 @@
     }
     .inv-name { flex: 1; font-size: 16px; font-weight: 500; min-width: 0; }
     .inv-toggle {
-      display: flex; flex-shrink: 0;
+      display: flex; flex-shrink: 0; position: relative;
       background: var(--bg); border-radius: 8px;
-      border: .5px solid var(--border); overflow: hidden;
+      border: .5px solid var(--border); padding: 2px; gap: 1px;
     }
+    .inv-pill {
+      position: absolute; top: 2px; height: calc(100% - 4px);
+      width: calc(33.33% - 2px); border-radius: 6px;
+      transition: transform .2s ease, background .2s ease;
+      box-shadow: 0 1px 3px rgba(0,0,0,.2);
+    }
+    .inv-pill[data-v="0"] { transform: translateX(0); background: var(--red); }
+    .inv-pill[data-v="1"] { transform: translateX(calc(100% + 2px)); background: #eab308; }
+    .inv-pill[data-v="2"] { transform: translateX(calc(200% + 4px)); background: #22c55e; }
     .inv-opt {
       padding: 5px 8px; font-size: 12px; font-weight: 500;
-      color: var(--text3); cursor: pointer;
+      color: var(--text3); cursor: pointer; position: relative; z-index: 1;
       border: none; background: none;
-      transition: background .15s, color .15s;
+      transition: color .15s;
     }
-    .inv-opt.on-0 { background: var(--red); color: #fff; }
-    .inv-opt.on-1 { background: #eab308; color: #fff; }
-    .inv-opt.on-2 { background: #22c55e; color: #fff; }
+    .inv-opt.on { color: #fff; }
     .inv-del {
       padding: 4px 8px; background: none; border: none;
       color: var(--text3); font-size: 16px; cursor: pointer;
@@ -495,6 +502,22 @@
     .inv-col-section { break-inside:avoid; margin-bottom:8px; }
     @media (max-width:900px) { .inv-cols { column-count:2; } }
     @media (max-width:639px) { .inv-cols { column-count:1; } }
+    .inv-tabs {
+      display: none; gap: 6px; padding: 0 0 12px;
+      overflow-x: auto; flex-shrink: 0; -webkit-overflow-scrolling: touch;
+    }
+    .inv-tab {
+      padding: 6px 14px; border-radius: 8px; font-size: 13px; font-weight: 500;
+      background: var(--bg); border: .5px solid var(--border);
+      color: var(--text2); cursor: pointer; white-space: nowrap;
+      transition: background .15s, color .15s, border-color .15s;
+    }
+    .inv-tab.active { background: var(--blue); color: #fff; border-color: transparent; }
+    @media (max-width:639px) {
+      .inv-tabs { display: flex; }
+      .inv-col-section { display: none; }
+      .inv-col-section.active { display: block; }
+    }
 
     /* ── Mode d'emploi ── */
     .doc-view { flex:1; display:none; flex-direction:column; padding:calc(16px + env(safe-area-inset-top)) 20px 16px; min-height:0; overflow-y:auto; }
@@ -564,6 +587,7 @@
 
   <div class="inv-view" id="view-inv">
     <div class="inv-title">Inventaire</div>
+    <div class="inv-tabs" id="inv-tabs"></div>
     <div class="inv-cols" id="inv-body"></div>
     <div class="inv-add">
       <select class="fi" id="f-inv-cat" style="flex:none;width:auto;padding:10px 8px;font-size:14px;">
@@ -1126,11 +1150,15 @@ async function showView(name) {
 
 const CAT_ORDER = ['Épicerie','Condiments','Boissons','Frais','Entretien','Autre'];
 
+let invActiveCat = null;
+
 function renderInventory() {
   const body = document.getElementById('inv-body');
+  const tabsWrap = document.getElementById('inv-tabs');
   body.innerHTML = '';
+  tabsWrap.innerHTML = '';
   if (!inventory.length) {
-    body.innerHTML = '<div class="empty" style="grid-column:1/-1">Aucun article</div>';
+    body.innerHTML = '<div class="empty">Aucun article</div>';
     return;
   }
   const groups = {};
@@ -1142,9 +1170,17 @@ function renderInventory() {
     const ia = CAT_ORDER.indexOf(a), ib = CAT_ORDER.indexOf(b);
     return (ia === -1 ? 99 : ia) - (ib === -1 ? 99 : ib);
   });
+  if (!invActiveCat || cats.indexOf(invActiveCat) === -1) invActiveCat = cats[0];
+  cats.forEach(cat => {
+    const tab = document.createElement('button');
+    tab.className = 'inv-tab' + (cat === invActiveCat ? ' active' : '');
+    tab.textContent = cat;
+    tab.onclick = function(){ invActiveCat = cat; renderInventory(); };
+    tabsWrap.appendChild(tab);
+  });
   cats.forEach((cat, ci) => {
     const section = document.createElement('div');
-    section.className = 'inv-col-section fade-up';
+    section.className = 'inv-col-section fade-up' + (cat === invActiveCat ? ' active' : '');
     section.style.animationDelay = (ci * 50) + 'ms';
     const hdr = document.createElement('div');
     hdr.className = 'inv-cat';
@@ -1157,9 +1193,10 @@ function renderInventory() {
       row.innerHTML = `
         <div class="inv-name">${esc(item.name)}</div>
         <div class="inv-toggle">
-          <button class="inv-opt${q===0?' on-0':''}" onclick="setInvQty('${item.id}',0)">Aucun</button>
-          <button class="inv-opt${q===1?' on-1':''}" onclick="setInvQty('${item.id}',1)">Un peu</button>
-          <button class="inv-opt${q===2?' on-2':''}" onclick="setInvQty('${item.id}',2)">Beaucoup</button>
+          <div class="inv-pill" data-v="${q}"></div>
+          <button class="inv-opt${q===0?' on':''}" onclick="setInvQty('${item.id}',0)">Aucun</button>
+          <button class="inv-opt${q===1?' on':''}" onclick="setInvQty('${item.id}',1)">Un peu</button>
+          <button class="inv-opt${q===2?' on':''}" onclick="setInvQty('${item.id}',2)">Beaucoup</button>
         </div>
         <button class="inv-del" onclick="deleteInvItem('${item.id}')" title="Supprimer">✕</button>`;
       section.appendChild(row);
