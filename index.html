@@ -247,7 +247,7 @@
       border-radius: 4px 0 0 4px;
     }
     .bk-lbl {
-      position: absolute; left: 4px;
+      position: absolute; left: 6px;
       height: 18px; line-height: 18px;
       font-size: 11px; font-weight: 600; color: #fff;
       white-space: nowrap; pointer-events: none;
@@ -1010,7 +1010,7 @@ function renderGrid() {
             const span=endCol-col+1;
             const lbl=document.createElement('span');
             lbl.className='bk-lbl';
-            lbl.style.top=(24+lane*19)+'px';
+            lbl.style.top=(26+lane*19)+'px';
             lbl.style.width='calc('+span+'00% + '+(span-1)*1+'px)';
             lbl.textContent=esc(bk.description);
             div.appendChild(lbl);
