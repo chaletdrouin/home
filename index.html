@@ -249,6 +249,7 @@
     .bk-start {
       margin-left: 0;
       border-radius: 4px 0 0 4px;
+      overflow: visible;
     }
     .bk-end {
       margin-right: 0;
@@ -479,8 +480,10 @@
     }
     .inv-add-btn {
       flex: none; min-width: 44px; height: 44px; padding: 0 14px;
-      font-size: 18px; font-weight: 600; border-radius: 10px;
+      font-size: 24px; font-weight: 600; border-radius: 10px;
+      display: flex; align-items: center; justify-content: center;
     }
+    .inv-add-btn svg { display: block; }
 
     /* ── Loader ── */
     .loader {
