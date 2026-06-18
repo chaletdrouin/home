@@ -459,27 +459,23 @@
     }
     .inv-del:hover { color: var(--red); }
     .inv-add {
-      display: flex; gap: 8px; padding: 14px 0; flex-shrink: 0;
-      align-items: center;
+      display: flex; gap: 0; padding: 14px 0; flex-shrink: 0;
+      align-items: center; justify-content: flex-end;
     }
     .inv-add-field {
-      flex: 1; padding: 10px 12px; font-size: 15px;
-      max-width: 0; overflow: hidden; opacity: 0;
-      padding-left: 0; padding-right: 0; border-width: 0;
-      transition: max-width .3s ease, opacity .2s ease, padding .3s ease, border-width .3s ease;
+      padding: 10px 0; font-size: 15px;
+      width: 0; max-width: 0; overflow: hidden; opacity: 0;
+      border-width: 0; margin: 0;
+      transition: max-width .3s ease, opacity .2s .05s ease, padding .3s ease, border-width .3s ease, margin .3s ease;
     }
     .inv-add.open .inv-add-field {
       max-width: 300px; opacity: 1;
-      padding-left: 12px; padding-right: 12px; border-width: 1px;
+      padding: 10px 12px; border-width: 1px; margin-right: 8px;
     }
+    .inv-add.open .inv-add-field:first-child { margin-right: 8px; }
     .inv-add-btn {
-      flex: none; width: 44px; height: 44px; padding: 0;
-      font-size: 22px; border-radius: 50%;
-      transition: border-radius .3s ease, width .3s ease, font-size .2s ease;
-    }
-    .inv-add.open .inv-add-btn {
-      border-radius: 8px; width: auto; padding: 0 18px;
-      font-size: 15px;
+      flex: none; min-width: 44px; height: 44px; padding: 0 14px;
+      font-size: 18px; font-weight: 600; border-radius: 10px;
     }
 
     /* ── Loader ── */
@@ -580,7 +576,7 @@
     Inventaire
   </button>
   <button class="nav-item" onclick="showView('doc')">
-    <svg class="nav-icon" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+    <svg class="nav-icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
     Mode d'emploi
   </button>
   <button class="nav-item nav-settings" onclick="openSettings()">
@@ -1251,7 +1247,7 @@ async function addInvItem() {
   const inp = document.getElementById('f-inv-name');
   const cat = document.getElementById('f-inv-cat').value;
   const name = inp.value.trim();
-  if (!name) { inp.focus(); return; }
+  if (!name) { closeInvAdd(); return; }
   try {
     const r = await fetch(API + '/inventory', {
       method: 'POST',
