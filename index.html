@@ -214,7 +214,7 @@
       border-bottom: 1px solid var(--border);
       padding: 3px 3px 2px;
       display: flex; flex-direction: column; gap: 1px;
-      overflow: visible;
+      overflow: visible; position: relative;
       cursor: pointer;
       min-height: 0;
     }
@@ -245,7 +245,11 @@
     .bk-start {
       margin-left: 0;
       border-radius: 4px 0 0 4px;
-      overflow: visible; white-space: nowrap;
+    }
+    .bk-lbl {
+      position: absolute; left: 4px; top: 0;
+      height: 18px; line-height: 18px;
+      white-space: nowrap; pointer-events: none;
     }
     .bk-end {
       margin-right: 0;
@@ -997,9 +1001,18 @@ function renderGrid() {
           const isEnd=bk.end===ds||col===6;
           if(isStart)chip.classList.add('bk-start');
           if(isEnd)chip.classList.add('bk-end');
-          if(isStart) chip.textContent=esc(bk.description||'');
           chip.onclick=(e)=>{e.stopPropagation();openDay(ds);};
           div.appendChild(chip);
+          if(isStart&&bk.description){
+            const endCol=week.findIndex((c,i)=>i>=col&&(ymd(c.date)===bk.end||i===6));
+            const span=endCol-col+1;
+            const lbl=document.createElement('span');
+            lbl.className='bk-lbl';
+            lbl.style.top=(24+lane*19)+'px';
+            lbl.style.width='calc('+span+'00% + '+(span-1)*1+'px)';
+            lbl.textContent=esc(bk.description);
+            div.appendChild(lbl);
+          }
         } else {
           const sp=document.createElement('div');
           sp.className='bk-spacer';
