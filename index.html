@@ -276,13 +276,6 @@
       min-height: 0; overflow-y: auto;
     }
     .year-view.active { display: flex; }
-    .year-title {
-      font-size: 15px; font-weight: 600; text-align: center;
-      color: var(--text2); letter-spacing: -.01em;
-      padding: 4px 8px 14px; cursor: pointer; border-radius: 8px;
-      transition: background .1s;
-    }
-    .year-title:hover { background: rgba(255,255,255,.06); }
     .year-grid {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
@@ -558,7 +551,7 @@
       <button class="hdr-add" onclick="openCreate(null)">+</button>
       <button class="hdr-today hidden" id="btn-today" onclick="goToday()">Aujourd'hui</button>
       <button class="hdr-nav" onclick="nav(-1)">‹</button>
-      <div class="hdr-title" id="month-lbl" onclick="showAnnual()"></div>
+      <div class="hdr-title" id="month-lbl" onclick="isAnnualOpen()?closeAnnual():showAnnual()"></div>
       <button class="hdr-nav" onclick="nav(1)">›</button>
     </div>
   </div>
@@ -622,7 +615,6 @@
   </div>
 
   <div class="year-view" id="view-year">
-    <div class="year-title" id="year-title" onclick="closeAnnual()"></div>
     <div class="year-grid" id="year-grid"></div>
   </div>
 </div>
@@ -783,24 +775,31 @@ async function load() {
 
 let slideDir = 0;
 
+function isAnnualOpen(){ return document.getElementById('view-year').classList.contains('active'); }
+
 function nav(d){
+  if(isAnnualOpen()){
+    cY += d;
+    renderAnnual();
+    updateHdr();
+    return;
+  }
   slideDir = d;
   cM+=d; if(cM>11){cM=0;cY++;} if(cM<0){cM=11;cY--;}
-  // Close annual view if open
-  document.getElementById('view-year').classList.remove('active');
-  document.querySelector('.hdr').style.display = '';
-  document.getElementById('view-cal').style.display = '';
   render();
 }
 
 function goToday(){
   const now = new Date();
+  if(isAnnualOpen()){
+    cY = now.getFullYear();
+    renderAnnual();
+    updateHdr();
+    return;
+  }
   const d = now.getMonth() > cM || now.getFullYear() > cY ? 1 : -1;
   slideDir = (now.getFullYear() === cY && now.getMonth() === cM) ? 0 : d;
   cY = now.getFullYear(); cM = now.getMonth();
-  document.getElementById('view-year').classList.remove('active');
-  document.querySelector('.hdr').style.display = '';
-  document.getElementById('view-cal').style.display = '';
   render();
 }
 
@@ -811,24 +810,32 @@ function updateTodayBtn(){
 }
 
 function showAnnual(){
-  document.querySelector('.hdr').style.display = 'none';
   document.getElementById('view-cal').style.display = 'none';
   document.getElementById('view-inv').classList.remove('active');
   document.getElementById('view-doc').classList.remove('active');
-  const yv = document.getElementById('view-year');
-  yv.classList.add('active');
+  document.getElementById('view-year').classList.add('active');
   renderAnnual();
+  updateHdr();
 }
 
 function closeAnnual(){
   document.getElementById('view-year').classList.remove('active');
-  document.querySelector('.hdr').style.display = '';
   document.getElementById('view-cal').style.display = '';
   render();
 }
 
+function updateHdr(){
+  if(isAnnualOpen()){
+    document.getElementById('month-lbl').textContent = cY;
+    const now = new Date();
+    document.getElementById('btn-today').classList.toggle('hidden', cY === now.getFullYear());
+  } else {
+    document.getElementById('month-lbl').textContent = MONTHS[cM]+' '+cY;
+    updateTodayBtn();
+  }
+}
+
 function renderAnnual(){
-  document.getElementById('year-title').textContent = cY;
   const grid = document.getElementById('year-grid');
   grid.innerHTML = '';
   const now = new Date();
@@ -836,7 +843,7 @@ function renderAnnual(){
   for(let m=0;m<12;m++){
     const card = document.createElement('div');
     card.className = 'ym' + (m===cM?' current':'');
-    card.onclick = function(){ cM=m; slideDir=0; document.getElementById('view-year').classList.remove('active'); document.querySelector('.hdr').style.display=''; document.getElementById('view-cal').style.display=''; render(); };
+    card.onclick = function(){ cM=m; slideDir=0; closeAnnual(); };
     const title = document.createElement('div');
     title.className = 'ym-title';
     title.textContent = MSHO[m];
