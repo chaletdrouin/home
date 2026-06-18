@@ -463,16 +463,15 @@
       align-items: center; justify-content: flex-end;
     }
     .inv-add-field {
-      padding: 10px 0; font-size: 15px;
-      width: 0; max-width: 0; overflow: hidden; opacity: 0;
-      border-width: 0; margin: 0;
-      transition: max-width .3s ease, opacity .2s .05s ease, padding .3s ease, border-width .3s ease, margin .3s ease;
+      font-size: 15px;
+      flex: 0 0 0; min-width: 0; overflow: hidden; opacity: 0;
+      padding: 10px 0; border-width: 0; margin: 0;
+      transition: flex .3s ease, opacity .2s .05s ease, padding .3s ease, border-width .3s ease, margin .3s ease;
     }
     .inv-add.open .inv-add-field {
-      max-width: 300px; opacity: 1;
+      flex: 1 1 0; opacity: 1;
       padding: 10px 12px; border-width: 1px; margin-right: 8px;
     }
-    .inv-add.open .inv-add-field:first-child { margin-right: 8px; }
     .inv-add-btn {
       flex: none; min-width: 44px; height: 44px; padding: 0 14px;
       font-size: 18px; font-weight: 600; border-radius: 10px;
