@@ -998,7 +998,7 @@ function renderGrid() {
         if(bk){
           const chip=document.createElement('div');
           chip.className='bk';
-          chip.style.background=bk.color;
+          chip.style.background='var(--blue)';
           const isStart=bk.start===ds||col===0;
           const isEnd=bk.end===ds||col===6;
           if(isStart)chip.classList.add('bk-start');
