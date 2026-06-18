@@ -44,21 +44,36 @@
       border-right: 1px solid var(--border);
       padding: 20px 10px;
       gap: 2px;
+      position: relative;
     }
     .sidebar-brand {
       font-size: 15px; font-weight: 700;
       color: var(--text); letter-spacing: -.01em;
       padding: 4px 12px 20px;
     }
+    .nav-pill {
+      position: absolute;
+      left: 10px; right: 10px;
+      height: 40px; border-radius: 10px;
+      background: rgba(255,255,255,.08);
+      border: .5px solid rgba(255,255,255,.1);
+      box-shadow: inset 0 1px 0 rgba(255,255,255,.06), 0 2px 8px rgba(0,0,0,.15);
+      backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+      transition: top .3s cubic-bezier(.4,0,.2,1), left .3s cubic-bezier(.4,0,.2,1),
+                  width .3s cubic-bezier(.4,0,.2,1), height .3s cubic-bezier(.4,0,.2,1);
+      pointer-events: none;
+      z-index: 0;
+    }
     .nav-item {
       display: flex; align-items: center; gap: 10px;
       padding: 10px 12px; border-radius: 10px;
       font-size: 14px; font-weight: 500; color: var(--text2);
       cursor: pointer; border: none; background: none; width: 100%;
-      text-align: left; transition: background .1s, color .1s;
+      text-align: left; transition: color .2s;
+      position: relative; z-index: 1;
     }
-    .nav-item:hover { background: rgba(255,255,255,.06); color: var(--text); }
-    .nav-item.active { background: rgba(79,142,247,.15); color: var(--blue); }
+    .nav-item:hover { color: var(--text); }
+    .nav-item.active { color: var(--text); }
     .nav-icon {
       width: 18px; height: 18px; flex-shrink: 0;
       stroke: currentColor; fill: none; stroke-width: 2;
@@ -122,6 +137,11 @@
       }
       .sidebar-brand { display: none; }
       .sidebar-mountains-wrap { display: none; }
+      .nav-pill {
+        left: auto; right: auto; top: auto !important;
+        height: auto; border-radius: 8px;
+        transition: left .3s cubic-bezier(.4,0,.2,1), width .3s cubic-bezier(.4,0,.2,1);
+      }
       .nav-item {
         flex: 1; flex-direction: column; justify-content: center;
         padding: 6px 4px; gap: 3px;
@@ -371,8 +391,9 @@
 
 <div class="loader" id="loader">Chargement…</div>
 
-<nav class="sidebar">
+<nav class="sidebar" id="sidebar">
   <div class="sidebar-brand">Chalet Drouin</div>
+  <div class="nav-pill" id="nav-pill"></div>
   <button class="nav-item active" onclick="showView('cal')">
     <svg class="nav-icon" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
     Calendrier
@@ -637,6 +658,9 @@ function openDay(ds) {
 }
 
 function openSettings() {
+  const navBtns = document.querySelectorAll('.nav-item');
+  navBtns.forEach((b, i) => b.classList.toggle('active', i === 3));
+  moveNavPill(3);
   updateNotifStatus();
   open1('m-settings');
 }
@@ -695,10 +719,31 @@ async function subscribePush() {
 
 let inventory = [];
 
+function moveNavPill(idx) {
+  const pill = document.getElementById('nav-pill');
+  const sidebar = document.getElementById('sidebar');
+  const btns = sidebar.querySelectorAll('.nav-item');
+  const btn = btns[idx];
+  if (!pill || !btn) return;
+  const isMobile = window.innerWidth <= 639;
+  if (isMobile) {
+    pill.style.top = (btn.offsetTop) + 'px';
+    pill.style.left = (btn.offsetLeft) + 'px';
+    pill.style.width = btn.offsetWidth + 'px';
+    pill.style.height = btn.offsetHeight + 'px';
+  } else {
+    pill.style.top = (btn.offsetTop) + 'px';
+    pill.style.left = '';
+    pill.style.width = '';
+    pill.style.height = btn.offsetHeight + 'px';
+  }
+}
+
 async function showView(name) {
   const navBtns = document.querySelectorAll('.nav-item');
   const idx = name === 'cal' ? 0 : 2;
   navBtns.forEach((b, i) => b.classList.toggle('active', i === idx));
+  moveNavPill(idx);
 
   const hdr = document.querySelector('.hdr');
   const cal = document.getElementById('view-cal');
@@ -804,6 +849,9 @@ async function deleteInvItem(id) {
 }
 
 function openCreate(ds) {
+  const navBtns = document.querySelectorAll('.nav-item');
+  navBtns.forEach((b, i) => b.classList.toggle('active', i === 1));
+  moveNavPill(1);
   document.getElementById('f-desc').value='';
   document.getElementById('f-start').value=ds||TODAY;
   document.getElementById('f-end').value=ds||TODAY;
@@ -840,7 +888,14 @@ async function doDelete(id) {
 }
 
 function open1(id){ document.getElementById(id).classList.add('open'); }
-function close1(id){ document.getElementById(id).classList.remove('open'); }
+function close1(id){
+  document.getElementById(id).classList.remove('open');
+  // Return pill to current view
+  var isInv = document.getElementById('view-inv').classList.contains('active');
+  var idx = isInv ? 2 : 0;
+  document.querySelectorAll('.nav-item').forEach(function(b,i){ b.classList.toggle('active', i===idx); });
+  moveNavPill(idx);
+}
 function bgClose(e,id){ if(e.target.classList.contains('overlay')) close1(id); }
 
 // Drag down to close modals
@@ -921,6 +976,13 @@ async function initSW() {
 initSW();
 
 load();
+
+// Init nav pill
+requestAnimationFrame(function(){ moveNavPill(0); });
+window.addEventListener('resize', function(){
+  var active = document.querySelector('.nav-item.active');
+  if(active){ var btns = document.querySelectorAll('.nav-item'); btns.forEach(function(b,i){ if(b===active) moveNavPill(i); }); }
+});
 
 // Swipe navigation
 (function() {
