@@ -75,9 +75,11 @@
       overflow: hidden;
     }
     .hdr-mountains {
-      width: 100%; height: 48px;
+      width: 100%; height: 40px;
       margin-top: 4px;
-      opacity: .45;
+      opacity: .5;
+      object-fit: cover;
+      object-position: center;
     }
     .hdr-brand-mobile {
       display: none;
@@ -308,7 +310,13 @@
     .inv-title {
       font-size: 18px; font-weight: 700; margin-bottom: 14px;
     }
-    .inv-list { flex: 1; min-height: 0; overflow-y: auto; }
+    .inv-list { flex: 1; min-height: 0; overflow-y: auto; padding-bottom: 8px; }
+    .inv-cat {
+      font-size: 12px; font-weight: 600; color: var(--text2);
+      text-transform: uppercase; letter-spacing: .06em;
+      padding: 16px 0 6px; border-bottom: 1px solid var(--border);
+    }
+    .inv-cat:first-child { padding-top: 0; }
     .inv-item {
       display: flex; align-items: center; gap: 10px;
       padding: 10px 0; border-bottom: 1px solid var(--border);
@@ -381,18 +389,7 @@
       <div class="hdr-title" id="month-lbl"></div>
       <button class="hdr-nav" onclick="nav(1)">›</button>
     </div>
-    <svg class="hdr-mountains" viewBox="0 0 1200 160" preserveAspectRatio="none" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <!-- Ridge line 1 (top) -->
-      <path d="M0 72 L20 65 L40 58 L55 50 L65 38 L75 28 L85 18 L95 25 L105 35 L110 42 L120 50 L130 44 L140 30 L150 20 L160 14 L170 22 L185 36 L200 48 L220 54 L250 58 L280 56 L310 62 L340 80 L360 90 L380 95 L400 100 L420 98 L440 90 L455 82 L470 76 L480 68 L490 60 L500 54 L510 48 L520 42 L535 38 L550 35 L560 32 L575 36 L585 40 L600 44 L615 38 L625 34 L640 30 L655 34 L670 40 L685 36 L695 32 L710 36 L730 42 L750 38 L765 34 L780 30 L795 28 L810 34 L830 42 L850 50 L870 56 L890 60 L910 55 L925 48 L940 42 L955 50 L970 58 L985 64 L1000 68 L1020 64 L1040 58 L1060 52 L1090 46 L1120 40 L1150 36 L1200 30" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-      <!-- Ridge line 2 (bottom, echo) -->
-      <path d="M0 78 L20 72 L40 64 L55 56 L65 44 L75 34 L85 24 L95 32 L105 42 L110 48 L120 56 L130 50 L140 36 L150 26 L160 20 L170 28 L185 42 L200 54 L220 60 L250 64 L280 62 L310 68 L340 86 L360 96 L380 102 L400 106 L420 104 L440 96 L455 88 L470 82 L480 74 L490 66 L500 60 L510 54 L520 48 L535 44 L550 40 L560 38 L575 42 L585 46 L600 50 L615 44 L625 40 L640 36 L655 40 L670 46 L685 42 L695 38 L710 42 L730 48 L750 44 L765 40 L780 36 L795 34 L810 40 L830 48 L850 56 L870 62 L890 66 L910 62 L925 54 L940 48 L955 56 L970 64 L985 70 L1000 74 L1020 70 L1040 64 L1060 58 L1090 52 L1120 46 L1150 42 L1200 36" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
-      <!-- Left peak shadow -->
-      <path d="M55 50 L65 38 L75 28 L85 18 L95 25 L105 35 L110 42 L115 50 L105 52 L95 48 L85 40 L75 46 L65 52 Z" fill="currentColor" opacity=".25"/>
-      <!-- Left valley shadow -->
-      <path d="M340 80 L360 90 L380 100 L395 108 L400 120 L395 132 L390 140 L385 132 L380 120 L370 108 L355 96 L340 88 Z" fill="currentColor" opacity=".35"/>
-      <!-- Right valley shadow -->
-      <path d="M900 60 L920 52 L940 42 L950 50 L955 62 L960 80 L958 100 L954 118 L950 130 L946 118 L942 100 L938 85 L930 72 L920 64 L910 58 Z" fill="currentColor" opacity=".35"/>
-    </svg>
+    <img class="hdr-mountains" src="mountains.png" alt="">
   </div>
   <div class="cal-outer" id="view-cal">
     <div class="dow-row" id="dow"></div>
@@ -403,7 +400,10 @@
     <div class="inv-title">Inventaire</div>
     <div class="inv-list" id="inv-body"></div>
     <div class="inv-add">
-      <input class="fi" id="f-inv-name" type="text" placeholder="Ajouter un article…" onkeydown="if(event.key==='Enter')addInvItem()">
+      <select class="fi" id="f-inv-cat" style="flex:none;width:auto;padding:10px 8px;font-size:13px;">
+        <option>Épicerie</option><option>Boissons</option><option>Frais</option><option>Entretien</option><option>Autre</option>
+      </select>
+      <input class="fi" id="f-inv-name" type="text" placeholder="Ajouter…" onkeydown="if(event.key==='Enter')addInvItem()">
       <button class="btn btn-p" onclick="addInvItem()">+</button>
     </div>
   </div>
@@ -709,6 +709,8 @@ async function showView(name) {
   }
 }
 
+const CAT_ORDER = ['Épicerie','Boissons','Frais','Entretien','Autre'];
+
 function renderInventory() {
   const body = document.getElementById('inv-body');
   body.innerHTML = '';
@@ -716,31 +718,47 @@ function renderInventory() {
     body.innerHTML = '<div class="empty">Aucun article</div>';
     return;
   }
+  const groups = {};
   inventory.forEach(item => {
-    const row = document.createElement('div');
-    row.className = 'inv-item';
-    const q = Math.min(2, Math.max(0, item.qty));
-    row.innerHTML = `
-      <div class="inv-name">${esc(item.name)}</div>
-      <div class="inv-toggle">
-        <button class="inv-opt${q===0?' on-0':''}" onclick="setInvQty('${item.id}',0)">Aucun</button>
-        <button class="inv-opt${q===1?' on-1':''}" onclick="setInvQty('${item.id}',1)">Un peu</button>
-        <button class="inv-opt${q===2?' on-2':''}" onclick="setInvQty('${item.id}',2)">Beaucoup</button>
-      </div>
-      <button class="inv-del" onclick="deleteInvItem('${item.id}')" title="Supprimer">✕</button>`;
-    body.appendChild(row);
+    const c = item.cat || 'Autre';
+    (groups[c] = groups[c] || []).push(item);
+  });
+  const cats = Object.keys(groups).sort((a, b) => {
+    const ia = CAT_ORDER.indexOf(a), ib = CAT_ORDER.indexOf(b);
+    return (ia === -1 ? 99 : ia) - (ib === -1 ? 99 : ib);
+  });
+  cats.forEach(cat => {
+    const hdr = document.createElement('div');
+    hdr.className = 'inv-cat';
+    hdr.textContent = cat;
+    body.appendChild(hdr);
+    groups[cat].forEach(item => {
+      const row = document.createElement('div');
+      row.className = 'inv-item';
+      const q = Math.min(2, Math.max(0, item.qty));
+      row.innerHTML = `
+        <div class="inv-name">${esc(item.name)}</div>
+        <div class="inv-toggle">
+          <button class="inv-opt${q===0?' on-0':''}" onclick="setInvQty('${item.id}',0)">Aucun</button>
+          <button class="inv-opt${q===1?' on-1':''}" onclick="setInvQty('${item.id}',1)">Un peu</button>
+          <button class="inv-opt${q===2?' on-2':''}" onclick="setInvQty('${item.id}',2)">Beaucoup</button>
+        </div>
+        <button class="inv-del" onclick="deleteInvItem('${item.id}')" title="Supprimer">✕</button>`;
+      body.appendChild(row);
+    });
   });
 }
 
 async function addInvItem() {
   const inp = document.getElementById('f-inv-name');
+  const cat = document.getElementById('f-inv-cat').value;
   const name = inp.value.trim();
   if (!name) { inp.focus(); return; }
   try {
     const r = await fetch(API + '/inventory', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ name, qty: 1 })
+      body: JSON.stringify({ name, cat, qty: 1 })
     });
     if (r.ok) {
       const item = await r.json();

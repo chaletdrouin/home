@@ -250,16 +250,32 @@ export default {
     // ── Inventory ──
 
     const DEFAULT_INVENTORY = [
-      'Sel','Poivre','Huile d\'olive','Vinaigre','Sucre','Farine',
-      'Pâtes','Riz','Café','Thé','Lait','Beurre','Œufs','Pain',
-      'Eau','Papier toilette','Savon','Éponges','Sacs poubelle',
+      { name: 'Sel', cat: 'Épicerie' },
+      { name: 'Poivre', cat: 'Épicerie' },
+      { name: 'Huile d\'olive', cat: 'Épicerie' },
+      { name: 'Vinaigre', cat: 'Épicerie' },
+      { name: 'Sucre', cat: 'Épicerie' },
+      { name: 'Farine', cat: 'Épicerie' },
+      { name: 'Pâtes', cat: 'Épicerie' },
+      { name: 'Riz', cat: 'Épicerie' },
+      { name: 'Café', cat: 'Boissons' },
+      { name: 'Thé', cat: 'Boissons' },
+      { name: 'Eau', cat: 'Boissons' },
+      { name: 'Lait', cat: 'Frais' },
+      { name: 'Beurre', cat: 'Frais' },
+      { name: 'Œufs', cat: 'Frais' },
+      { name: 'Pain', cat: 'Frais' },
+      { name: 'Papier toilette', cat: 'Entretien' },
+      { name: 'Savon', cat: 'Entretien' },
+      { name: 'Éponges', cat: 'Entretien' },
+      { name: 'Sacs poubelle', cat: 'Entretien' },
     ];
 
     async function getInventory() {
       let items = await env.BOOKINGS.get('inventory', 'json');
       if (!items) {
-        items = DEFAULT_INVENTORY.map(name => ({
-          id: crypto.randomUUID(), name, qty: 1,
+        items = DEFAULT_INVENTORY.map(d => ({
+          id: crypto.randomUUID(), name: d.name, cat: d.cat, qty: 1,
         }));
         await env.BOOKINGS.put('inventory', JSON.stringify(items));
       }
@@ -277,7 +293,7 @@ export default {
       try { body = await req.json(); } catch { return json({ error: 'Invalid JSON' }, 400); }
       if (!body.name) return json({ error: 'name required' }, 400);
       const items = await getInventory();
-      const item = { id: crypto.randomUUID(), name: String(body.name).slice(0, 80), qty: Number(body.qty) || 1 };
+      const item = { id: crypto.randomUUID(), name: String(body.name).slice(0, 80), cat: String(body.cat || 'Autre').slice(0, 40), qty: Number(body.qty) || 1 };
       items.push(item);
       await env.BOOKINGS.put('inventory', JSON.stringify(items));
       return json(item, 201);
