@@ -79,6 +79,21 @@
       stroke: currentColor; fill: none; stroke-width: 2;
       stroke-linecap: round; stroke-linejoin: round;
     }
+    @media (min-width: 640px) {
+      .nav-item .nav-icon { display: none; }
+    }
+    .nav-settings {
+      margin-top: auto;
+      z-index: 1; position: relative;
+      margin-bottom: 6px;
+    }
+    .hdr-add {
+      width: 30px; height: 30px;
+      background: var(--blue); border: none; border-radius: 8px;
+      color: #fff; font-size: 22px; line-height: 1;
+      cursor: pointer; display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+    }
 
     /* ── Header ── */
     .hdr {
@@ -158,7 +173,8 @@
         padding: 6px 4px; gap: 3px;
         font-size: 10px; text-align: center; border-radius: 8px;
       }
-      .nav-icon { width: 22px; height: 22px; }
+      .nav-icon { width: 22px; height: 22px; display: block !important; }
+      .nav-settings { margin-top: 0; margin-bottom: 0; }
       .hdr-brand-mobile { display: block; }
     }
 
@@ -455,15 +471,11 @@
     <svg class="nav-icon" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
     Calendrier
   </button>
-  <button class="nav-item" onclick="openCreate(null)">
-    <svg class="nav-icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg>
-    Réserver
-  </button>
   <button class="nav-item" onclick="showView('inv')">
     <svg class="nav-icon" viewBox="0 0 24 24"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>
     Inventaire
   </button>
-  <button class="nav-item" onclick="openSettings()">
+  <button class="nav-item nav-settings" onclick="openSettings()">
     <svg class="nav-icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
     Paramètres
   </button>
@@ -477,6 +489,7 @@
   <div class="hdr">
     <div class="hdr-brand-mobile">Chalet Drouin</div>
     <div class="hdr-nav-row">
+      <button class="hdr-add" onclick="openCreate(null)">+</button>
       <button class="hdr-today hidden" id="btn-today" onclick="goToday()">Aujourd'hui</button>
       <button class="hdr-nav" onclick="nav(-1)">‹</button>
       <div class="hdr-title" id="month-lbl" onclick="showAnnual()"></div>
@@ -814,9 +827,6 @@ function openDay(ds) {
 }
 
 function openSettings() {
-  const navBtns = document.querySelectorAll('.nav-item');
-  navBtns.forEach((b, i) => b.classList.toggle('active', i === 3));
-  moveNavPill(3);
   updateNotifStatus();
   open1('m-settings');
 }
@@ -878,7 +888,7 @@ let inventory = [];
 function moveNavPill(idx) {
   const pill = document.getElementById('nav-pill');
   const sidebar = document.getElementById('sidebar');
-  const btns = sidebar.querySelectorAll('.nav-item');
+  const btns = sidebar.querySelectorAll('.nav-item:not(.nav-settings)');
   const btn = btns[idx];
   if (!pill || !btn) return;
   const isMobile = window.innerWidth <= 639;
@@ -896,8 +906,8 @@ function moveNavPill(idx) {
 }
 
 async function showView(name) {
-  const navBtns = document.querySelectorAll('.nav-item');
-  const idx = name === 'cal' ? 0 : 2;
+  const navBtns = document.querySelectorAll('.nav-item:not(.nav-settings)');
+  const idx = name === 'cal' ? 0 : 1;
   navBtns.forEach((b, i) => b.classList.toggle('active', i === idx));
   moveNavPill(idx);
 
@@ -1006,9 +1016,6 @@ async function deleteInvItem(id) {
 }
 
 function openCreate(ds) {
-  const navBtns = document.querySelectorAll('.nav-item');
-  navBtns.forEach((b, i) => b.classList.toggle('active', i === 1));
-  moveNavPill(1);
   document.getElementById('f-desc').value='';
   document.getElementById('f-start').value=ds||TODAY;
   document.getElementById('f-end').value=ds||TODAY;
@@ -1047,10 +1054,9 @@ async function doDelete(id) {
 function open1(id){ document.getElementById(id).classList.add('open'); }
 function close1(id){
   document.getElementById(id).classList.remove('open');
-  // Return pill to current view
   var isInv = document.getElementById('view-inv').classList.contains('active');
-  var idx = isInv ? 2 : 0;
-  document.querySelectorAll('.nav-item').forEach(function(b,i){ b.classList.toggle('active', i===idx); });
+  var idx = isInv ? 1 : 0;
+  document.querySelectorAll('.nav-item:not(.nav-settings)').forEach(function(b,i){ b.classList.toggle('active', i===idx); });
   moveNavPill(idx);
 }
 function bgClose(e,id){ if(e.target.classList.contains('overlay')) close1(id); }
@@ -1137,8 +1143,8 @@ load();
 // Init nav pill
 requestAnimationFrame(function(){ moveNavPill(0); });
 window.addEventListener('resize', function(){
-  var active = document.querySelector('.nav-item.active');
-  if(active){ var btns = document.querySelectorAll('.nav-item'); btns.forEach(function(b,i){ if(b===active) moveNavPill(i); }); }
+  var active = document.querySelector('.nav-item:not(.nav-settings).active');
+  if(active){ var btns = document.querySelectorAll('.nav-item:not(.nav-settings)'); btns.forEach(function(b,i){ if(b===active) moveNavPill(i); }); }
 });
 
 // Swipe navigation
