@@ -257,6 +257,15 @@
     }
     .empty { color: var(--text3); font-size: 14px; text-align: center; padding: 20px 0; }
 
+    /* ── Settings ── */
+    .settings-row {
+      display: flex; align-items: center; gap: 12px;
+      padding: 14px 0; border-bottom: 1px solid var(--border);
+    }
+    .settings-info { flex: 1; min-width: 0; }
+    .settings-label { font-size: 15px; font-weight: 600; }
+    .settings-desc { font-size: 12px; color: var(--text2); margin-top: 2px; }
+
     /* ── Inventory ── */
     .inv-item {
       display: flex; align-items: center; gap: 10px;
@@ -368,6 +377,24 @@
     <div class="inv-add">
       <input class="fi" id="f-inv-name" type="text" placeholder="Ajouter un article…" onkeydown="if(event.key==='Enter')addInvItem()">
       <button class="btn btn-p" onclick="addInvItem()">+</button>
+    </div>
+  </div>
+</div>
+
+<!-- Settings modal -->
+<div class="overlay" id="m-settings" onclick="bgClose(event,'m-settings')">
+  <div class="sheet">
+    <div class="sheet-grip"></div>
+    <div class="sheet-title">Paramètres</div>
+    <div class="settings-row">
+      <div class="settings-info">
+        <div class="settings-label">Notifications</div>
+        <div class="settings-desc" id="notif-status">Chargement…</div>
+      </div>
+      <button class="btn btn-p" id="notif-btn" onclick="enablePush()" style="flex:none;padding:10px 16px;font-size:13px;">Activer</button>
+    </div>
+    <div class="btns" style="margin-top:20px">
+      <button class="btn btn-c" onclick="close1('m-settings')">Fermer</button>
     </div>
   </div>
 </div>
@@ -545,7 +572,60 @@ function openDay(ds) {
 }
 
 function openSettings() {
-  alert('Paramètres – à venir');
+  updateNotifStatus();
+  open1('m-settings');
+}
+
+function updateNotifStatus() {
+  const statusEl = document.getElementById('notif-status');
+  const btn = document.getElementById('notif-btn');
+  if (!('PushManager' in window)) {
+    statusEl.textContent = 'Non supporté sur ce navigateur';
+    btn.style.display = 'none';
+    return;
+  }
+  const perm = Notification.permission;
+  if (perm === 'granted') {
+    statusEl.textContent = 'Activées';
+    btn.textContent = 'Activées ✓';
+    btn.disabled = true;
+    btn.style.opacity = '.5';
+  } else if (perm === 'denied') {
+    statusEl.textContent = 'Bloquées — modifie les permissions du site dans les réglages du navigateur';
+    btn.style.display = 'none';
+  } else {
+    statusEl.textContent = 'Désactivées';
+    btn.textContent = 'Activer';
+    btn.disabled = false;
+    btn.style.opacity = '1';
+  }
+}
+
+async function enablePush() {
+  try {
+    const perm = await Notification.requestPermission();
+    if (perm !== 'granted') { updateNotifStatus(); return; }
+    await subscribePush();
+    updateNotifStatus();
+  } catch (e) { console.error('Push enable failed:', e); }
+}
+
+async function subscribePush() {
+  const reg = await navigator.serviceWorker.ready;
+  let sub = await reg.pushManager.getSubscription();
+  if (!sub) {
+    const res = await fetch(API + '/vapid-public-key');
+    const { key } = await res.json();
+    sub = await reg.pushManager.subscribe({
+      userVisibleOnly: true,
+      applicationServerKey: b64urlToUint8(key),
+    });
+  }
+  await fetch(API + '/subscribe', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(sub),
+  });
 }
 
 let inventory = [];
@@ -670,34 +750,14 @@ function b64urlToUint8(str) {
   return Uint8Array.from(bin, c => c.charCodeAt(0));
 }
 
-async function initPush() {
-  if (!('serviceWorker' in navigator) || !('PushManager' in window)) return;
-  const reg = await navigator.serviceWorker.register('sw.js');
-  await navigator.serviceWorker.ready;
-
-  const perm = await Notification.requestPermission();
-  if (perm !== 'granted') return;
-
-  let sub = await reg.pushManager.getSubscription();
-  if (!sub) {
-    try {
-      const res = await fetch(API + '/vapid-public-key');
-      const { key } = await res.json();
-      sub = await reg.pushManager.subscribe({
-        userVisibleOnly: true,
-        applicationServerKey: b64urlToUint8(key),
-      });
-    } catch (e) { console.error('Push subscribe failed:', e); return; }
+async function initSW() {
+  if (!('serviceWorker' in navigator)) return;
+  await navigator.serviceWorker.register('sw.js');
+  if (Notification.permission === 'granted') {
+    try { await subscribePush(); } catch {}
   }
-  try {
-    await fetch(API + '/subscribe', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(sub),
-    });
-  } catch (e) { console.error('Push register failed:', e); }
 }
-initPush();
+initSW();
 
 load();
 </script>
