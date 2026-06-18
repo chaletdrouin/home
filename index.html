@@ -10,7 +10,7 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=DM+Serif+Display&family=Libre+Baskerville:wght@400;700&family=Lora:wght@400;500;600;700&family=Playfair+Display:wght@400;500;600;700&family=Source+Serif+4:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Arvo:wght@400;700&family=Cormorant+Garamond:wght@400;500;600;700&family=DM+Serif+Display&family=Libre+Baskerville:wght@400;700&family=Lora:wght@400;500;600;700&family=Playfair+Display:wght@400;500;600;700&family=Roboto+Slab:wght@400;500;600;700&family=Source+Serif+4:wght@400;500;600;700&family=Zilla+Slab:wght@400;500;600;700&display=swap" rel="stylesheet">
   <style>
     :root {
       --bg:     #1c1c1e;
@@ -26,7 +26,7 @@
     html, body {
       height: 100%; overflow: hidden;
       background: var(--bg); color: var(--text);
-      font-family: var(--font, 'Lora', Georgia, 'Times New Roman', serif);
+      font-family: var(--font, 'Arvo', Georgia, serif);
       -webkit-text-size-adjust: 100%;
     }
     body {
@@ -686,7 +686,7 @@
     <div class="settings-row">
       <div class="settings-info">
         <div class="settings-label">Police</div>
-        <div class="settings-desc" id="font-current">Lora</div>
+        <div class="settings-desc" id="font-current">Arvo</div>
       </div>
       <button class="btn btn-p" onclick="openFontPicker()" style="flex:none;padding:10px 16px;font-size:13px;">Changer</button>
     </div>
@@ -1478,6 +1478,9 @@ window.addEventListener('resize', function(){
 
 // Font picker
 const FONTS = [
+  { id:'arvo', name:'Arvo', css:"'Arvo', Georgia, serif" },
+  { id:'roboto-slab', name:'Roboto Slab', css:"'Roboto Slab', Georgia, serif" },
+  { id:'zilla', name:'Zilla Slab', css:"'Zilla Slab', Georgia, serif" },
   { id:'lora', name:'Lora', css:"'Lora', Georgia, serif" },
   { id:'playfair', name:'Playfair Display', css:"'Playfair Display', Georgia, serif" },
   { id:'cormorant', name:'Cormorant Garamond', css:"'Cormorant Garamond', Garamond, serif" },
@@ -1485,7 +1488,7 @@ const FONTS = [
   { id:'dm-serif', name:'DM Serif Display', css:"'DM Serif Display', Georgia, serif" },
   { id:'source-serif', name:'Source Serif 4', css:"'Source Serif 4', Georgia, serif" },
 ];
-let currentFont = localStorage.getItem('chalet-font') || 'lora';
+let currentFont = localStorage.getItem('chalet-font') || 'arvo';
 
 function applyFont(id) {
   const f = FONTS.find(x=>x.id===id);
