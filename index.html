@@ -843,13 +843,34 @@ function open1(id){ document.getElementById(id).classList.add('open'); }
 function close1(id){ document.getElementById(id).classList.remove('open'); }
 function bgClose(e,id){ if(e.target.classList.contains('overlay')) close1(id); }
 
-// Swipe down to close modals
+// Drag down to close modals
 document.querySelectorAll('.overlay').forEach(ov => {
-  let sy;
-  ov.addEventListener('touchstart', e => { sy = e.touches[0].clientY; }, { passive: true });
-  ov.addEventListener('touchend', e => {
+  const sheet = ov.querySelector('.sheet');
+  let sy, dragging;
+  sheet.addEventListener('touchstart', e => {
+    if (sheet.scrollTop > 0) return;
+    sy = e.touches[0].clientY;
+    dragging = false;
+  }, { passive: true });
+  sheet.addEventListener('touchmove', e => {
+    const dy = e.touches[0].clientY - sy;
+    if (dy > 0) {
+      dragging = true;
+      sheet.style.transition = 'none';
+      sheet.style.transform = `translateY(${dy}px)`;
+    }
+  }, { passive: true });
+  sheet.addEventListener('touchend', e => {
+    if (!dragging) return;
     const dy = e.changedTouches[0].clientY - sy;
-    if (dy > 80) ov.classList.remove('open');
+    sheet.style.transition = '';
+    if (dy > 120) {
+      sheet.style.transform = '';
+      ov.classList.remove('open');
+    } else {
+      sheet.style.transform = '';
+    }
+    dragging = false;
   }, { passive: true });
 });
 
