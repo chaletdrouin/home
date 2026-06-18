@@ -247,6 +247,64 @@ export default {
       return new Response(null, { status: 204, headers: CORS });
     }
 
+    // ── Inventory ──
+
+    const DEFAULT_INVENTORY = [
+      'Sel','Poivre','Huile d\'olive','Vinaigre','Sucre','Farine',
+      'Pâtes','Riz','Café','Thé','Lait','Beurre','Œufs','Pain',
+      'Eau','Papier toilette','Savon','Éponges','Sacs poubelle',
+    ];
+
+    async function getInventory() {
+      let items = await env.BOOKINGS.get('inventory', 'json');
+      if (!items) {
+        items = DEFAULT_INVENTORY.map(name => ({
+          id: crypto.randomUUID(), name, qty: 1,
+        }));
+        await env.BOOKINGS.put('inventory', JSON.stringify(items));
+      }
+      return items;
+    }
+
+    // GET /inventory
+    if (req.method === 'GET' && path === '/inventory') {
+      return json(await getInventory());
+    }
+
+    // POST /inventory
+    if (req.method === 'POST' && path === '/inventory') {
+      let body;
+      try { body = await req.json(); } catch { return json({ error: 'Invalid JSON' }, 400); }
+      if (!body.name) return json({ error: 'name required' }, 400);
+      const items = await getInventory();
+      const item = { id: crypto.randomUUID(), name: String(body.name).slice(0, 80), qty: Number(body.qty) || 1 };
+      items.push(item);
+      await env.BOOKINGS.put('inventory', JSON.stringify(items));
+      return json(item, 201);
+    }
+
+    // PUT /inventory/:id
+    const mInvPut = path.match(/^\/inventory\/([0-9a-f-]+)$/i);
+    if (req.method === 'PUT' && mInvPut) {
+      let body;
+      try { body = await req.json(); } catch { return json({ error: 'Invalid JSON' }, 400); }
+      const items = await getInventory();
+      const idx = items.findIndex(i => i.id === mInvPut[1]);
+      if (idx === -1) return json({ error: 'Not found' }, 404);
+      if (body.name !== undefined) items[idx].name = String(body.name).slice(0, 80);
+      if (body.qty !== undefined) items[idx].qty = Math.max(0, Number(body.qty));
+      await env.BOOKINGS.put('inventory', JSON.stringify(items));
+      return json(items[idx]);
+    }
+
+    // DELETE /inventory/:id
+    const mInvDel = path.match(/^\/inventory\/([0-9a-f-]+)$/i);
+    if (req.method === 'DELETE' && mInvDel) {
+      const items = await getInventory();
+      await env.BOOKINGS.put('inventory', JSON.stringify(items.filter(i => i.id !== mInvDel[1])));
+      return new Response(null, { status: 204, headers: CORS });
+    }
+
     return new Response('Not found', { status: 404, headers: CORS });
   },
 };

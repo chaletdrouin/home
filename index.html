@@ -257,6 +257,35 @@
     }
     .empty { color: var(--text3); font-size: 14px; text-align: center; padding: 20px 0; }
 
+    /* ── Inventory ── */
+    .inv-item {
+      display: flex; align-items: center; gap: 10px;
+      padding: 10px 0; border-bottom: 1px solid var(--border);
+    }
+    .inv-name { flex: 1; font-size: 15px; font-weight: 500; min-width: 0; }
+    .inv-qty-wrap {
+      display: flex; align-items: center; gap: 6px; flex-shrink: 0;
+    }
+    .inv-qty-btn {
+      width: 28px; height: 28px;
+      display: flex; align-items: center; justify-content: center;
+      background: var(--bg2); border: none; border-radius: 7px;
+      color: var(--text); font-size: 16px; font-weight: 600;
+      cursor: pointer;
+    }
+    .inv-qty-btn:active { opacity: .6; }
+    .inv-qty { font-size: 14px; font-weight: 600; min-width: 20px; text-align: center; }
+    .inv-del {
+      padding: 4px 8px; background: none; border: none;
+      color: var(--text3); font-size: 16px; cursor: pointer;
+    }
+    .inv-del:hover { color: var(--red); }
+    .inv-add {
+      display: flex; gap: 8px; margin-top: 14px;
+    }
+    .inv-add .fi { flex: 1; padding: 10px 12px; font-size: 14px; }
+    .inv-add .btn { flex: none; width: 44px; padding: 0; font-size: 20px; }
+
     /* ── Loader ── */
     .loader {
       position: fixed; inset: 0; background: var(--bg);
@@ -326,6 +355,19 @@
     <div class="btns">
       <button class="btn btn-c" onclick="close1('m-create')">Annuler</button>
       <button class="btn btn-p" onclick="submitCreate()">Réserver</button>
+    </div>
+  </div>
+</div>
+
+<!-- Inventory modal -->
+<div class="overlay" id="m-inv" onclick="bgClose(event,'m-inv')">
+  <div class="sheet">
+    <div class="sheet-grip"></div>
+    <div class="sheet-title">Inventaire</div>
+    <div id="inv-body"></div>
+    <div class="inv-add">
+      <input class="fi" id="f-inv-name" type="text" placeholder="Ajouter un article…" onkeydown="if(event.key==='Enter')addInvItem()">
+      <button class="btn btn-p" onclick="addInvItem()">+</button>
     </div>
   </div>
 </div>
@@ -506,8 +548,78 @@ function openSettings() {
   alert('Paramètres – à venir');
 }
 
-function openInventory() {
-  alert('Inventaire – à venir');
+let inventory = [];
+
+async function openInventory() {
+  try {
+    const r = await fetch(API + '/inventory');
+    if (r.ok) inventory = await r.json();
+  } catch {}
+  renderInventory();
+  open1('m-inv');
+}
+
+function renderInventory() {
+  const body = document.getElementById('inv-body');
+  body.innerHTML = '';
+  if (!inventory.length) {
+    body.innerHTML = '<div class="empty">Aucun article</div>';
+    return;
+  }
+  inventory.forEach(item => {
+    const row = document.createElement('div');
+    row.className = 'inv-item';
+    row.innerHTML = `
+      <div class="inv-name">${esc(item.name)}</div>
+      <div class="inv-qty-wrap">
+        <button class="inv-qty-btn" onclick="updateInvQty('${item.id}',-1)">−</button>
+        <span class="inv-qty">${item.qty}</span>
+        <button class="inv-qty-btn" onclick="updateInvQty('${item.id}',1)">+</button>
+      </div>
+      <button class="inv-del" onclick="deleteInvItem('${item.id}')" title="Supprimer">✕</button>`;
+    body.appendChild(row);
+  });
+}
+
+async function addInvItem() {
+  const inp = document.getElementById('f-inv-name');
+  const name = inp.value.trim();
+  if (!name) { inp.focus(); return; }
+  try {
+    const r = await fetch(API + '/inventory', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ name, qty: 1 })
+    });
+    if (r.ok) {
+      const item = await r.json();
+      inventory.push(item);
+      inp.value = '';
+      renderInventory();
+    }
+  } catch { alert('Erreur réseau'); }
+}
+
+async function updateInvQty(id, delta) {
+  const item = inventory.find(i => i.id === id);
+  if (!item) return;
+  const newQty = Math.max(0, item.qty + delta);
+  try {
+    const r = await fetch(API + '/inventory/' + id, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ qty: newQty })
+    });
+    if (r.ok) { item.qty = newQty; renderInventory(); }
+  } catch {}
+}
+
+async function deleteInvItem(id) {
+  try {
+    await fetch(API + '/inventory/' + id, { method: 'DELETE' });
+    inventory = inventory.filter(i => i.id !== id);
+    renderInventory();
+  } catch {}
 }
 
 function openCreate(ds) {
