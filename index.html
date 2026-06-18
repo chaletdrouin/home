@@ -116,13 +116,24 @@
       flex: 1; text-align: center;
       font-size: 15px; font-weight: 600;
       letter-spacing: -.01em; color: var(--text2);
+      cursor: pointer; padding: 4px 8px; border-radius: 8px;
+      transition: background .1s;
     }
+    .hdr-title:hover { background: rgba(255,255,255,.06); }
     .hdr-nav {
       width: 30px; height: 30px;
       background: var(--bg2); border: none; border-radius: 8px;
       color: var(--text); font-size: 18px; line-height: 1;
       cursor: pointer; display: flex; align-items: center; justify-content: center;
     }
+    .hdr-today {
+      padding: 5px 10px; font-size: 12px; font-weight: 500;
+      background: var(--bg2); border: .5px solid var(--border); border-radius: 8px;
+      color: var(--text); cursor: pointer;
+      transition: max-width .22s ease, opacity .22s ease, padding .22s ease;
+      overflow: hidden; white-space: nowrap; max-width: 80px;
+    }
+    .hdr-today.hidden { max-width: 0; opacity: 0; padding: 5px 0; border-color: transparent; pointer-events: none; }
 
     /* ── Mobile ── */
     @media (max-width: 639px) {
@@ -227,6 +238,52 @@
     .bk-more {
       font-size: 9px; color: var(--text3); padding-left: 2px; flex-shrink: 0;
     }
+
+    /* ── Slide animation ── */
+    @keyframes slideOutLeft  { from{opacity:1;transform:translateX(0)} to{opacity:0;transform:translateX(-28px)} }
+    @keyframes slideOutRight { from{opacity:1;transform:translateX(0)} to{opacity:0;transform:translateX(28px)} }
+    @keyframes slideInLeft   { from{opacity:0;transform:translateX(28px)} to{opacity:1;transform:translateX(0)} }
+    @keyframes slideInRight  { from{opacity:0;transform:translateX(-28px)} to{opacity:1;transform:translateX(0)} }
+    .slide-out-left  { animation: slideOutLeft .18s ease forwards; }
+    .slide-out-right { animation: slideOutRight .18s ease forwards; }
+    .slide-in-left   { animation: slideInLeft .18s ease forwards; }
+    .slide-in-right  { animation: slideInRight .18s ease forwards; }
+
+    /* ── Annual view ── */
+    .year-view {
+      flex: 1; display: none; flex-direction: column;
+      padding: calc(10px + env(safe-area-inset-top)) 12px 12px;
+      min-height: 0; overflow-y: auto;
+    }
+    .year-view.active { display: flex; }
+    .year-title {
+      font-size: 18px; font-weight: 700; text-align: center;
+      padding: 6px 0 12px; cursor: pointer;
+    }
+    .year-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px; flex: 1;
+    }
+    @media (max-width: 639px) { .year-grid { grid-template-columns: repeat(2, 1fr); } }
+    .ym {
+      background: var(--bg2); border-radius: 10px; padding: 8px;
+      cursor: pointer; transition: background .1s;
+      border: .5px solid var(--border);
+    }
+    .ym:hover { background: var(--bg); }
+    .ym.current { border-color: var(--blue); }
+    .ym-title { font-size: 12px; font-weight: 600; margin-bottom: 4px; text-align: center; }
+    .ym-grid {
+      display: grid; grid-template-columns: repeat(7, 1fr); gap: 0;
+    }
+    .ym-d {
+      font-size: 8px; text-align: center; padding: 1px 0;
+      color: var(--text3); line-height: 1.4;
+    }
+    .ym-d.in { color: var(--text2); }
+    .ym-d.today { color: var(--blue); font-weight: 700; }
+    .ym-d.has-bk { background: rgba(79,142,247,.2); border-radius: 2px; }
 
     /* ── Modal overlay ── */
     .overlay {
@@ -420,8 +477,9 @@
   <div class="hdr">
     <div class="hdr-brand-mobile">Chalet Drouin</div>
     <div class="hdr-nav-row">
+      <button class="hdr-today hidden" id="btn-today" onclick="goToday()">Aujourd'hui</button>
       <button class="hdr-nav" onclick="nav(-1)">‹</button>
-      <div class="hdr-title" id="month-lbl"></div>
+      <div class="hdr-title" id="month-lbl" onclick="showAnnual()"></div>
       <button class="hdr-nav" onclick="nav(1)">›</button>
     </div>
   </div>
@@ -441,6 +499,11 @@
       <button class="btn btn-p" onclick="addInvItem()">+</button>
     </div>
   </div>
+
+  <div class="year-view" id="view-year">
+    <div class="year-title" id="year-title"></div>
+    <div class="year-grid" id="year-grid"></div>
+  </div>
 </div>
 
 <!-- Create modal -->
@@ -454,11 +517,11 @@
     </div>
     <div class="ff">
       <label class="fl">Arrivée</label>
-      <input class="fi" id="f-start" type="date">
+      <input class="fi" id="f-start" type="date" onclick="this.showPicker?.()">
     </div>
     <div class="ff">
       <label class="fl">Départ</label>
-      <input class="fi" id="f-end" type="date">
+      <input class="fi" id="f-end" type="date" onclick="this.showPicker?.()">
     </div>
     <div class="btns">
       <button class="btn btn-c" onclick="close1('m-create')">Annuler</button>
@@ -544,13 +607,106 @@ async function load() {
   render();
 }
 
-function nav(d){ cM+=d; if(cM>11){cM=0;cY++;} if(cM<0){cM=11;cY--;} render(); }
+let slideDir = 0;
+
+function nav(d){
+  slideDir = d;
+  cM+=d; if(cM>11){cM=0;cY++;} if(cM<0){cM=11;cY--;}
+  // Close annual view if open
+  document.getElementById('view-year').classList.remove('active');
+  document.querySelector('.hdr').style.display = '';
+  document.getElementById('view-cal').style.display = '';
+  render();
+}
+
+function goToday(){
+  const now = new Date();
+  const d = now.getMonth() > cM || now.getFullYear() > cY ? 1 : -1;
+  slideDir = (now.getFullYear() === cY && now.getMonth() === cM) ? 0 : d;
+  cY = now.getFullYear(); cM = now.getMonth();
+  document.getElementById('view-year').classList.remove('active');
+  document.querySelector('.hdr').style.display = '';
+  document.getElementById('view-cal').style.display = '';
+  render();
+}
+
+function updateTodayBtn(){
+  const btn = document.getElementById('btn-today');
+  const now = new Date();
+  btn.classList.toggle('hidden', cY === now.getFullYear() && cM === now.getMonth());
+}
+
+function showAnnual(){
+  document.querySelector('.hdr').style.display = 'none';
+  document.getElementById('view-cal').style.display = 'none';
+  document.getElementById('view-inv').classList.remove('active');
+  const yv = document.getElementById('view-year');
+  yv.classList.add('active');
+  renderAnnual();
+}
+
+function renderAnnual(){
+  document.getElementById('year-title').textContent = cY;
+  const grid = document.getElementById('year-grid');
+  grid.innerHTML = '';
+  const now = new Date();
+  const todayStr = ymd(now);
+  for(let m=0;m<12;m++){
+    const card = document.createElement('div');
+    card.className = 'ym' + (m===cM?' current':'');
+    card.onclick = function(){ cM=m; slideDir=0; document.getElementById('view-year').classList.remove('active'); document.querySelector('.hdr').style.display=''; document.getElementById('view-cal').style.display=''; render(); };
+    const title = document.createElement('div');
+    title.className = 'ym-title';
+    title.textContent = MSHO[m];
+    card.appendChild(title);
+    const mg = document.createElement('div');
+    mg.className = 'ym-grid';
+    const first = new Date(cY,m,1);
+    const last = new Date(cY,m+1,0);
+    let sdow = (first.getDay()+6)%7;
+    for(let i=0;i<sdow;i++){ const e=document.createElement('div'); e.className='ym-d'; mg.appendChild(e); }
+    for(let d=1;d<=last.getDate();d++){
+      const ds = cY+'-'+String(m+1).padStart(2,'0')+'-'+String(d).padStart(2,'0');
+      const e = document.createElement('div');
+      const hasBk = bookings.some(b=>b.start<=ds&&b.end>=ds);
+      e.className = 'ym-d in' + (ds===todayStr?' today':'') + (hasBk?' has-bk':'');
+      e.textContent = d;
+      mg.appendChild(e);
+    }
+    card.appendChild(mg);
+    grid.appendChild(card);
+  }
+}
 
 function render() {
   document.getElementById('month-lbl').textContent = MONTHS[cM]+' '+cY;
+  updateTodayBtn();
   const grid = document.getElementById('grid');
-  grid.innerHTML = '';
 
+  // Slide animation
+  if(slideDir !== 0){
+    const dir = slideDir;
+    slideDir = 0;
+    grid.classList.add(dir > 0 ? 'slide-out-left' : 'slide-out-right');
+    grid.addEventListener('animationend', function h(){
+      grid.removeEventListener('animationend', h);
+      grid.classList.remove('slide-out-left','slide-out-right');
+      grid.innerHTML = '';
+      renderGrid();
+      grid.classList.add(dir > 0 ? 'slide-in-left' : 'slide-in-right');
+      grid.addEventListener('animationend', function h2(){
+        grid.removeEventListener('animationend', h2);
+        grid.classList.remove('slide-in-left','slide-in-right');
+      });
+    });
+    return;
+  }
+  grid.innerHTML = '';
+  renderGrid();
+}
+
+function renderGrid() {
+  const grid = document.getElementById('grid');
   const first = new Date(cY,cM,1);
   const last  = new Date(cY,cM+1,0);
   let sdow = (first.getDay()+6)%7;
@@ -764,6 +920,7 @@ async function showView(name) {
     hdr.style.display = '';
     cal.style.display = '';
     inv.classList.remove('active');
+    document.getElementById('view-year').classList.remove('active');
   }
 }
 
