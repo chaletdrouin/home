@@ -10,7 +10,7 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Arvo:wght@400;700&family=Cormorant+Garamond:wght@400;500;600;700&family=DM+Serif+Display&family=Libre+Baskerville:wght@400;700&family=Lora:wght@400;500;600;700&family=Playfair+Display:wght@400;500;600;700&family=Roboto+Slab:wght@400;500;600;700&family=Source+Serif+4:wght@400;500;600;700&family=Zilla+Slab:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:wght@400;500;600;700&display=swap" rel="stylesheet">
   <style>
     :root {
       --bg:     #1c1c1e;
@@ -26,7 +26,7 @@
     html, body {
       height: 100%; overflow: hidden;
       background: var(--bg); color: var(--text);
-      font-family: var(--font, 'Arvo', Georgia, serif);
+      font-family: 'Source Serif 4', Georgia, serif;
       -webkit-text-size-adjust: 100%;
     }
     body {
@@ -50,7 +50,7 @@
       position: relative;
     }
     .sidebar-brand {
-      font-size: 15px; font-weight: 700;
+      font-size: 16px; font-weight: 700;
       color: var(--text); letter-spacing: -.01em;
       padding: 4px 12px 20px;
     }
@@ -70,7 +70,7 @@
     .nav-item {
       display: flex; align-items: center; gap: 10px;
       padding: 10px 12px; border-radius: 10px;
-      font-size: 14px; font-weight: 500; color: var(--text2);
+      font-size: 15px; font-weight: 500; color: var(--text2);
       cursor: pointer; border: none; background: none; width: 100%;
       text-align: left; transition: color .2s;
       position: relative; z-index: 1;
@@ -125,14 +125,14 @@
     }
     .hdr-brand-mobile {
       display: none;
-      font-size: 15px; font-weight: 700; letter-spacing: -.01em;
+      font-size: 16px; font-weight: 700; letter-spacing: -.01em;
     }
     .hdr-nav-row {
       display: flex; align-items: center; gap: 8px;
     }
     .hdr-title {
       flex: 1; text-align: center;
-      font-size: 15px; font-weight: 600;
+      font-size: 16px; font-weight: 600;
       letter-spacing: -.01em; color: var(--text2);
       cursor: pointer; padding: 4px 8px; border-radius: 8px;
       transition: background .1s;
@@ -146,7 +146,7 @@
       padding: 0; padding-bottom: 2px;
     }
     .hdr-today {
-      padding: 5px 10px; font-size: 12px; font-weight: 500;
+      padding: 5px 10px; font-size: 13px; font-weight: 500;
       background: var(--bg2); border: .5px solid var(--border); border-radius: 8px;
       color: var(--text); cursor: pointer;
       transition: max-width .22s ease, opacity .22s ease, padding .22s ease;
@@ -175,7 +175,7 @@
       .nav-item {
         flex: 1; flex-direction: column; justify-content: center;
         padding: 6px 4px; gap: 3px;
-        font-size: 10px; text-align: center; border-radius: 8px;
+        font-size: 11px; text-align: center; border-radius: 8px;
       }
       .nav-icon { width: 22px; height: 22px; display: block !important; }
       .nav-settings { margin-top: 0; margin-bottom: 0; }
@@ -192,7 +192,7 @@
       margin-bottom: 4px;
     }
     .dow-cell {
-      text-align: center; font-size: clamp(8px, 1.6vw, 11px); font-weight: 500;
+      text-align: center; font-size: clamp(9px, 1.7vw, 12px); font-weight: 500;
       color: var(--text2);
       letter-spacing: .01em;
       padding: 2px 0; overflow: hidden;
@@ -224,16 +224,16 @@
     .dn {
       width: 22px; height: 22px;
       display: flex; align-items: center; justify-content: center;
-      border-radius: 50%; font-size: 12px; font-weight: 500;
+      border-radius: 50%; font-size: 13px; font-weight: 500;
       flex-shrink: 0;
     }
     .dn.today  { background: var(--blue); color: #fff !important; }
     .dn.ov     { color: var(--text3); font-weight: 400; }
 
     .bk {
-      font-size: 9px; font-weight: 600;
+      font-size: 10px; font-weight: 600;
       padding: 0; padding-left: 4px;
-      min-height: 14px; line-height: 14px;
+      min-height: 15px; line-height: 15px;
       color: #fff;
       overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
       flex-shrink: 0; cursor: pointer;
@@ -253,10 +253,10 @@
       border-radius: 4px;
     }
     .bk-spacer {
-      min-height: 14px; flex-shrink: 0;
+      min-height: 15px; flex-shrink: 0;
     }
     .bk-more {
-      font-size: 9px; color: var(--text3); padding-left: 2px; flex-shrink: 0;
+      font-size: 10px; color: var(--text3); padding-left: 2px; flex-shrink: 0;
     }
 
     /* ── Slide animation ── */
@@ -289,12 +289,12 @@
     }
     .ym:hover { background: var(--bg); }
     .ym.current { border-color: var(--blue); }
-    .ym-title { font-size: 13px; font-weight: 600; margin-bottom: 8px; text-align: center; }
+    .ym-title { font-size: 14px; font-weight: 600; margin-bottom: 8px; text-align: center; }
     .ym-grid {
       display: grid; grid-template-columns: repeat(7, 1fr); gap: 2px;
     }
     .ym-d {
-      font-size: 10px; text-align: center; padding: 3px 0;
+      font-size: 11px; text-align: center; padding: 3px 0;
       color: var(--text3); line-height: 1.3;
     }
     .ym-d.in { color: var(--text2); }
@@ -324,7 +324,7 @@
       width: 38px; height: 4px; border-radius: 2px;
       background: var(--border); margin: -4px auto 14px;
     }
-    .sheet-title { font-size: 18px; font-weight: 700; margin-bottom: 18px; }
+    .sheet-title { font-size: 19px; font-weight: 700; margin-bottom: 18px; }
 
     /* ── Desktop modals ── */
     @media (min-width: 640px) {
@@ -356,7 +356,7 @@
     /* ── Form ── */
     .ff { margin-bottom: 13px; }
     .fl {
-      font-size: 11px; font-weight: 600;
+      font-size: 12px; font-weight: 600;
       color: var(--text2); text-transform: uppercase; letter-spacing: .06em;
       display: block; margin-bottom: 5px;
     }
@@ -364,7 +364,7 @@
       width: 100%; padding: 11px 13px;
       border: 1.5px solid var(--border); border-radius: 10px;
       background: var(--bg2); color: var(--text);
-      font-family: inherit; font-size: 15px; outline: none;
+      font-family: inherit; font-size: 16px; outline: none;
       -webkit-appearance: none;
       transition: border-color .15s;
     }
@@ -375,7 +375,7 @@
     .btns { display: flex; gap: 10px; margin-top: 20px; }
     .btn {
       flex: 1; padding: 13px; border: none; border-radius: 12px;
-      font-size: 15px; font-weight: 600; cursor: pointer;
+      font-size: 16px; font-weight: 600; cursor: pointer;
     }
     .btn-c { background: var(--bg2); color: var(--text); }
     .btn-p { background: var(--blue); color: #fff; }
@@ -388,14 +388,14 @@
     }
     .bk-dot { width: 11px; height: 11px; border-radius: 50%; flex-shrink: 0; }
     .bk-info { flex: 1; min-width: 0; }
-    .bk-name { font-size: 15px; font-weight: 600; }
-    .bk-dates { font-size: 12px; color: var(--text2); margin-top: 2px; }
+    .bk-name { font-size: 16px; font-weight: 600; }
+    .bk-dates { font-size: 13px; color: var(--text2); margin-top: 2px; }
     .bk-del {
       padding: 5px 11px; background: var(--red); color: #fff;
       border: none; border-radius: 7px;
-      font-size: 12px; font-weight: 600; cursor: pointer; flex-shrink: 0;
+      font-size: 13px; font-weight: 600; cursor: pointer; flex-shrink: 0;
     }
-    .empty { color: var(--text3); font-size: 14px; text-align: center; padding: 20px 0; }
+    .empty { color: var(--text3); font-size: 15px; text-align: center; padding: 20px 0; }
 
     /* ── Settings ── */
     .settings-row {
@@ -403,8 +403,8 @@
       padding: 14px 0; border-bottom: 1px solid var(--border);
     }
     .settings-info { flex: 1; min-width: 0; }
-    .settings-label { font-size: 15px; font-weight: 600; }
-    .settings-desc { font-size: 12px; color: var(--text2); margin-top: 2px; }
+    .settings-label { font-size: 16px; font-weight: 600; }
+    .settings-desc { font-size: 13px; color: var(--text2); margin-top: 2px; }
 
     /* ── Inventory view ── */
     .inv-view {
@@ -413,10 +413,10 @@
     }
     .inv-view.active { display: flex; }
     .inv-title {
-      font-size: 18px; font-weight: 700; margin-bottom: 14px;
+      font-size: 19px; font-weight: 700; margin-bottom: 14px;
     }
     .inv-cat {
-      font-size: 12px; font-weight: 600; color: var(--text2);
+      font-size: 13px; font-weight: 600; color: var(--text2);
       text-transform: uppercase; letter-spacing: .06em;
       padding: 16px 0 6px; border-bottom: 1px solid var(--border);
     }
@@ -425,14 +425,14 @@
       display: flex; align-items: center; gap: 10px;
       padding: 10px 0; border-bottom: 1px solid var(--border);
     }
-    .inv-name { flex: 1; font-size: 15px; font-weight: 500; min-width: 0; }
+    .inv-name { flex: 1; font-size: 16px; font-weight: 500; min-width: 0; }
     .inv-toggle {
       display: flex; flex-shrink: 0;
       background: var(--bg); border-radius: 8px;
       border: .5px solid var(--border); overflow: hidden;
     }
     .inv-opt {
-      padding: 5px 8px; font-size: 11px; font-weight: 500;
+      padding: 5px 8px; font-size: 12px; font-weight: 500;
       color: var(--text3); cursor: pointer;
       border: none; background: none;
       transition: background .15s, color .15s;
@@ -448,14 +448,14 @@
     .inv-add {
       display: flex; gap: 8px; padding: 14px 0; flex-shrink: 0;
     }
-    .inv-add .fi { flex: 1; padding: 10px 12px; font-size: 14px; }
-    .inv-add .btn { flex: none; width: 44px; padding: 0; font-size: 20px; }
+    .inv-add .fi { flex: 1; padding: 10px 12px; font-size: 15px; }
+    .inv-add .btn { flex: none; width: 44px; padding: 0; font-size: 21px; }
 
     /* ── Loader ── */
     .loader {
       position: fixed; inset: 0; background: var(--bg);
       display: flex; align-items: center; justify-content: center;
-      color: var(--text3); font-size: 14px;
+      color: var(--text3); font-size: 15px;
       z-index: 300; transition: opacity .3s;
     }
     .loader.gone { opacity: 0; pointer-events: none; }
@@ -475,8 +475,8 @@
 
     /* ── Toast ── */
     .toast-wrap { position:fixed; bottom:calc(20px + env(safe-area-inset-bottom)); left:50%; transform:translateX(-50%); z-index:400; display:flex; flex-direction:column; align-items:center; gap:8px; pointer-events:none; }
-    .toast { background:var(--bg2); color:var(--text); border:.5px solid var(--border); border-radius:12px; padding:10px 18px; font-size:13px; font-weight:500; box-shadow:0 4px 20px rgba(0,0,0,.3); pointer-events:auto; display:flex; align-items:center; gap:10px; animation:toastIn .25s ease; }
-    .toast-btn { background:var(--blue); color:#fff; border:none; border-radius:6px; padding:4px 10px; font-size:12px; font-weight:600; cursor:pointer; }
+    .toast { background:var(--bg2); color:var(--text); border:.5px solid var(--border); border-radius:12px; padding:10px 18px; font-size:14px; font-weight:500; box-shadow:0 4px 20px rgba(0,0,0,.3); pointer-events:auto; display:flex; align-items:center; gap:10px; animation:toastIn .25s ease; }
+    .toast-btn { background:var(--blue); color:#fff; border:none; border-radius:6px; padding:4px 10px; font-size:13px; font-weight:600; cursor:pointer; }
     @keyframes toastIn { from{opacity:0;transform:translateY(12px)} to{opacity:1;transform:translateY(0)} }
     @keyframes toastOut { from{opacity:1;transform:translateY(0)} to{opacity:0;transform:translateY(12px)} }
 
@@ -498,10 +498,10 @@
     /* ── Mode d'emploi ── */
     .doc-view { flex:1; display:none; flex-direction:column; padding:calc(16px + env(safe-area-inset-top)) 20px 16px; min-height:0; overflow-y:auto; }
     .doc-view.active { display:flex; }
-    .doc-title { font-size:18px; font-weight:700; margin-bottom:16px; }
+    .doc-title { font-size:19px; font-weight:700; margin-bottom:16px; }
     .doc-section { margin-bottom:18px; }
-    .doc-section h3 { font-size:14px; font-weight:600; color:var(--blue); margin-bottom:8px; }
-    .doc-section p, .doc-section li { font-size:13px; color:var(--text2); line-height:1.6; }
+    .doc-section h3 { font-size:15px; font-weight:600; color:var(--blue); margin-bottom:8px; }
+    .doc-section p, .doc-section li { font-size:14px; color:var(--text2); line-height:1.6; }
     .doc-section ul { padding-left:18px; }
     .doc-section li { margin-bottom:4px; }
 
@@ -509,34 +509,9 @@
     .bk-edit {
       padding: 5px 11px; background: var(--bg2); color: var(--text);
       border: .5px solid var(--border); border-radius: 7px;
-      font-size: 12px; font-weight: 600; cursor: pointer; flex-shrink: 0;
+      font-size: 13px; font-weight: 600; cursor: pointer; flex-shrink: 0;
     }
 
-    /* ── Font picker ── */
-    .font-picker {
-      position: fixed; inset: 0; z-index: 500;
-      background: rgba(0,0,0,.5); backdrop-filter: blur(6px);
-      display: flex; align-items: center; justify-content: center;
-      opacity: 0; pointer-events: none; transition: opacity .2s;
-    }
-    .font-picker.open { opacity: 1; pointer-events: auto; }
-    .font-picker-card {
-      background: var(--bg2); border-radius: 16px; border: .5px solid var(--border);
-      padding: 24px; max-width: 440px; width: 90%; max-height: 85dvh; overflow-y: auto;
-    }
-    .fp-title { font-size: 16px; font-weight: 700; margin-bottom: 16px; text-align: center; }
-    .fp-option {
-      padding: 16px; border-radius: 12px; cursor: pointer;
-      border: 1.5px solid var(--border); margin-bottom: 10px;
-      transition: border-color .15s, background .15s;
-    }
-    .fp-option:hover { background: rgba(255,255,255,.04); }
-    .fp-option.selected { border-color: var(--blue); background: rgba(79,142,247,.08); }
-    .fp-name { font-size: 11px; font-weight: 600; color: var(--text2); text-transform: uppercase; letter-spacing: .06em; margin-bottom: 8px; font-family: -apple-system, sans-serif; }
-    .fp-sample-title { font-size: 18px; font-weight: 700; margin-bottom: 4px; }
-    .fp-sample-body { font-size: 14px; color: var(--text2); line-height: 1.5; }
-    .fp-sample-small { font-size: 11px; color: var(--text3); margin-top: 4px; }
-    .fp-close { margin-top: 14px; width: 100%; }
   </style>
 </head>
 <body>
@@ -590,7 +565,7 @@
     <div class="inv-title">Inventaire</div>
     <div class="inv-cols" id="inv-body"></div>
     <div class="inv-add">
-      <select class="fi" id="f-inv-cat" style="flex:none;width:auto;padding:10px 8px;font-size:13px;">
+      <select class="fi" id="f-inv-cat" style="flex:none;width:auto;padding:10px 8px;font-size:14px;">
         <option>Épicerie</option><option>Boissons</option><option>Frais</option><option>Entretien</option><option>Autre</option>
       </select>
       <input class="fi" id="f-inv-name" type="text" placeholder="Ajouter…" onkeydown="if(event.key==='Enter')addInvItem()">
@@ -681,14 +656,7 @@
         <div class="settings-label">Notifications</div>
         <div class="settings-desc" id="notif-status">Chargement…</div>
       </div>
-      <button class="btn btn-p" id="notif-btn" onclick="enablePush()" style="flex:none;padding:10px 16px;font-size:13px;">Activer</button>
-    </div>
-    <div class="settings-row">
-      <div class="settings-info">
-        <div class="settings-label">Police</div>
-        <div class="settings-desc" id="font-current">Arvo</div>
-      </div>
-      <button class="btn btn-p" onclick="openFontPicker()" style="flex:none;padding:10px 16px;font-size:13px;">Changer</button>
+      <button class="btn btn-p" id="notif-btn" onclick="enablePush()" style="flex:none;padding:10px 16px;font-size:14px;">Activer</button>
     </div>
     <div class="btns" style="margin-top:20px">
       <button class="btn btn-c" onclick="close1('m-settings')">Fermer</button>
@@ -736,14 +704,6 @@
   </div>
 </div>
 
-<!-- Font picker -->
-<div class="font-picker" id="font-picker" onclick="if(event.target===this)closeFontPicker()">
-  <div class="font-picker-card">
-    <div class="fp-title">Choisis ta police</div>
-    <div id="fp-options"></div>
-    <button class="btn btn-c fp-close" onclick="closeFontPicker()">Fermer</button>
-  </div>
-</div>
 
 <script>
 // ── CONFIG ─────────────────────────────────────────────
@@ -1476,54 +1436,6 @@ window.addEventListener('resize', function(){
   },{passive:false});
 })();
 
-// Font picker
-const FONTS = [
-  { id:'arvo', name:'Arvo', css:"'Arvo', Georgia, serif" },
-  { id:'roboto-slab', name:'Roboto Slab', css:"'Roboto Slab', Georgia, serif" },
-  { id:'zilla', name:'Zilla Slab', css:"'Zilla Slab', Georgia, serif" },
-  { id:'lora', name:'Lora', css:"'Lora', Georgia, serif" },
-  { id:'playfair', name:'Playfair Display', css:"'Playfair Display', Georgia, serif" },
-  { id:'cormorant', name:'Cormorant Garamond', css:"'Cormorant Garamond', Garamond, serif" },
-  { id:'baskerville', name:'Libre Baskerville', css:"'Libre Baskerville', Baskerville, serif" },
-  { id:'dm-serif', name:'DM Serif Display', css:"'DM Serif Display', Georgia, serif" },
-  { id:'source-serif', name:'Source Serif 4', css:"'Source Serif 4', Georgia, serif" },
-];
-let currentFont = localStorage.getItem('chalet-font') || 'arvo';
-
-function applyFont(id) {
-  const f = FONTS.find(x=>x.id===id);
-  if(!f) return;
-  document.documentElement.style.setProperty('--font', f.css);
-  currentFont = id;
-  localStorage.setItem('chalet-font', id);
-  document.getElementById('font-current').textContent = f.name;
-}
-
-function openFontPicker() {
-  const wrap = document.getElementById('fp-options');
-  wrap.innerHTML = '';
-  FONTS.forEach(f => {
-    const opt = document.createElement('div');
-    opt.className = 'fp-option' + (f.id===currentFont?' selected':'');
-    opt.innerHTML = `<div class="fp-name">${f.name}</div>
-      <div class="fp-sample-title" style="font-family:${f.css}">Chalet Drouin</div>
-      <div class="fp-sample-body" style="font-family:${f.css}">Réservation du 15 au 22 juin — La montagne vous attend dans le calme et la sérénité.</div>
-      <div class="fp-sample-small" style="font-family:${f.css}">Lun Mar Mer Jeu Ven Sam Dim · 1 2 3 4 5 6 7 8 9 10</div>`;
-    opt.onclick = function(){
-      applyFont(f.id);
-      wrap.querySelectorAll('.fp-option').forEach(o=>o.classList.remove('selected'));
-      opt.classList.add('selected');
-    };
-    wrap.appendChild(opt);
-  });
-  document.getElementById('font-picker').classList.add('open');
-}
-
-function closeFontPicker() {
-  document.getElementById('font-picker').classList.remove('open');
-}
-
-applyFont(currentFont);
 
 // Pull to refresh
 (function(){
