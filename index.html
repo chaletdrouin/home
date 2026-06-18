@@ -299,7 +299,16 @@
     .settings-label { font-size: 15px; font-weight: 600; }
     .settings-desc { font-size: 12px; color: var(--text2); margin-top: 2px; }
 
-    /* ── Inventory ── */
+    /* ── Inventory view ── */
+    .inv-view {
+      flex: 1; display: none; flex-direction: column;
+      padding: 16px 16px 8px; min-height: 0; overflow-y: auto;
+    }
+    .inv-view.active { display: flex; }
+    .inv-title {
+      font-size: 18px; font-weight: 700; margin-bottom: 14px;
+    }
+    .inv-list { flex: 1; min-height: 0; overflow-y: auto; }
     .inv-item {
       display: flex; align-items: center; gap: 10px;
       padding: 10px 0; border-bottom: 1px solid var(--border);
@@ -325,7 +334,7 @@
     }
     .inv-del:hover { color: var(--red); }
     .inv-add {
-      display: flex; gap: 8px; margin-top: 14px;
+      display: flex; gap: 8px; padding: 14px 0; flex-shrink: 0;
     }
     .inv-add .fi { flex: 1; padding: 10px 12px; font-size: 14px; }
     .inv-add .btn { flex: none; width: 44px; padding: 0; font-size: 20px; }
@@ -346,7 +355,7 @@
 
 <nav class="sidebar">
   <div class="sidebar-brand">Chalet Drouin</div>
-  <button class="nav-item active">
+  <button class="nav-item active" onclick="showView('cal')">
     <svg class="nav-icon" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
     Calendrier
   </button>
@@ -354,7 +363,7 @@
     <svg class="nav-icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg>
     Réserver
   </button>
-  <button class="nav-item" onclick="openInventory()">
+  <button class="nav-item" onclick="showView('inv')">
     <svg class="nav-icon" viewBox="0 0 24 24"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>
     Inventaire
   </button>
@@ -380,9 +389,18 @@
       <path d="M780 86 Q800 76 830 66" stroke="currentColor" stroke-width="3" stroke-linecap="round" fill="none" opacity=".4"/>
     </svg>
   </div>
-  <div class="cal-outer">
+  <div class="cal-outer" id="view-cal">
     <div class="dow-row" id="dow"></div>
     <div class="cal-grid" id="grid"></div>
+  </div>
+
+  <div class="inv-view" id="view-inv">
+    <div class="inv-title">Inventaire</div>
+    <div class="inv-list" id="inv-body"></div>
+    <div class="inv-add">
+      <input class="fi" id="f-inv-name" type="text" placeholder="Ajouter un article…" onkeydown="if(event.key==='Enter')addInvItem()">
+      <button class="btn btn-p" onclick="addInvItem()">+</button>
+    </div>
   </div>
 </div>
 
@@ -406,19 +424,6 @@
     <div class="btns">
       <button class="btn btn-c" onclick="close1('m-create')">Annuler</button>
       <button class="btn btn-p" onclick="submitCreate()">Réserver</button>
-    </div>
-  </div>
-</div>
-
-<!-- Inventory modal -->
-<div class="overlay" id="m-inv" onclick="bgClose(event,'m-inv')">
-  <div class="sheet">
-    <div class="sheet-grip"></div>
-    <div class="sheet-title">Inventaire</div>
-    <div id="inv-body"></div>
-    <div class="inv-add">
-      <input class="fi" id="f-inv-name" type="text" placeholder="Ajouter un article…" onkeydown="if(event.key==='Enter')addInvItem()">
-      <button class="btn btn-p" onclick="addInvItem()">+</button>
     </div>
   </div>
 </div>
@@ -672,13 +677,31 @@ async function subscribePush() {
 
 let inventory = [];
 
-async function openInventory() {
-  try {
-    const r = await fetch(API + '/inventory');
-    if (r.ok) inventory = await r.json();
-  } catch {}
-  renderInventory();
-  open1('m-inv');
+async function showView(name) {
+  const navBtns = document.querySelectorAll('.nav-item');
+  const idx = name === 'cal' ? 0 : 2;
+  navBtns.forEach((b, i) => b.classList.toggle('active', i === idx));
+
+  const hdr = document.querySelector('.hdr');
+  const cal = document.getElementById('view-cal');
+  const inv = document.getElementById('view-inv');
+
+  if (name === 'inv') {
+    hdr.style.display = 'none';
+    cal.style.display = 'none';
+    inv.classList.add('active');
+    if (!inventory.length) {
+      try {
+        const r = await fetch(API + '/inventory');
+        if (r.ok) inventory = await r.json();
+      } catch {}
+    }
+    renderInventory();
+  } else {
+    hdr.style.display = '';
+    cal.style.display = '';
+    inv.classList.remove('active');
+  }
 }
 
 function renderInventory() {
