@@ -874,7 +874,7 @@ load();
     ctx.drawImage(img, 0, 0);
     const data = ctx.getImageData(0, 0, c.width, c.height);
     const step = Math.max(1, Math.floor(c.width / 60));
-    const pts = [];
+    const raw = [];
     for (let x = 0; x < c.width; x += step) {
       let topY = c.height;
       for (let y = 0; y < c.height; y++) {
@@ -883,8 +883,15 @@ load();
           break;
         }
       }
-      pts.push(`${(x / c.width * 100).toFixed(1)}% ${(topY / c.height * 100).toFixed(1)}%`);
+      raw.push({ x: x / c.width * 100, y: topY / c.height * 100 });
     }
+    // After the rightmost valley, don't follow ridge back up
+    let maxYVal = 0, maxYIdx = 0;
+    for (let i = Math.floor(raw.length * 0.5); i < raw.length; i++) {
+      if (raw[i].y >= maxYVal) { maxYVal = raw[i].y; maxYIdx = i; }
+    }
+    raw.splice(maxYIdx + 1);
+    const pts = raw.map(p => `${p.x.toFixed(1)}% ${p.y.toFixed(1)}%`);
     pts.push('100% 100%', '0% 100%');
     const fill = document.getElementById('mountains-fill');
     if (fill) fill.style.clipPath = 'polygon(' + pts.join(',') + ')';
