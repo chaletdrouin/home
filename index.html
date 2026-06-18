@@ -843,6 +843,16 @@ function open1(id){ document.getElementById(id).classList.add('open'); }
 function close1(id){ document.getElementById(id).classList.remove('open'); }
 function bgClose(e,id){ if(e.target.classList.contains('overlay')) close1(id); }
 
+// Swipe down to close modals
+document.querySelectorAll('.overlay').forEach(ov => {
+  let sy;
+  ov.addEventListener('touchstart', e => { sy = e.touches[0].clientY; }, { passive: true });
+  ov.addEventListener('touchend', e => {
+    const dy = e.changedTouches[0].clientY - sy;
+    if (dy > 80) ov.classList.remove('open');
+  }, { passive: true });
+});
+
 // Service worker + Push
 function b64urlToUint8(str) {
   const b64 = str.replace(/-/g, '+').replace(/_/g, '/');
