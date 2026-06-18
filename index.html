@@ -416,14 +416,6 @@
       font-size: 19px; font-weight: 700; margin-bottom: 14px;
       display: flex; align-items: center; gap: 10px;
     }
-    .inv-title-add {
-      width: 28px; height: 28px; border-radius: 50%;
-      border: none; background: var(--accent); color: #fff;
-      font-size: 20px; font-weight: 500; cursor: pointer;
-      display: flex; align-items: center; justify-content: center;
-      padding-bottom: 1px; transition: transform .2s;
-    }
-    .inv-title-add.open { transform: rotate(45deg); }
     .inv-cat {
       font-size: 13px; font-weight: 600; color: var(--text2);
       text-transform: uppercase; letter-spacing: .06em;
@@ -468,14 +460,27 @@
     .inv-del:hover { color: var(--red); }
     .inv-add {
       display: flex; gap: 8px; padding: 14px 0; flex-shrink: 0;
-      max-height: 0; overflow: hidden; padding: 0;
-      transition: max-height .3s ease, padding .3s ease;
+      align-items: center;
     }
-    .inv-add.open {
-      max-height: 80px; padding: 14px 0;
+    .inv-add-field {
+      flex: 1; padding: 10px 12px; font-size: 15px;
+      max-width: 0; overflow: hidden; opacity: 0;
+      padding-left: 0; padding-right: 0; border-width: 0;
+      transition: max-width .3s ease, opacity .2s ease, padding .3s ease, border-width .3s ease;
     }
-    .inv-add .fi { flex: 1; padding: 10px 12px; font-size: 15px; }
-    .inv-add .btn { flex: none; width: 44px; padding: 0; font-size: 21px; }
+    .inv-add.open .inv-add-field {
+      max-width: 300px; opacity: 1;
+      padding-left: 12px; padding-right: 12px; border-width: 1px;
+    }
+    .inv-add-btn {
+      flex: none; width: 44px; height: 44px; padding: 0;
+      font-size: 22px; border-radius: 50%;
+      transition: border-radius .3s ease, width .3s ease, font-size .2s ease;
+    }
+    .inv-add.open .inv-add-btn {
+      border-radius: 8px; width: auto; padding: 0 18px;
+      font-size: 15px;
+    }
 
     /* ── Loader ── */
     .loader {
@@ -605,15 +610,15 @@
   </div>
 
   <div class="inv-view" id="view-inv">
-    <div class="inv-title">Inventaire <button class="inv-title-add" onclick="toggleInvAdd()">+</button></div>
+    <div class="inv-title">Inventaire</div>
     <div class="inv-tabs" id="inv-tabs"></div>
     <div class="inv-cols" id="inv-body"></div>
-    <div class="inv-add">
-      <select class="fi" id="f-inv-cat" style="flex:none;width:auto;padding:10px 8px;font-size:14px;">
+    <div class="inv-add" id="inv-add">
+      <select class="fi inv-add-field" id="f-inv-cat" style="flex:none;width:auto;padding:10px 8px;font-size:14px;">
         <option>Épicerie</option><option>Condiments</option><option>Boissons</option><option>Frais</option><option>Entretien</option><option>Autre</option>
       </select>
-      <input class="fi" id="f-inv-name" type="text" placeholder="Ajouter…" onkeydown="if(event.key==='Enter')addInvItem()">
-      <button class="btn btn-p" onclick="addInvItem()" style="flex:none;padding:0 16px;">OK</button>
+      <input class="fi inv-add-field" id="f-inv-name" type="text" placeholder="Ajouter…" onkeydown="if(event.key==='Enter')addInvItem()">
+      <button class="btn btn-p inv-add-btn" id="inv-add-btn" onclick="invAddClick()">+</button>
     </div>
   </div>
 
@@ -1224,12 +1229,22 @@ function renderInventory(animate) {
   });
 }
 
-function toggleInvAdd() {
-  const form = document.querySelector('.inv-add');
-  const btn = document.querySelector('.inv-title-add');
-  form.classList.toggle('open');
-  btn.classList.toggle('open');
-  if (form.classList.contains('open')) document.getElementById('f-inv-name').focus();
+function invAddClick() {
+  const form = document.getElementById('inv-add');
+  const btn = document.getElementById('inv-add-btn');
+  if (form.classList.contains('open')) {
+    addInvItem();
+  } else {
+    form.classList.add('open');
+    btn.textContent = 'OK';
+    setTimeout(() => document.getElementById('f-inv-name').focus(), 300);
+  }
+}
+function closeInvAdd() {
+  const form = document.getElementById('inv-add');
+  const btn = document.getElementById('inv-add-btn');
+  form.classList.remove('open');
+  btn.textContent = '+';
 }
 
 async function addInvItem() {
@@ -1248,6 +1263,7 @@ async function addInvItem() {
       inventory.push(item);
       inp.value = '';
       renderInventory();
+      closeInvAdd();
     }
   } catch { showToast('Erreur réseau'); }
 }
