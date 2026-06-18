@@ -1194,9 +1194,9 @@ function renderInventory() {
         <div class="inv-name">${esc(item.name)}</div>
         <div class="inv-toggle">
           <div class="inv-pill" data-v="${q}"></div>
-          <button class="inv-opt${q===0?' on':''}" onclick="setInvQty('${item.id}',0)">Aucun</button>
-          <button class="inv-opt${q===1?' on':''}" onclick="setInvQty('${item.id}',1)">Un peu</button>
-          <button class="inv-opt${q===2?' on':''}" onclick="setInvQty('${item.id}',2)">Beaucoup</button>
+          <button class="inv-opt${q===0?' on':''}" onclick="setInvQty('${item.id}',0,this)">Aucun</button>
+          <button class="inv-opt${q===1?' on':''}" onclick="setInvQty('${item.id}',1,this)">Un peu</button>
+          <button class="inv-opt${q===2?' on':''}" onclick="setInvQty('${item.id}',2,this)">Beaucoup</button>
         </div>
         <button class="inv-del" onclick="deleteInvItem('${item.id}')" title="Supprimer">✕</button>`;
       section.appendChild(row);
@@ -1225,16 +1225,21 @@ async function addInvItem() {
   } catch { showToast('Erreur réseau'); }
 }
 
-async function setInvQty(id, level) {
+async function setInvQty(id, level, btn) {
   const item = inventory.find(i => i.id === id);
   if (!item) return;
+  item.qty = level;
+  if (btn) {
+    const toggle = btn.closest('.inv-toggle');
+    toggle.querySelector('.inv-pill').setAttribute('data-v', level);
+    toggle.querySelectorAll('.inv-opt').forEach((o, i) => o.classList.toggle('on', i === level));
+  }
   try {
-    const r = await fetch(API + '/inventory/' + id, {
+    await fetch(API + '/inventory/' + id, {
       method: 'PUT',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ qty: level })
     });
-    if (r.ok) { item.qty = level; renderInventory(); }
   } catch {}
 }
 
