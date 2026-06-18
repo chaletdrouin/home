@@ -414,7 +414,16 @@
     .inv-view.active { display: flex; }
     .inv-title {
       font-size: 19px; font-weight: 700; margin-bottom: 14px;
+      display: flex; align-items: center; gap: 10px;
     }
+    .inv-title-add {
+      width: 28px; height: 28px; border-radius: 50%;
+      border: none; background: var(--accent); color: #fff;
+      font-size: 20px; font-weight: 500; cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      padding-bottom: 1px; transition: transform .2s;
+    }
+    .inv-title-add.open { transform: rotate(45deg); }
     .inv-cat {
       font-size: 13px; font-weight: 600; color: var(--text2);
       text-transform: uppercase; letter-spacing: .06em;
@@ -459,6 +468,11 @@
     .inv-del:hover { color: var(--red); }
     .inv-add {
       display: flex; gap: 8px; padding: 14px 0; flex-shrink: 0;
+      max-height: 0; overflow: hidden; padding: 0;
+      transition: max-height .3s ease, padding .3s ease;
+    }
+    .inv-add.open {
+      max-height: 80px; padding: 14px 0;
     }
     .inv-add .fi { flex: 1; padding: 10px 12px; font-size: 15px; }
     .inv-add .btn { flex: none; width: 44px; padding: 0; font-size: 21px; }
@@ -591,7 +605,7 @@
   </div>
 
   <div class="inv-view" id="view-inv">
-    <div class="inv-title">Inventaire</div>
+    <div class="inv-title">Inventaire <button class="inv-title-add" onclick="toggleInvAdd()">+</button></div>
     <div class="inv-tabs" id="inv-tabs"></div>
     <div class="inv-cols" id="inv-body"></div>
     <div class="inv-add">
@@ -599,7 +613,7 @@
         <option>Épicerie</option><option>Condiments</option><option>Boissons</option><option>Frais</option><option>Entretien</option><option>Autre</option>
       </select>
       <input class="fi" id="f-inv-name" type="text" placeholder="Ajouter…" onkeydown="if(event.key==='Enter')addInvItem()">
-      <button class="btn btn-p" onclick="addInvItem()">+</button>
+      <button class="btn btn-p" onclick="addInvItem()" style="flex:none;padding:0 16px;">OK</button>
     </div>
   </div>
 
@@ -1208,6 +1222,14 @@ function renderInventory(animate) {
     });
     body.appendChild(section);
   });
+}
+
+function toggleInvAdd() {
+  const form = document.querySelector('.inv-add');
+  const btn = document.querySelector('.inv-title-add');
+  form.classList.toggle('open');
+  btn.classList.toggle('open');
+  if (form.classList.contains('open')) document.getElementById('f-inv-name').focus();
 }
 
 async function addInvItem() {
