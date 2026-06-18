@@ -75,9 +75,9 @@
       overflow: hidden;
     }
     .hdr-mountains {
-      width: 100%; height: 32px;
-      margin-top: 2px;
-      opacity: .18;
+      width: 100%; height: 48px;
+      margin-top: 4px;
+      opacity: .45;
     }
     .hdr-brand-mobile {
       display: none;
@@ -381,12 +381,17 @@
       <div class="hdr-title" id="month-lbl"></div>
       <button class="hdr-nav" onclick="nav(1)">›</button>
     </div>
-    <svg class="hdr-mountains" viewBox="0 0 1200 120" preserveAspectRatio="none" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <path d="M0 68 L30 58 L55 62 L70 42 L85 35 L100 28 L120 38 L130 52 L140 48 L155 55 L175 50 L190 58 L210 65 L230 72 L260 78 L290 82 L320 90 L340 85 L360 78 L390 72 L410 60 L430 52 L445 48 L460 55 L475 50 L490 45 L510 42 L530 50 L545 46 L560 38 L575 42 L590 35 L610 40 L630 46 L645 42 L660 48 L680 44 L700 52 L720 60 L740 68 L760 75 L780 82 L800 78 L815 70 L830 62 L845 68 L860 75 L880 82 L900 88 L930 92 L960 95 L1000 98 L1040 100 L1080 102 L1120 104 L1160 106 L1200 108" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
-      <path d="M0 72 L30 63 L55 66 L70 48 L85 40 L100 34 L120 44 L130 56 L140 52 L155 59 L175 54 L190 62 L210 69 L230 76 L260 82 L290 86 L320 94 L340 88 L360 82 L390 76 L410 64 L430 56 L445 52 L460 59 L475 54 L490 49 L510 46 L530 54 L545 50 L560 42 L575 46 L590 40 L610 44 L630 50 L645 46 L660 52 L680 48 L700 56 L720 64 L740 72 L760 79 L780 86 L800 82 L815 74 L830 66 L845 72 L860 79 L880 86 L900 92 L930 96 L960 99 L1000 102 L1040 104 L1080 106 L1120 108 L1160 110 L1200 112" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-      <path d="M0 76 Q60 70 100 40 Q110 32 120 42 L130 58" stroke="currentColor" stroke-width="3" stroke-linecap="round" fill="currentColor" opacity=".3"/>
-      <path d="M300 92 Q330 80 360 76 Q390 58 420 52" stroke="currentColor" stroke-width="3" stroke-linecap="round" fill="none" opacity=".4"/>
-      <path d="M780 86 Q800 76 830 66" stroke="currentColor" stroke-width="3" stroke-linecap="round" fill="none" opacity=".4"/>
+    <svg class="hdr-mountains" viewBox="0 0 1200 160" preserveAspectRatio="none" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <!-- Ridge line 1 (top) -->
+      <path d="M0 72 L20 65 L40 58 L55 50 L65 38 L75 28 L85 18 L95 25 L105 35 L110 42 L120 50 L130 44 L140 30 L150 20 L160 14 L170 22 L185 36 L200 48 L220 54 L250 58 L280 56 L310 62 L340 80 L360 90 L380 95 L400 100 L420 98 L440 90 L455 82 L470 76 L480 68 L490 60 L500 54 L510 48 L520 42 L535 38 L550 35 L560 32 L575 36 L585 40 L600 44 L615 38 L625 34 L640 30 L655 34 L670 40 L685 36 L695 32 L710 36 L730 42 L750 38 L765 34 L780 30 L795 28 L810 34 L830 42 L850 50 L870 56 L890 60 L910 55 L925 48 L940 42 L955 50 L970 58 L985 64 L1000 68 L1020 64 L1040 58 L1060 52 L1090 46 L1120 40 L1150 36 L1200 30" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      <!-- Ridge line 2 (bottom, echo) -->
+      <path d="M0 78 L20 72 L40 64 L55 56 L65 44 L75 34 L85 24 L95 32 L105 42 L110 48 L120 56 L130 50 L140 36 L150 26 L160 20 L170 28 L185 42 L200 54 L220 60 L250 64 L280 62 L310 68 L340 86 L360 96 L380 102 L400 106 L420 104 L440 96 L455 88 L470 82 L480 74 L490 66 L500 60 L510 54 L520 48 L535 44 L550 40 L560 38 L575 42 L585 46 L600 50 L615 44 L625 40 L640 36 L655 40 L670 46 L685 42 L695 38 L710 42 L730 48 L750 44 L765 40 L780 36 L795 34 L810 40 L830 48 L850 56 L870 62 L890 66 L910 62 L925 54 L940 48 L955 56 L970 64 L985 70 L1000 74 L1020 70 L1040 64 L1060 58 L1090 52 L1120 46 L1150 42 L1200 36" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
+      <!-- Left peak shadow -->
+      <path d="M55 50 L65 38 L75 28 L85 18 L95 25 L105 35 L110 42 L115 50 L105 52 L95 48 L85 40 L75 46 L65 52 Z" fill="currentColor" opacity=".25"/>
+      <!-- Left valley shadow -->
+      <path d="M340 80 L360 90 L380 100 L395 108 L400 120 L395 132 L390 140 L385 132 L380 120 L370 108 L355 96 L340 88 Z" fill="currentColor" opacity=".35"/>
+      <!-- Right valley shadow -->
+      <path d="M900 60 L920 52 L940 42 L950 50 L955 62 L960 80 L958 100 L954 118 L950 130 L946 118 L942 100 L938 85 L930 72 L920 64 L910 58 Z" fill="currentColor" opacity=".35"/>
     </svg>
   </div>
   <div class="cal-outer" id="view-cal">
