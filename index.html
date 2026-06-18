@@ -68,10 +68,16 @@
     /* ── Header ── */
     .hdr {
       display: flex; flex-direction: column;
-      padding: 10px 14px; gap: 6px;
+      padding: 10px 14px 0; gap: 6px;
       flex-shrink: 0;
       border-bottom: 1px solid var(--border);
       background: var(--bg);
+      overflow: hidden;
+    }
+    .hdr-mountains {
+      width: 100%; height: 32px;
+      margin-top: 2px;
+      opacity: .18;
     }
     .hdr-brand-mobile {
       display: none;
@@ -366,6 +372,13 @@
       <div class="hdr-title" id="month-lbl"></div>
       <button class="hdr-nav" onclick="nav(1)">›</button>
     </div>
+    <svg class="hdr-mountains" viewBox="0 0 1200 120" preserveAspectRatio="none" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M0 68 L30 58 L55 62 L70 42 L85 35 L100 28 L120 38 L130 52 L140 48 L155 55 L175 50 L190 58 L210 65 L230 72 L260 78 L290 82 L320 90 L340 85 L360 78 L390 72 L410 60 L430 52 L445 48 L460 55 L475 50 L490 45 L510 42 L530 50 L545 46 L560 38 L575 42 L590 35 L610 40 L630 46 L645 42 L660 48 L680 44 L700 52 L720 60 L740 68 L760 75 L780 82 L800 78 L815 70 L830 62 L845 68 L860 75 L880 82 L900 88 L930 92 L960 95 L1000 98 L1040 100 L1080 102 L1120 104 L1160 106 L1200 108" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+      <path d="M0 72 L30 63 L55 66 L70 48 L85 40 L100 34 L120 44 L130 56 L140 52 L155 59 L175 54 L190 62 L210 69 L230 76 L260 82 L290 86 L320 94 L340 88 L360 82 L390 76 L410 64 L430 56 L445 52 L460 59 L475 54 L490 49 L510 46 L530 54 L545 50 L560 42 L575 46 L590 40 L610 44 L630 50 L645 46 L660 52 L680 48 L700 56 L720 64 L740 72 L760 79 L780 86 L800 82 L815 74 L830 66 L845 72 L860 79 L880 86 L900 92 L930 96 L960 99 L1000 102 L1040 104 L1080 106 L1120 108 L1160 110 L1200 112" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+      <path d="M0 76 Q60 70 100 40 Q110 32 120 42 L130 58" stroke="currentColor" stroke-width="3" stroke-linecap="round" fill="currentColor" opacity=".3"/>
+      <path d="M300 92 Q330 80 360 76 Q390 58 420 52" stroke="currentColor" stroke-width="3" stroke-linecap="round" fill="none" opacity=".4"/>
+      <path d="M780 86 Q800 76 830 66" stroke="currentColor" stroke-width="3" stroke-linecap="round" fill="none" opacity=".4"/>
+    </svg>
   </div>
   <div class="cal-outer">
     <div class="dow-row" id="dow"></div>
