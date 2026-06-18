@@ -1147,7 +1147,7 @@ async function showView(name) {
         if (r.ok) inventory = await r.json();
       } catch {}
     }
-    renderInventory();
+    renderInventory(true);
   } else if (name === 'doc') {
     doc.classList.add('active');
   }
@@ -1157,7 +1157,7 @@ const CAT_ORDER = ['Épicerie','Condiments','Boissons','Frais','Entretien','Autr
 
 let invActiveCat = null;
 
-function renderInventory() {
+function renderInventory(animate) {
   const body = document.getElementById('inv-body');
   const tabsWrap = document.getElementById('inv-tabs');
   body.innerHTML = '';
@@ -1185,8 +1185,8 @@ function renderInventory() {
   });
   cats.forEach((cat, ci) => {
     const section = document.createElement('div');
-    section.className = 'inv-col-section fade-up' + (cat === invActiveCat ? ' active' : '');
-    section.style.animationDelay = (ci * 50) + 'ms';
+    section.className = 'inv-col-section' + (animate ? ' fade-up' : '') + (cat === invActiveCat ? ' active' : '');
+    if (animate) section.style.animationDelay = (ci * 50) + 'ms';
     const hdr = document.createElement('div');
     hdr.className = 'inv-cat';
     hdr.textContent = cat;
