@@ -184,15 +184,13 @@
       .hdr-brand-mobile { display: block; }
       .views-slider {
         flex-direction: row; overflow: hidden;
-        transition: none;
       }
-      .view-panel {
-        flex: 0 0 100%; width: 100%;
+      .views-slider > .view-panel {
+        flex: 0 0 100% !important; width: 100%;
+        display: flex !important;
+        transform: translateX(0);
         transition: transform .3s ease;
       }
-      .views-slider .cal-outer { display: flex !important; }
-      .views-slider .inv-view { display: flex !important; }
-      .views-slider .doc-view { display: flex !important; }
     }
 
     /* ── Calendar ── */
