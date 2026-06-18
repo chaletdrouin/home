@@ -68,7 +68,7 @@
     /* ── Header ── */
     .hdr {
       display: flex; flex-direction: column;
-      padding: 10px 14px; gap: 6px;
+      padding: calc(10px + env(safe-area-inset-top)) 14px 10px; gap: 6px;
       flex-shrink: 0;
       border-bottom: 1px solid var(--border);
       background: var(--bg);
@@ -314,7 +314,7 @@
     /* ── Inventory view ── */
     .inv-view {
       flex: 1; display: none; flex-direction: column;
-      padding: 16px 16px 8px; min-height: 0; overflow-y: auto;
+      padding: calc(16px + env(safe-area-inset-top)) 16px 8px; min-height: 0; overflow-y: auto;
     }
     .inv-view.active { display: flex; }
     .inv-title {
