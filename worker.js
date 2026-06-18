@@ -202,8 +202,8 @@ export default {
       await env.BOOKINGS.put('all', JSON.stringify(all));
 
       ctx.waitUntil
-        ? ctx.waitUntil(notifyAll({ title: 'Nouvelle réservation', body: booking.description }, env))
-        : await notifyAll({ title: 'Nouvelle réservation', body: booking.description }, env);
+        ? ctx.waitUntil(notifyAll({ title: 'Nouvelle r\u00e9servation', body: booking.description }, env))
+        : await notifyAll({ title: 'Nouvelle r\u00e9servation', body: booking.description }, env);
 
       return json(booking, 201);
     }
@@ -226,7 +226,7 @@ export default {
       };
       await env.BOOKINGS.put('all', JSON.stringify(all));
 
-      const notify = notifyAll({ title: 'Réservation modifiée', body: all[idx].description }, env);
+      const notify = notifyAll({ title: 'R\u00e9servation modifi\u00e9e', body: all[idx].description }, env);
       ctx.waitUntil ? ctx.waitUntil(notify) : await notify;
 
       return json(all[idx]);
@@ -241,7 +241,7 @@ export default {
       const desc = booking ? booking.description : 'Réservation';
       await env.BOOKINGS.put('all', JSON.stringify(all.filter(b => b.id !== id)));
 
-      const notify = notifyAll({ title: 'Réservation supprimée', body: desc }, env);
+      const notify = notifyAll({ title: 'R\u00e9servation supprim\u00e9e', body: desc }, env);
       ctx.waitUntil ? ctx.waitUntil(notify) : await notify;
 
       return new Response(null, { status: 204, headers: CORS });
