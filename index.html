@@ -231,9 +231,9 @@
     .dn.ov     { color: var(--text3); font-weight: 400; }
 
     .bk {
-      font-size: 10px; font-weight: 600;
+      font-size: 11px; font-weight: 600;
       padding: 0; padding-left: 4px;
-      min-height: 15px; line-height: 15px;
+      min-height: 18px; line-height: 18px;
       color: #fff;
       overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
       flex-shrink: 0; cursor: pointer;
@@ -253,7 +253,7 @@
       border-radius: 4px;
     }
     .bk-spacer {
-      min-height: 15px; flex-shrink: 0;
+      min-height: 18px; flex-shrink: 0;
     }
     .bk-more {
       font-size: 10px; color: var(--text3); padding-left: 2px; flex-shrink: 0;
@@ -370,7 +370,7 @@
     }
     .fi:focus { border-color: var(--blue); }
     .fi[type="date"] { -webkit-user-select: none; user-select: none; }
-    .fi[type="date"]:focus { border-color: var(--border); }
+    .fi[type="date"]:focus { border-color: var(--border); outline: none; box-shadow: none; -webkit-appearance: none; }
 
     .btns { display: flex; gap: 10px; margin-top: 20px; }
     .btn {
@@ -491,9 +491,10 @@
     .ff-row .ff { flex:1; margin-bottom:13px; }
 
     /* ── Inventory columns ── */
-    .inv-cols { display:grid; grid-template-columns:repeat(auto-fill, minmax(200px, 1fr)); gap:0 20px; flex:1; min-height:0; overflow-y:auto; padding-bottom:8px; }
-    .inv-col-section { break-inside:avoid; }
-    @media (max-width:639px) { .inv-cols { grid-template-columns:1fr; } }
+    .inv-cols { column-count:3; column-gap:24px; flex:1; min-height:0; overflow-y:auto; padding-bottom:8px; }
+    .inv-col-section { break-inside:avoid; margin-bottom:8px; }
+    @media (max-width:900px) { .inv-cols { column-count:2; } }
+    @media (max-width:639px) { .inv-cols { column-count:1; } }
 
     /* ── Mode d'emploi ── */
     .doc-view { flex:1; display:none; flex-direction:column; padding:calc(16px + env(safe-area-inset-top)) 20px 16px; min-height:0; overflow-y:auto; }
@@ -566,7 +567,7 @@
     <div class="inv-cols" id="inv-body"></div>
     <div class="inv-add">
       <select class="fi" id="f-inv-cat" style="flex:none;width:auto;padding:10px 8px;font-size:14px;">
-        <option>Épicerie</option><option>Boissons</option><option>Frais</option><option>Entretien</option><option>Autre</option>
+        <option>Épicerie</option><option>Condiments</option><option>Boissons</option><option>Frais</option><option>Entretien</option><option>Autre</option>
       </select>
       <input class="fi" id="f-inv-name" type="text" placeholder="Ajouter…" onkeydown="if(event.key==='Enter')addInvItem()">
       <button class="btn btn-p" onclick="addInvItem()">+</button>
@@ -1123,7 +1124,7 @@ async function showView(name) {
   }
 }
 
-const CAT_ORDER = ['Épicerie','Boissons','Frais','Entretien','Autre'];
+const CAT_ORDER = ['Épicerie','Condiments','Boissons','Frais','Entretien','Autre'];
 
 function renderInventory() {
   const body = document.getElementById('inv-body');
