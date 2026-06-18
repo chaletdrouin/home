@@ -215,6 +215,33 @@
     }
     .sheet-title { font-size: 18px; font-weight: 700; margin-bottom: 18px; }
 
+    /* ── Desktop modals ── */
+    @media (min-width: 640px) {
+      .overlay {
+        background: rgba(0,0,0,.25);
+        backdrop-filter: blur(16px);
+        -webkit-backdrop-filter: blur(16px);
+        align-items: center;
+        justify-content: center;
+      }
+      .sheet {
+        max-width: 420px;
+        max-height: 80dvh;
+        border-radius: 16px;
+        border: .5px solid var(--border);
+        background: var(--bg2);
+        padding: 28px 24px;
+        transform: scale(.96);
+        opacity: 0;
+        transition: transform .25s cubic-bezier(.4,0,.2,1), opacity .2s;
+      }
+      .overlay.open .sheet {
+        transform: scale(1);
+        opacity: 1;
+      }
+      .sheet-grip { display: none; }
+    }
+
     /* ── Form ── */
     .ff { margin-bottom: 13px; }
     .fl {
