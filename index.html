@@ -183,13 +183,16 @@
       .nav-settings { margin-top: 0; margin-bottom: 0; }
       .hdr-brand-mobile { display: block; }
       .views-slider {
-        flex-direction: row; overflow: hidden;
+        flex-direction: row; flex-wrap: nowrap; overflow: hidden;
       }
       .views-slider > .view-panel {
-        flex: 0 0 100% !important; width: 100%; height: 100%;
+        flex: 0 0 100% !important; width: 100%;
         display: flex !important; flex-direction: column;
-        transform: translateX(0);
-        transition: transform .3s ease;
+        min-height: 0; overflow-y: auto;
+      }
+      .views-slider > .view-panel:first-child {
+        margin-left: 0;
+        transition: margin-left .3s ease;
       }
     }
 
@@ -1178,10 +1181,7 @@ async function showView(name) {
   document.getElementById('view-year').classList.remove('active');
 
   if (isMobile) {
-    const tx = -idx * 100;
-    document.querySelectorAll('.view-panel').forEach(p => {
-      p.style.transform = 'translateX(' + tx + '%)';
-    });
+    document.querySelector('.views-slider > .view-panel').style.marginLeft = (-idx * 100) + '%';
     hdr.style.display = name === 'cal' ? '' : 'none';
   } else {
     hdr.style.display = 'none';
