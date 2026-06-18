@@ -885,8 +885,11 @@ load();
       }
       raw.push({ x: x / c.width * 100, y: topY / c.height * 100 });
     }
+    // Ensure last point reaches right edge
+    const last = raw[raw.length - 1];
+    if (last && last.x < 100) raw.push({ x: 100, y: last.y });
     const pts = raw.map(p => `${p.x.toFixed(1)}% ${p.y.toFixed(1)}%`);
-    pts.push('100% 0%', '100% 100%', '0% 100%');
+    pts.push('100% 100%', '0% 100%');
     const fill = document.getElementById('mountains-fill');
     if (fill) fill.style.clipPath = 'polygon(' + pts.join(',') + ')';
   }
