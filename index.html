@@ -438,20 +438,20 @@
       box-shadow: 0 1px 2px rgba(0,0,0,.15);
       pointer-events: none;
     }
-    .inv-pill[data-v="0"] { left: 3px; background: var(--red); }
-    .inv-pill[data-v="1"] { left: calc((100% - 6px) / 3 + 3px); background: #eab308; }
-    .inv-pill[data-v="2"] { left: calc((100% - 6px) / 3 * 2 + 3px); background: #22c55e; }
+    .inv-pill[data-v="0"] { left: 3px; background: #b45050; }
+    .inv-pill[data-v="1"] { left: calc((100% - 6px) / 3 + 3px); background: #a08520; }
+    .inv-pill[data-v="2"] { left: calc((100% - 6px) / 3 * 2 + 3px); background: #3d8a50; }
     .inv-opt {
       flex: 1; margin: 0; padding: 0;
       height: 30px; min-width: 0; padding: 0 14px;
-      font-size: 11px; font-weight: 600; line-height: 1;
+      font-size: 11px; font-weight: 700; line-height: 1; letter-spacing: .3px;
       color: var(--text3); cursor: pointer; position: relative; z-index: 1;
       border: none; background: none;
       display: flex; align-items: center; justify-content: center;
       -webkit-appearance: none; appearance: none;
       transition: color .15s; white-space: nowrap;
     }
-    .inv-opt.on { color: #fff; }
+    .inv-opt.on { color: #fff; text-shadow: 0 1px 2px rgba(0,0,0,.25); }
     .inv-del {
       padding: 4px 8px; background: none; border: none;
       color: var(--text3); font-size: 16px; cursor: pointer;
