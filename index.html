@@ -144,7 +144,8 @@
       border-bottom: 1px solid var(--border);
       padding: 3px 3px 2px;
       display: flex; flex-direction: column; gap: 1px;
-      overflow: hidden; cursor: pointer;
+      overflow-x: visible; overflow-y: clip;
+      cursor: pointer;
       min-height: 0;
     }
     .dc:nth-child(7n)   { border-right: none; }
@@ -162,10 +163,28 @@
 
     .bk {
       font-size: 9px; font-weight: 600;
-      padding: 0 4px; min-height: 13px; line-height: 13px;
-      border-radius: 3px; color: #fff;
+      padding: 0; padding-left: 4px;
+      min-height: 14px; line-height: 14px;
+      color: #fff;
       overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
       flex-shrink: 0; cursor: pointer;
+      margin: 0 -4px 0 -3px;
+      position: relative; z-index: 1;
+      border-radius: 0;
+    }
+    .bk-start {
+      margin-left: 0;
+      border-radius: 4px 0 0 4px;
+    }
+    .bk-end {
+      margin-right: 0;
+      border-radius: 0 4px 4px 0;
+    }
+    .bk-start.bk-end {
+      border-radius: 4px;
+    }
+    .bk-spacer {
+      min-height: 14px; flex-shrink: 0;
     }
     .bk-more {
       font-size: 9px; color: var(--text3); padding-left: 2px; flex-shrink: 0;
@@ -212,14 +231,6 @@
       transition: border-color .15s;
     }
     .fi:focus { border-color: var(--blue); }
-
-    .swatches { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; }
-    .sw {
-      width: 30px; height: 30px; border-radius: 50%;
-      border: 2.5px solid transparent; cursor: pointer;
-      transition: transform .1s, border-color .1s;
-    }
-    .sw.on { border-color: var(--text); transform: scale(1.18); }
 
     .btns { display: flex; gap: 10px; margin-top: 20px; }
     .btn {
@@ -302,7 +313,7 @@
     <div class="sheet-title">Nouvelle réservation</div>
     <div class="ff">
       <label class="fl">Qui / Description</label>
-      <input class="fi" id="f-desc" type="text" placeholder="Famille Martin…" autocomplete="off" autocorrect="off">
+      <input class="fi" id="f-desc" type="text" autocomplete="off" autocorrect="off">
     </div>
     <div class="ff">
       <label class="fl">Arrivée</label>
@@ -311,10 +322,6 @@
     <div class="ff">
       <label class="fl">Départ</label>
       <input class="fi" id="f-end" type="date">
-    </div>
-    <div class="ff">
-      <label class="fl">Couleur</label>
-      <div class="swatches" id="swatches"></div>
     </div>
     <div class="btns">
       <button class="btn btn-c" onclick="close1('m-create')">Annuler</button>
@@ -348,7 +355,7 @@ const DOW    = ['Lundi','Mardi','Mercredi','Jeudi','Vendredi','Samedi','Dimanche
 const COLORS = ['#4f8ef7','#22c55e','#f97316','#ec4899','#8b5cf6','#eab308','#ef4444','#06b6d4'];
 
 let cY = new Date().getFullYear(), cM = new Date().getMonth();
-let bookings = [], activeColor = COLORS[0], dayCx = null;
+let bookings = [], dayCx = null;
 const TODAY = ymd(new Date());
 
 function ymd(d) {
@@ -372,18 +379,6 @@ function esc(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').rep
   });
 })();
 
-// Color swatches
-(()=>{
-  const box=document.getElementById('swatches');
-  COLORS.forEach(c=>{
-    const s=document.createElement('div');
-    s.className='sw'+(c===activeColor?' on':'');
-    s.style.background=c;
-    s.onclick=()=>{ activeColor=c; box.querySelectorAll('.sw').forEach(x=>x.classList.remove('on')); s.classList.add('on'); };
-    box.appendChild(s);
-  });
-})();
-
 async function load() {
   try {
     const r = await fetch(API+'/bookings');
@@ -403,56 +398,76 @@ function render() {
 
   const first = new Date(cY,cM,1);
   const last  = new Date(cY,cM+1,0);
-  let sdow = (first.getDay()+6)%7; // Mon=0
+  let sdow = (first.getDay()+6)%7;
 
   const cells = [];
-  // Leading prev-month days
   const prevLast = new Date(cY,cM,0);
-  for(let i=sdow;i>0;i--){
+  for(let i=sdow;i>0;i--)
     cells.push({ date:new Date(prevLast.getFullYear(),prevLast.getMonth(),prevLast.getDate()-i+1), ov:true });
-  }
-  // Current month
   for(let d=1;d<=last.getDate();d++) cells.push({ date:new Date(cY,cM,d), ov:false });
-  // Trailing next-month days
   const nxt=new Date(cY,cM+1,1);
   for(let d=1;cells.length<42;d++) cells.push({ date:new Date(nxt.getFullYear(),nxt.getMonth(),d), ov:true });
 
-  cells.forEach((cell,idx)=>{
-    const ds  = ymd(cell.date);
-    const dow = cell.date.getDay(); // 0=Sun 6=Sat
-    const we  = dow===0||dow===6;
-    const bks = bookings.filter(b=>b.start<=ds&&b.end>=ds);
+  for(let row=0;row<6;row++){
+    const week=cells.slice(row*7,row*7+7);
+    const ws=ymd(week[0].date), we=ymd(week[6].date);
 
-    const div=document.createElement('div');
-    div.className='dc';
-    div.onclick=(e)=>{ if(!e.target.classList.contains('bk')) openDay(ds); };
+    const wbks=bookings
+      .filter(b=>b.start<=we&&b.end>=ws)
+      .sort((a,b)=>a.start<b.start?-1:a.start>b.start?1:a.end>b.end?-1:a.end<b.end?1:0);
 
-    // Day number
-    const dn=document.createElement('div');
-    dn.className='dn'+(ds===TODAY?' today':cell.ov?' ov':'');
-    dn.textContent=cell.date.getDate();
-    div.appendChild(dn);
-
-    // Booking chips — show text on first visible day of each booking (start or Monday)
-    const maxShow = bks.length<=3?3:2;
-    bks.slice(0,maxShow).forEach(b=>{
-      const chip=document.createElement('div');
-      chip.className='bk';
-      chip.style.background=b.color;
-      const isFirstVisible = b.start===ds || cell.date.getDay()===1 /* Mon */;
-      chip.textContent = isFirstVisible ? esc(b.description||'?') : '​';
-      chip.onclick=(e)=>{ e.stopPropagation(); openDay(ds); };
-      div.appendChild(chip);
-    });
-    if(bks.length>maxShow){
-      const m=document.createElement('div');
-      m.className='bk-more';
-      m.textContent='+'+( bks.length-maxShow);
-      div.appendChild(m);
+    const laneEnds=[];
+    const bkLane=new Map();
+    for(const bk of wbks){
+      let lane=laneEnds.findIndex(e=>e<bk.start);
+      if(lane===-1){lane=laneEnds.length;laneEnds.push('');}
+      laneEnds[lane]=bk.end;
+      bkLane.set(bk.id,lane);
     }
+    const maxLane=Math.min(laneEnds.length,3);
 
-    grid.appendChild(div);
-  });
+    week.forEach((cell,col)=>{
+      const ds=ymd(cell.date);
+      const div=document.createElement('div');
+      div.className='dc';
+      div.onclick=(e)=>{if(!e.target.classList.contains('bk'))openDay(ds);};
+
+      const dn=document.createElement('div');
+      dn.className='dn'+(ds===TODAY?' today':cell.ov?' ov':'');
+      dn.textContent=cell.date.getDate();
+      div.appendChild(dn);
+
+      for(let lane=0;lane<maxLane;lane++){
+        const bk=wbks.find(b=>bkLane.get(b.id)===lane&&b.start<=ds&&b.end>=ds);
+        if(bk){
+          const chip=document.createElement('div');
+          chip.className='bk';
+          chip.style.background=bk.color;
+          const isStart=bk.start===ds||col===0;
+          const isEnd=bk.end===ds||col===6;
+          if(isStart)chip.classList.add('bk-start');
+          if(isEnd)chip.classList.add('bk-end');
+          chip.textContent=isStart?esc(bk.description||''):'';
+          chip.onclick=(e)=>{e.stopPropagation();openDay(ds);};
+          div.appendChild(chip);
+        } else {
+          const sp=document.createElement('div');
+          sp.className='bk-spacer';
+          div.appendChild(sp);
+        }
+      }
+
+      const total=bookings.filter(b=>b.start<=ds&&b.end>=ds).length;
+      if(total>maxLane){
+        const m=document.createElement('div');
+        m.className='bk-more';
+        m.textContent='+'+(total-maxLane);
+        div.appendChild(m);
+      }
+
+      grid.appendChild(div);
+    });
+  }
 }
 
 function openDay(ds) {
@@ -514,7 +529,7 @@ async function submitCreate() {
     const r=await fetch(API+'/bookings',{
       method:'POST',
       headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({start,end,description:desc,color:activeColor})
+      body:JSON.stringify({start,end,description:desc,color:COLORS[bookings.length%COLORS.length]})
     });
     if(!r.ok) throw 0;
     close1('m-create');
