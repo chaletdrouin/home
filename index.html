@@ -80,7 +80,7 @@
     .sidebar-mountains-fill {
       position: absolute;
       inset: 0;
-      background: #000;
+      background: #111;
       pointer-events: none;
     }
     .sidebar-mountains {
@@ -844,35 +844,64 @@ function close1(id){ document.getElementById(id).classList.remove('open'); }
 function bgClose(e,id){ if(e.target.classList.contains('overlay')) close1(id); }
 
 // Drag down to close modals
-document.querySelectorAll('.overlay').forEach(ov => {
-  const sheet = ov.querySelector('.sheet');
-  let sy, dragging;
-  sheet.addEventListener('touchstart', e => {
-    if (sheet.scrollTop > 0) return;
-    sy = e.touches[0].clientY;
-    dragging = false;
-  }, { passive: true });
-  sheet.addEventListener('touchmove', e => {
-    const dy = e.touches[0].clientY - sy;
-    if (dy > 0) {
-      dragging = true;
-      sheet.style.transition = 'none';
-      sheet.style.transform = `translateY(${dy}px)`;
+(function(){
+  var startY=0,startX=0,sheet=null,overlay=null,dragging=false,dirLocked=null;
+  document.addEventListener('touchstart',function(e){
+    var el=e.target.closest('.sheet');
+    if(!el)return;
+    if(e.target.closest('select,input,textarea'))return;
+    startY=e.touches[0].clientY;
+    startX=e.touches[0].clientX;
+    sheet=el;overlay=el.closest('.overlay');
+    dragging=true;dirLocked=null;
+    sheet.style.transition='none';
+  },{passive:true});
+  document.addEventListener('touchmove',function(e){
+    if(!dragging||!sheet)return;
+    var dx=Math.abs(e.touches[0].clientX-startX);
+    var dy=e.touches[0].clientY-startY;
+    var dyAbs=Math.abs(dy);
+    if(!dirLocked){
+      if(dx>10||dyAbs>10) dirLocked=dx>dyAbs?'h':'v';
+      else return;
     }
-  }, { passive: true });
-  sheet.addEventListener('touchend', e => {
-    if (!dragging) return;
-    const dy = e.changedTouches[0].clientY - sy;
-    sheet.style.transition = '';
-    if (dy > 120) {
-      sheet.style.transform = '';
-      ov.classList.remove('open');
-    } else {
-      sheet.style.transform = '';
+    if(dirLocked==='h'){dragging=false;sheet.style.transform='';sheet.style.transition='';if(overlay)overlay.style.background='';return;}
+    if(dy>0&&sheet.scrollTop<=0){
+      e.preventDefault();
+      sheet.style.transform='translateY('+Math.min(dy,300)+'px)';
+      if(overlay){
+        overlay.style.background='rgba(0,0,0,'+Math.max(0,.45-dy/400)+')';
+        var bl='blur('+Math.max(0,6-dy*6/200)+'px)';
+        overlay.style.backdropFilter=bl;overlay.style.webkitBackdropFilter=bl;
+      }
+    }else if(dy<0&&sheet.scrollTop+sheet.clientHeight>=sheet.scrollHeight-1){
+      e.preventDefault();
     }
-    dragging = false;
-  }, { passive: true });
-});
+  },{passive:false});
+  document.addEventListener('touchend',function(e){
+    if(!dragging||!sheet)return;
+    dragging=false;
+    var dy=e.changedTouches[0].clientY-startY;
+    sheet.style.transition='transform .2s ease';
+    if(dy>80){
+      sheet.style.transform='translateY(100%)';
+      if(overlay){
+        var tr='background .2s ease,backdrop-filter .2s ease,-webkit-backdrop-filter .2s ease';
+        overlay.style.transition=tr;overlay.style.background='rgba(0,0,0,0)';
+        overlay.style.backdropFilter='blur(0px)';overlay.style.webkitBackdropFilter='blur(0px)';
+      }
+      setTimeout(function(){
+        document.querySelectorAll('.overlay.open').forEach(function(o){o.classList.remove('open');});
+        if(sheet){sheet.style.transform='';sheet.style.transition='';}
+        if(overlay){overlay.style.transition='';overlay.style.background='';overlay.style.backdropFilter='';overlay.style.webkitBackdropFilter='';}
+      },200);
+    }else{
+      sheet.style.transform='';
+      if(overlay){overlay.style.background='';overlay.style.backdropFilter='';overlay.style.webkitBackdropFilter='';}
+    }
+    sheet=null;overlay=null;
+  },{passive:true});
+})();
 
 // Service worker + Push
 function b64urlToUint8(str) {
@@ -895,19 +924,28 @@ load();
 
 // Swipe navigation
 (function() {
-  const el = document.getElementById('view-cal');
-  let sx, sy;
-  el.addEventListener('touchstart', e => {
-    sx = e.touches[0].clientX;
-    sy = e.touches[0].clientY;
-  }, { passive: true });
-  el.addEventListener('touchend', e => {
-    const dx = e.changedTouches[0].clientX - sx;
-    const dy = e.changedTouches[0].clientY - sy;
-    if (Math.abs(dx) > 50 && Math.abs(dx) > Math.abs(dy) * 1.5) {
-      nav(dx < 0 ? 1 : -1);
+  let sx=0,sy=0,active=false;
+  document.addEventListener('touchstart',function(e){
+    if(e.target.closest('.sheet')||e.target.closest('.overlay'))return;
+    sx=e.touches[0].clientX;
+    sy=e.touches[0].clientY;
+    active=true;
+  },{passive:true});
+  document.addEventListener('touchend',function(e){
+    if(!active)return;
+    active=false;
+    const dx=e.changedTouches[0].clientX-sx;
+    const dy=e.changedTouches[0].clientY-sy;
+    if(Math.abs(dx)>50&&Math.abs(dx)>Math.abs(dy)*1.5){
+      nav(dx<0?1:-1);
     }
-  }, { passive: true });
+  },{passive:true});
+  document.addEventListener('touchmove',function(e){
+    if(!active)return;
+    const dx=Math.abs(e.touches[0].clientX-sx);
+    const dy=Math.abs(e.touches[0].clientY-sy);
+    if(dx>dy*1.5&&dx>20)e.preventDefault();
+  },{passive:false});
 })();
 
 // Trace mountain ridge and generate clip-path
