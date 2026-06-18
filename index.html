@@ -182,9 +182,23 @@
       .nav-icon { width: 22px; height: 22px; display: block !important; }
       .nav-settings { margin-top: 0; margin-bottom: 0; }
       .hdr-brand-mobile { display: block; }
+      .views-slider {
+        flex-direction: row; overflow: hidden;
+        transition: none;
+      }
+      .view-panel {
+        flex: 0 0 100%; width: 100%;
+        transition: transform .3s ease;
+      }
+      .views-slider .cal-outer { display: flex !important; }
+      .views-slider .inv-view { display: flex !important; }
+      .views-slider .doc-view { display: flex !important; }
     }
 
     /* ── Calendar ── */
+    .views-slider {
+      flex: 1; display: flex; flex-direction: column; min-height: 0;
+    }
     .cal-outer {
       flex: 1; display: flex; flex-direction: column;
       padding: 6px 8px 8px; min-height: 0;
@@ -610,12 +624,13 @@
       <button class="hdr-nav" onclick="nav(1)">›</button>
     </div>
   </div>
-  <div class="cal-outer" id="view-cal">
+  <div class="views-slider" id="views-slider">
+  <div class="view-panel cal-outer" id="view-cal">
     <div class="dow-row" id="dow"></div>
     <div class="cal-grid" id="grid"></div>
   </div>
 
-  <div class="inv-view" id="view-inv">
+  <div class="view-panel inv-view" id="view-inv">
     <div class="inv-title">Inventaire</div>
     <div class="inv-tabs" id="inv-tabs"></div>
     <div class="inv-cols" id="inv-body"></div>
@@ -628,7 +643,7 @@
     </div>
   </div>
 
-  <div class="doc-view" id="view-doc">
+  <div class="view-panel doc-view" id="view-doc">
     <div class="doc-title">Mode d'emploi</div>
     <div class="doc-section">
       <h3>Calendrier</h3>
@@ -668,6 +683,7 @@
       <p>Sur iPhone : Safari → Partager → Sur l'écran d'accueil.<br>
          Sur Android : Chrome → Menu → Installer l'application.</p>
     </div>
+  </div>
   </div>
 
   <div class="year-view" id="view-year">
@@ -1159,31 +1175,44 @@ async function showView(name) {
   navBtns.forEach((b, i) => b.classList.toggle('active', i === idx));
   moveNavPill(idx);
 
+  const isMobile = window.innerWidth <= 639;
   const hdr = document.querySelector('.hdr');
   const cal = document.getElementById('view-cal');
   const inv = document.getElementById('view-inv');
   const doc = document.getElementById('view-doc');
 
-  hdr.style.display = 'none';
-  cal.style.display = 'none';
-  inv.classList.remove('active');
-  doc.classList.remove('active');
   document.getElementById('view-year').classList.remove('active');
 
-  if (name === 'cal') {
-    hdr.style.display = '';
-    cal.style.display = '';
-  } else if (name === 'inv') {
-    inv.classList.add('active');
+  if (isMobile) {
+    const tx = -idx * 100;
+    document.querySelectorAll('.view-panel').forEach(p => {
+      p.style.transform = 'translateX(' + tx + '%)';
+    });
+    hdr.style.display = name === 'cal' ? '' : 'none';
+  } else {
+    hdr.style.display = 'none';
+    cal.style.display = 'none';
+    inv.classList.remove('active');
+    doc.classList.remove('active');
+
+    if (name === 'cal') {
+      hdr.style.display = '';
+      cal.style.display = '';
+    } else if (name === 'inv') {
+      inv.classList.add('active');
+    } else if (name === 'doc') {
+      doc.classList.add('active');
+    }
+  }
+
+  if (name === 'inv') {
     if (!inventory.length) {
       try {
         const r = await fetch(API + '/inventory');
         if (r.ok) inventory = await r.json();
       } catch {}
     }
-    renderInventory(true);
-  } else if (name === 'doc') {
-    doc.classList.add('active');
+    renderInventory();
   }
 }
 
