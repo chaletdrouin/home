@@ -413,7 +413,6 @@
     .inv-title {
       font-size: 18px; font-weight: 700; margin-bottom: 14px;
     }
-    .inv-list { flex: 1; min-height: 0; overflow-y: auto; padding-bottom: 8px; }
     .inv-cat {
       font-size: 12px; font-weight: 600; color: var(--text2);
       text-transform: uppercase; letter-spacing: .06em;
@@ -458,11 +457,65 @@
       z-index: 300; transition: opacity .3s;
     }
     .loader.gone { opacity: 0; pointer-events: none; }
+
+    /* ── Cell pop ── */
+    @keyframes cellPop { 0%{transform:scale(1)} 40%{transform:scale(1.08)} 70%{transform:scale(.97)} 100%{transform:scale(1)} }
+    .dc:active { animation: cellPop .25s cubic-bezier(.4,0,.2,1); }
+
+    /* ── Fade up stagger ── */
+    @keyframes fadeUp { from{opacity:0;transform:translateY(8px)} to{opacity:1;transform:translateY(0)} }
+    .fade-up { animation: fadeUp .25s ease both; }
+
+    /* ── Skeleton loading ── */
+    @keyframes skelPulse { 0%,100%{opacity:.06} 50%{opacity:.12} }
+    .skel-row { display:flex; gap:8px; padding:6px 3px; }
+    .skel-bar { height:14px; border-radius:4px; background:var(--text); animation:skelPulse 1.2s ease infinite; }
+
+    /* ── Toast ── */
+    .toast-wrap { position:fixed; bottom:calc(20px + env(safe-area-inset-bottom)); left:50%; transform:translateX(-50%); z-index:400; display:flex; flex-direction:column; align-items:center; gap:8px; pointer-events:none; }
+    .toast { background:var(--bg2); color:var(--text); border:.5px solid var(--border); border-radius:12px; padding:10px 18px; font-size:13px; font-weight:500; box-shadow:0 4px 20px rgba(0,0,0,.3); pointer-events:auto; display:flex; align-items:center; gap:10px; animation:toastIn .25s ease; }
+    .toast-btn { background:var(--blue); color:#fff; border:none; border-radius:6px; padding:4px 10px; font-size:12px; font-weight:600; cursor:pointer; }
+    @keyframes toastIn { from{opacity:0;transform:translateY(12px)} to{opacity:1;transform:translateY(0)} }
+    @keyframes toastOut { from{opacity:1;transform:translateY(0)} to{opacity:0;transform:translateY(12px)} }
+
+    /* ── Pull to refresh ── */
+    .ptr-indicator { position:fixed; top:0; left:50%; transform:translateX(-50%) translateY(-40px); z-index:250; background:var(--bg2); border:1px solid var(--border); border-radius:50%; width:36px; height:36px; display:flex; align-items:center; justify-content:center; transition:transform .2s; font-size:16px; color:var(--text2); }
+    .ptr-indicator.visible { transform:translateX(-50%) translateY(calc(env(safe-area-inset-top) + 12px)); }
+    .ptr-indicator.loading { animation:spin .8s linear infinite; }
+    @keyframes spin { to{transform:translateX(-50%) translateY(calc(env(safe-area-inset-top) + 12px)) rotate(360deg)} }
+
+    /* ── Dates row ── */
+    .ff-row { display:flex; gap:10px; }
+    .ff-row .ff { flex:1; margin-bottom:13px; }
+
+    /* ── Inventory columns ── */
+    .inv-cols { display:grid; grid-template-columns:repeat(auto-fill, minmax(200px, 1fr)); gap:0 20px; flex:1; min-height:0; overflow-y:auto; padding-bottom:8px; }
+    .inv-col-section { break-inside:avoid; }
+    @media (max-width:639px) { .inv-cols { grid-template-columns:1fr; } }
+
+    /* ── Mode d'emploi ── */
+    .doc-view { flex:1; display:none; flex-direction:column; padding:calc(16px + env(safe-area-inset-top)) 20px 16px; min-height:0; overflow-y:auto; }
+    .doc-view.active { display:flex; }
+    .doc-title { font-size:18px; font-weight:700; margin-bottom:16px; }
+    .doc-section { margin-bottom:18px; }
+    .doc-section h3 { font-size:14px; font-weight:600; color:var(--blue); margin-bottom:8px; }
+    .doc-section p, .doc-section li { font-size:13px; color:var(--text2); line-height:1.6; }
+    .doc-section ul { padding-left:18px; }
+    .doc-section li { margin-bottom:4px; }
+
+    /* ── Edit button in day detail ── */
+    .bk-edit {
+      padding: 5px 11px; background: var(--bg2); color: var(--text);
+      border: .5px solid var(--border); border-radius: 7px;
+      font-size: 12px; font-weight: 600; cursor: pointer; flex-shrink: 0;
+    }
   </style>
 </head>
 <body>
 
 <div class="loader" id="loader">Chargement…</div>
+<div class="toast-wrap" id="toast-wrap"></div>
+<div class="ptr-indicator" id="ptr">↻</div>
 
 <nav class="sidebar" id="sidebar">
   <div class="sidebar-brand">Chalet Drouin</div>
@@ -474,6 +527,10 @@
   <button class="nav-item" onclick="showView('inv')">
     <svg class="nav-icon" viewBox="0 0 24 24"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>
     Inventaire
+  </button>
+  <button class="nav-item" onclick="showView('doc')">
+    <svg class="nav-icon" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+    Mode d'emploi
   </button>
   <button class="nav-item nav-settings" onclick="openSettings()">
     <svg class="nav-icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
@@ -503,13 +560,55 @@
 
   <div class="inv-view" id="view-inv">
     <div class="inv-title">Inventaire</div>
-    <div class="inv-list" id="inv-body"></div>
+    <div class="inv-cols" id="inv-body"></div>
     <div class="inv-add">
       <select class="fi" id="f-inv-cat" style="flex:none;width:auto;padding:10px 8px;font-size:13px;">
         <option>Épicerie</option><option>Boissons</option><option>Frais</option><option>Entretien</option><option>Autre</option>
       </select>
       <input class="fi" id="f-inv-name" type="text" placeholder="Ajouter…" onkeydown="if(event.key==='Enter')addInvItem()">
       <button class="btn btn-p" onclick="addInvItem()">+</button>
+    </div>
+  </div>
+
+  <div class="doc-view" id="view-doc">
+    <div class="doc-title">Mode d'emploi</div>
+    <div class="doc-section">
+      <h3>Calendrier</h3>
+      <ul>
+        <li>Glissez à gauche/droite pour changer de mois</li>
+        <li>Cliquez sur le titre du mois pour afficher la vue annuelle</li>
+        <li>Cliquez sur une journée pour voir les réservations</li>
+        <li>Utilisez le bouton <strong>+</strong> pour créer une réservation</li>
+        <li>Le bouton <strong>Aujourd'hui</strong> apparaît quand vous quittez le mois courant</li>
+      </ul>
+    </div>
+    <div class="doc-section">
+      <h3>Réservations</h3>
+      <ul>
+        <li>Les réservations apparaissent comme des barres colorées continues</li>
+        <li>Cliquez sur une barre ou un jour pour voir le détail</li>
+        <li>Vous pouvez modifier ou supprimer une réservation depuis le détail du jour</li>
+      </ul>
+    </div>
+    <div class="doc-section">
+      <h3>Inventaire</h3>
+      <ul>
+        <li>Organisé en colonnes par catégorie</li>
+        <li>Utilisez les boutons <strong>Aucun / Un peu / Beaucoup</strong> pour indiquer les quantités</li>
+        <li>Ajoutez des articles avec le formulaire en bas</li>
+      </ul>
+    </div>
+    <div class="doc-section">
+      <h3>Notifications</h3>
+      <ul>
+        <li>Activez les notifications dans <strong>Paramètres</strong></li>
+        <li>Recevez une alerte à chaque nouvelle réservation, modification ou suppression</li>
+      </ul>
+    </div>
+    <div class="doc-section">
+      <h3>Installation</h3>
+      <p>Sur iPhone : Safari → Partager → Sur l'écran d'accueil.<br>
+         Sur Android : Chrome → Menu → Installer l'application.</p>
     </div>
   </div>
 
@@ -528,13 +627,15 @@
       <label class="fl">Qui / Description</label>
       <input class="fi" id="f-desc" type="text" autocomplete="off" autocorrect="off">
     </div>
-    <div class="ff">
-      <label class="fl">Arrivée</label>
-      <input class="fi" id="f-start" type="date" onclick="this.showPicker?.()">
-    </div>
-    <div class="ff">
-      <label class="fl">Départ</label>
-      <input class="fi" id="f-end" type="date" onclick="this.showPicker?.()">
+    <div class="ff-row">
+      <div class="ff">
+        <label class="fl">Arrivée</label>
+        <input class="fi" id="f-start" type="date" onclick="this.showPicker?.()">
+      </div>
+      <div class="ff">
+        <label class="fl">Départ</label>
+        <input class="fi" id="f-end" type="date" onclick="this.showPicker?.()">
+      </div>
     </div>
     <div class="btns">
       <button class="btn btn-c" onclick="close1('m-create')">Annuler</button>
@@ -574,6 +675,33 @@
   </div>
 </div>
 
+<!-- Edit modal -->
+<div class="overlay" id="m-edit" onclick="bgClose(event,'m-edit')">
+  <div class="sheet">
+    <div class="sheet-grip"></div>
+    <div class="sheet-title">Modifier la réservation</div>
+    <input type="hidden" id="e-id">
+    <div class="ff">
+      <label class="fl">Qui / Description</label>
+      <input class="fi" id="e-desc" type="text" autocomplete="off" autocorrect="off">
+    </div>
+    <div class="ff-row">
+      <div class="ff">
+        <label class="fl">Arrivée</label>
+        <input class="fi" id="e-start" type="date" onclick="this.showPicker?.()">
+      </div>
+      <div class="ff">
+        <label class="fl">Départ</label>
+        <input class="fi" id="e-end" type="date" onclick="this.showPicker?.()">
+      </div>
+    </div>
+    <div class="btns">
+      <button class="btn btn-c" onclick="close1('m-edit')">Annuler</button>
+      <button class="btn btn-p" onclick="submitEdit()">Enregistrer</button>
+    </div>
+  </div>
+</div>
+
 <script>
 // ── CONFIG ─────────────────────────────────────────────
 // Remplacez par l'URL de votre Worker après déploiement :
@@ -609,6 +737,30 @@ function esc(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').rep
     row.appendChild(c);
   });
 })();
+
+function showSkeleton() {
+  const grid = document.getElementById('grid');
+  grid.innerHTML = '';
+  for(let i=0;i<42;i++){
+    const div = document.createElement('div');
+    div.className = 'dc';
+    const dn = document.createElement('div');
+    dn.className = 'skel-bar';
+    dn.style.width = '18px';
+    dn.style.height = '18px';
+    dn.style.borderRadius = '50%';
+    dn.style.animationDelay = (i*20)+'ms';
+    div.appendChild(dn);
+    if(Math.random()>.6){
+      const bar = document.createElement('div');
+      bar.className = 'skel-bar';
+      bar.style.width = (40+Math.random()*50)+'%';
+      bar.style.animationDelay = (i*20+100)+'ms';
+      div.appendChild(bar);
+    }
+    grid.appendChild(div);
+  }
+}
 
 async function load() {
   try {
@@ -807,14 +959,20 @@ function openDay(ds) {
   if(!bks.length){
     body.innerHTML='<div class="empty">Aucune réservation</div>';
   } else {
-    bks.forEach(b=>{
+    bks.forEach((b, i)=>{
       const row=document.createElement('div');
-      row.className='bk-row';
+      row.className='bk-row fade-up';
+      row.style.animationDelay = (i * 40) + 'ms';
       row.innerHTML=`<div class="bk-dot" style="background:${b.color}"></div>
         <div class="bk-info">
           <div class="bk-name">${esc(b.description||'—')}</div>
           <div class="bk-dates">${fmtD(b.start)} → ${fmtD(b.end)}</div>
         </div>`;
+      const edit=document.createElement('button');
+      edit.className='bk-edit';
+      edit.textContent='Modifier';
+      edit.onclick=()=>openEdit(b);
+      row.appendChild(edit);
       const del=document.createElement('button');
       del.className='bk-del';
       del.textContent='Supprimer';
@@ -907,17 +1065,25 @@ function moveNavPill(idx) {
 
 async function showView(name) {
   const navBtns = document.querySelectorAll('.nav-item:not(.nav-settings)');
-  const idx = name === 'cal' ? 0 : 1;
+  const idx = name === 'cal' ? 0 : name === 'inv' ? 1 : 2;
   navBtns.forEach((b, i) => b.classList.toggle('active', i === idx));
   moveNavPill(idx);
 
   const hdr = document.querySelector('.hdr');
   const cal = document.getElementById('view-cal');
   const inv = document.getElementById('view-inv');
+  const doc = document.getElementById('view-doc');
 
-  if (name === 'inv') {
-    hdr.style.display = 'none';
-    cal.style.display = 'none';
+  hdr.style.display = 'none';
+  cal.style.display = 'none';
+  inv.classList.remove('active');
+  doc.classList.remove('active');
+  document.getElementById('view-year').classList.remove('active');
+
+  if (name === 'cal') {
+    hdr.style.display = '';
+    cal.style.display = '';
+  } else if (name === 'inv') {
     inv.classList.add('active');
     if (!inventory.length) {
       try {
@@ -926,11 +1092,8 @@ async function showView(name) {
       } catch {}
     }
     renderInventory();
-  } else {
-    hdr.style.display = '';
-    cal.style.display = '';
-    inv.classList.remove('active');
-    document.getElementById('view-year').classList.remove('active');
+  } else if (name === 'doc') {
+    doc.classList.add('active');
   }
 }
 
@@ -940,7 +1103,7 @@ function renderInventory() {
   const body = document.getElementById('inv-body');
   body.innerHTML = '';
   if (!inventory.length) {
-    body.innerHTML = '<div class="empty">Aucun article</div>';
+    body.innerHTML = '<div class="empty" style="grid-column:1/-1">Aucun article</div>';
     return;
   }
   const groups = {};
@@ -952,11 +1115,14 @@ function renderInventory() {
     const ia = CAT_ORDER.indexOf(a), ib = CAT_ORDER.indexOf(b);
     return (ia === -1 ? 99 : ia) - (ib === -1 ? 99 : ib);
   });
-  cats.forEach(cat => {
+  cats.forEach((cat, ci) => {
+    const section = document.createElement('div');
+    section.className = 'inv-col-section fade-up';
+    section.style.animationDelay = (ci * 50) + 'ms';
     const hdr = document.createElement('div');
     hdr.className = 'inv-cat';
     hdr.textContent = cat;
-    body.appendChild(hdr);
+    section.appendChild(hdr);
     groups[cat].forEach(item => {
       const row = document.createElement('div');
       row.className = 'inv-item';
@@ -969,8 +1135,9 @@ function renderInventory() {
           <button class="inv-opt${q===2?' on-2':''}" onclick="setInvQty('${item.id}',2)">Beaucoup</button>
         </div>
         <button class="inv-del" onclick="deleteInvItem('${item.id}')" title="Supprimer">✕</button>`;
-      body.appendChild(row);
+      section.appendChild(row);
     });
+    body.appendChild(section);
   });
 }
 
@@ -991,7 +1158,7 @@ async function addInvItem() {
       inp.value = '';
       renderInventory();
     }
-  } catch { alert('Erreur réseau'); }
+  } catch { showToast('Erreur réseau'); }
 }
 
 async function setInvQty(id, level) {
@@ -1038,24 +1205,93 @@ async function submitCreate() {
     });
     if(!r.ok) throw 0;
     close1('m-create');
+    showToast('Réservation créée');
     await load();
-  } catch { alert('Erreur. Vérifiez votre connexion.'); }
+  } catch { showToast('Erreur réseau'); }
 }
 
+function openEdit(b) {
+  document.getElementById('e-id').value = b.id;
+  document.getElementById('e-desc').value = b.description || '';
+  document.getElementById('e-start').value = b.start;
+  document.getElementById('e-end').value = b.end;
+  close1('m-day');
+  setTimeout(()=> open1('m-edit'), 220);
+}
+
+async function submitEdit() {
+  const id = document.getElementById('e-id').value;
+  const desc = document.getElementById('e-desc').value.trim();
+  const start = document.getElementById('e-start').value;
+  const end = document.getElementById('e-end').value;
+  if(!desc){ document.getElementById('e-desc').focus(); return; }
+  if(!start||!end) return;
+  if(end<start){ document.getElementById('e-end').value=start; return; }
+  try {
+    const r = await fetch(API+'/bookings/'+id, {
+      method:'PUT',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({start, end, description:desc})
+    });
+    if(!r.ok) throw 0;
+    close1('m-edit');
+    showToast('Réservation modifiée');
+    await load();
+  } catch { showToast('Erreur réseau'); }
+}
+
+let undoTimer = null, undoData = null;
 async function doDelete(id) {
-  if(!confirm('Supprimer cette réservation ?')) return;
+  const bk = bookings.find(b=>b.id===id);
+  if(!bk) return;
+  undoData = { ...bk };
   try {
     await fetch(API+'/bookings/'+id,{method:'DELETE'});
     close1('m-day');
     await load();
-  } catch { alert('Erreur. Vérifiez votre connexion.'); }
+    showToast('Réservation supprimée', 'Annuler', doUndo);
+  } catch { showToast('Erreur réseau'); }
+}
+
+async function doUndo() {
+  if(!undoData) return;
+  const d = undoData; undoData = null;
+  try {
+    await fetch(API+'/bookings', {
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({start:d.start, end:d.end, description:d.description, color:d.color})
+    });
+    showToast('Réservation restaurée');
+    await load();
+  } catch { showToast('Erreur réseau'); }
+}
+
+function showToast(msg, btnLabel, btnCb) {
+  const wrap = document.getElementById('toast-wrap');
+  const t = document.createElement('div');
+  t.className = 'toast';
+  t.textContent = msg;
+  if(btnLabel && btnCb) {
+    const b = document.createElement('button');
+    b.className = 'toast-btn';
+    b.textContent = btnLabel;
+    b.onclick = () => { btnCb(); t.remove(); };
+    t.appendChild(b);
+  }
+  wrap.appendChild(t);
+  setTimeout(()=>{
+    t.style.animation = 'toastOut .2s ease forwards';
+    t.addEventListener('animationend', ()=>t.remove());
+  }, 4000);
 }
 
 function open1(id){ document.getElementById(id).classList.add('open'); }
 function close1(id){
   document.getElementById(id).classList.remove('open');
   var isInv = document.getElementById('view-inv').classList.contains('active');
-  var idx = isInv ? 1 : 0;
+  var isDoc = document.getElementById('view-doc').classList.contains('active');
+  var idx = isDoc ? 2 : isInv ? 1 : 0;
   document.querySelectorAll('.nav-item:not(.nav-settings)').forEach(function(b,i){ b.classList.toggle('active', i===idx); });
   moveNavPill(idx);
 }
@@ -1138,6 +1374,7 @@ async function initSW() {
 }
 initSW();
 
+showSkeleton();
 load();
 
 // Init nav pill
@@ -1171,6 +1408,38 @@ window.addEventListener('resize', function(){
     const dy=Math.abs(e.touches[0].clientY-sy);
     if(dx>dy*1.5&&dx>20)e.preventDefault();
   },{passive:false});
+})();
+
+// Pull to refresh
+(function(){
+  var sy=0, pulling=false, ptr=document.getElementById('ptr');
+  document.addEventListener('touchstart',function(e){
+    if(e.target.closest('.sheet,.overlay,.sidebar,.inv-view,.doc-view'))return;
+    sy=e.touches[0].clientY; pulling=true;
+  },{passive:true});
+  document.addEventListener('touchmove',function(e){
+    if(!pulling)return;
+    var dy=e.touches[0].clientY-sy;
+    if(dy>0 && dy<120 && document.scrollingElement.scrollTop<=0){
+      ptr.classList.add('visible');
+    } else {
+      ptr.classList.remove('visible');
+    }
+  },{passive:true});
+  document.addEventListener('touchend',function(e){
+    if(!pulling)return;
+    pulling=false;
+    var dy=e.changedTouches[0].clientY-sy;
+    if(dy>60 && ptr.classList.contains('visible')){
+      ptr.classList.add('loading');
+      load().then(function(){
+        ptr.classList.remove('loading','visible');
+        showToast('Données actualisées');
+      });
+    } else {
+      ptr.classList.remove('visible');
+    }
+  },{passive:true});
 })();
 
 // Trace mountain ridge and generate clip-path
