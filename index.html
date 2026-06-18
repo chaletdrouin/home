@@ -26,7 +26,7 @@
     html, body {
       height: 100%; overflow: hidden;
       background: var(--bg); color: var(--text);
-      font-family: 'Lora', Georgia, 'Times New Roman', serif;
+      font-family: var(--font, 'Lora', Georgia, 'Times New Roman', serif);
       -webkit-text-size-adjust: 100%;
     }
     body {
@@ -1490,7 +1490,7 @@ let currentFont = localStorage.getItem('chalet-font') || 'lora';
 function applyFont(id) {
   const f = FONTS.find(x=>x.id===id);
   if(!f) return;
-  document.documentElement.style.fontFamily = f.css;
+  document.documentElement.style.setProperty('--font', f.css);
   currentFont = id;
   localStorage.setItem('chalet-font', id);
   document.getElementById('font-current').textContent = f.name;
