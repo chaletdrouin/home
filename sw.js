@@ -1,4 +1,4 @@
-const SW_VERSION = '1.0';
+const SW_VERSION = '2.0';
 
 self.addEventListener('install', () => self.skipWaiting());
 
@@ -19,4 +19,25 @@ self.addEventListener('fetch', e => {
     });
     e.respondWith(fetch(req).catch(() => caches.match(e.request)));
   }
+});
+
+self.addEventListener('push', e => {
+  const data = e.data ? e.data.json() : {};
+  e.waitUntil(
+    self.registration.showNotification(data.title || 'Chalet Drouin', {
+      body: data.body || '',
+      icon: '/icon-192.png',
+      badge: '/icon-192.png',
+    })
+  );
+});
+
+self.addEventListener('notificationclick', e => {
+  e.notification.close();
+  e.waitUntil(
+    clients.matchAll({ type: 'window' }).then(list => {
+      if (list.length) return list[0].focus();
+      return clients.openWindow('/');
+    })
+  );
 });

@@ -550,8 +550,23 @@ function open1(id){ document.getElementById(id).classList.add('open'); }
 function close1(id){ document.getElementById(id).classList.remove('open'); }
 function bgClose(e,id){ if(e.target.classList.contains('overlay')) close1(id); }
 
-// Service worker
-if('serviceWorker' in navigator) navigator.serviceWorker.register('sw.js');
+// Service worker + Push
+async function initPush() {
+  if (!('serviceWorker' in navigator) || !('PushManager' in window)) return;
+  const reg = await navigator.serviceWorker.register('sw.js');
+  await navigator.serviceWorker.ready;
+  let sub = await reg.pushManager.getSubscription();
+  if (!sub) {
+    try {
+      const res = await fetch(API + '/vapid-public-key');
+      const { key } = await res.json();
+      const raw = Uint8Array.from(atob(key.replace(/-/g,'+').replace(/_/g,'/') + '=='), c => c.charCodeAt(0));
+      sub = await reg.pushManager.subscribe({ userVisibleOnly: true, applicationServerKey: raw });
+    } catch { return; }
+  }
+  try { await fetch(API + '/subscribe', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(sub) }); } catch {}
+}
+initPush();
 
 load();
 </script>

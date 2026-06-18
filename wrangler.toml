@@ -2,6 +2,10 @@ name = "maison-vacances"
 main = "worker.js"
 compatibility_date = "2024-01-01"
 
+[vars]
+VAPID_PUBLIC_KEY = "BBtZgXZkLRpUK9zf-xHP0CfbixRP2JTeYv_kdXZVxIpC2FhUE4trf1Jnu6_1ccDofMyAyOvf0viA6giSAV9bNNA"
+VAPID_PRIVATE_KEY = "Vk4IgIUDZGlWpBgUPItrK6LLzgmk4m7_jNfJuaBOcu8"
+
 [[kv_namespaces]]
 binding = "BOOKINGS"
 id = "REPLACE_WITH_YOUR_KV_NAMESPACE_ID"
