@@ -90,9 +90,9 @@
     .hdr-add {
       width: 30px; height: 30px;
       background: var(--blue); border: none; border-radius: 8px;
-      color: #fff; font-size: 22px; line-height: 1;
+      color: #fff; font-size: 20px;
       cursor: pointer; display: flex; align-items: center; justify-content: center;
-      flex-shrink: 0;
+      flex-shrink: 0; padding: 0; padding-bottom: 1px;
     }
 
     /* ── Header ── */
@@ -138,8 +138,9 @@
     .hdr-nav {
       width: 30px; height: 30px;
       background: var(--bg2); border: none; border-radius: 8px;
-      color: var(--text); font-size: 18px; line-height: 1;
+      color: var(--text); font-size: 18px;
       cursor: pointer; display: flex; align-items: center; justify-content: center;
+      padding: 0; padding-bottom: 2px;
     }
     .hdr-today {
       padding: 5px 10px; font-size: 12px; font-weight: 500;
@@ -268,38 +269,41 @@
     /* ── Annual view ── */
     .year-view {
       flex: 1; display: none; flex-direction: column;
-      padding: calc(10px + env(safe-area-inset-top)) 12px 12px;
+      padding: calc(10px + env(safe-area-inset-top)) 14px 14px;
       min-height: 0; overflow-y: auto;
     }
     .year-view.active { display: flex; }
     .year-title {
-      font-size: 18px; font-weight: 700; text-align: center;
-      padding: 6px 0 12px; cursor: pointer;
+      font-size: 15px; font-weight: 600; text-align: center;
+      color: var(--text2); letter-spacing: -.01em;
+      padding: 4px 8px 14px; cursor: pointer; border-radius: 8px;
+      transition: background .1s;
     }
+    .year-title:hover { background: rgba(255,255,255,.06); }
     .year-grid {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
-      gap: 10px; flex: 1;
+      gap: 12px; flex: 1;
     }
     @media (max-width: 639px) { .year-grid { grid-template-columns: repeat(2, 1fr); } }
     .ym {
-      background: var(--bg2); border-radius: 10px; padding: 8px;
+      background: var(--bg2); border-radius: 12px; padding: 12px;
       cursor: pointer; transition: background .1s;
       border: .5px solid var(--border);
     }
     .ym:hover { background: var(--bg); }
     .ym.current { border-color: var(--blue); }
-    .ym-title { font-size: 12px; font-weight: 600; margin-bottom: 4px; text-align: center; }
+    .ym-title { font-size: 13px; font-weight: 600; margin-bottom: 8px; text-align: center; }
     .ym-grid {
-      display: grid; grid-template-columns: repeat(7, 1fr); gap: 0;
+      display: grid; grid-template-columns: repeat(7, 1fr); gap: 2px;
     }
     .ym-d {
-      font-size: 8px; text-align: center; padding: 1px 0;
-      color: var(--text3); line-height: 1.4;
+      font-size: 10px; text-align: center; padding: 3px 0;
+      color: var(--text3); line-height: 1.3;
     }
     .ym-d.in { color: var(--text2); }
     .ym-d.today { color: var(--blue); font-weight: 700; }
-    .ym-d.has-bk { background: rgba(79,142,247,.2); border-radius: 2px; }
+    .ym-d.has-bk { background: rgba(79,142,247,.2); border-radius: 3px; }
 
     /* ── Modal overlay ── */
     .overlay {
@@ -459,8 +463,8 @@
     .loader.gone { opacity: 0; pointer-events: none; }
 
     /* ── Cell pop ── */
-    @keyframes cellPop { 0%{transform:scale(1)} 40%{transform:scale(1.08)} 70%{transform:scale(.97)} 100%{transform:scale(1)} }
-    .dc:active { animation: cellPop .25s cubic-bezier(.4,0,.2,1); }
+    @keyframes cellPop { 0%{transform:scale(1)} 30%{transform:scale(1.22)} 60%{transform:scale(.94)} 100%{transform:scale(1)} }
+    .dc:active .dn { animation: cellPop .4s cubic-bezier(.34,1.56,.64,1); }
 
     /* ── Fade up stagger ── */
     @keyframes fadeUp { from{opacity:0;transform:translateY(8px)} to{opacity:1;transform:translateY(0)} }
@@ -613,7 +617,7 @@
   </div>
 
   <div class="year-view" id="view-year">
-    <div class="year-title" id="year-title"></div>
+    <div class="year-title" id="year-title" onclick="closeAnnual()"></div>
     <div class="year-grid" id="year-grid"></div>
   </div>
 </div>
@@ -805,9 +809,17 @@ function showAnnual(){
   document.querySelector('.hdr').style.display = 'none';
   document.getElementById('view-cal').style.display = 'none';
   document.getElementById('view-inv').classList.remove('active');
+  document.getElementById('view-doc').classList.remove('active');
   const yv = document.getElementById('view-year');
   yv.classList.add('active');
   renderAnnual();
+}
+
+function closeAnnual(){
+  document.getElementById('view-year').classList.remove('active');
+  document.querySelector('.hdr').style.display = '';
+  document.getElementById('view-cal').style.display = '';
+  render();
 }
 
 function renderAnnual(){
