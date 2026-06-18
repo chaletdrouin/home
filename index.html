@@ -241,6 +241,11 @@
       position: relative; z-index: 1;
       border-radius: 0;
     }
+    .bk-label {
+      position: absolute; left: 4px; top: 0;
+      line-height: 18px; white-space: nowrap;
+      pointer-events: none; z-index: 2;
+    }
     .bk-start {
       margin-left: 0;
       border-radius: 4px 0 0 4px;
@@ -993,7 +998,15 @@ function renderGrid() {
           const isEnd=bk.end===ds||col===6;
           if(isStart)chip.classList.add('bk-start');
           if(isEnd)chip.classList.add('bk-end');
-          chip.textContent=isStart?esc(bk.description||''):'';
+          if(isStart&&bk.description){
+            const endCol=week.findIndex((c,i)=>i>=col&&(ymd(c.date)===bk.end||i===6));
+            const span=endCol-col+1;
+            const lbl=document.createElement('span');
+            lbl.className='bk-label';
+            lbl.style.width='calc('+span+' * (100% + 7px) - 11px)';
+            lbl.textContent=esc(bk.description);
+            chip.appendChild(lbl);
+          }
           chip.onclick=(e)=>{e.stopPropagation();openDay(ds);};
           div.appendChild(chip);
         } else {
