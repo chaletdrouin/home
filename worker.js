@@ -141,7 +141,7 @@ async function notifyAll(payload, env) {
 // ── Main handler ────────────────────────────────────────
 
 export default {
-  async fetch(req, env) {
+  async fetch(req, env, ctx) {
     const url = new URL(req.url);
     const path = url.pathname;
 
@@ -201,8 +201,8 @@ export default {
       all.push(booking);
       await env.BOOKINGS.put('all', JSON.stringify(all));
 
-      env.ctx && env.ctx.waitUntil
-        ? env.ctx.waitUntil(notifyAll({ title: 'Nouvelle réservation', body: booking.description }, env))
+      ctx.waitUntil
+        ? ctx.waitUntil(notifyAll({ title: 'Nouvelle réservation', body: booking.description }, env))
         : await notifyAll({ title: 'Nouvelle réservation', body: booking.description }, env);
 
       return json(booking, 201);
@@ -227,7 +227,7 @@ export default {
       await env.BOOKINGS.put('all', JSON.stringify(all));
 
       const notify = notifyAll({ title: 'Réservation modifiée', body: all[idx].description }, env);
-      env.ctx && env.ctx.waitUntil ? env.ctx.waitUntil(notify) : await notify;
+      ctx.waitUntil ? ctx.waitUntil(notify) : await notify;
 
       return json(all[idx]);
     }
@@ -242,7 +242,7 @@ export default {
       await env.BOOKINGS.put('all', JSON.stringify(all.filter(b => b.id !== id)));
 
       const notify = notifyAll({ title: 'Réservation supprimée', body: desc }, env);
-      env.ctx && env.ctx.waitUntil ? env.ctx.waitUntil(notify) : await notify;
+      ctx.waitUntil ? ctx.waitUntil(notify) : await notify;
 
       return new Response(null, { status: 204, headers: CORS });
     }
