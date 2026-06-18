@@ -80,7 +80,7 @@
     .sidebar-mountains-fill {
       position: absolute;
       inset: 0;
-      background: #000;
+      background: linear-gradient(to right, #000 60%, transparent 100%);
       pointer-events: none;
     }
     .sidebar-mountains {
@@ -885,12 +885,6 @@ load();
       }
       raw.push({ x: x / c.width * 100, y: topY / c.height * 100 });
     }
-    // After the rightmost valley, don't follow ridge back up
-    let maxYVal = 0, maxYIdx = 0;
-    for (let i = Math.floor(raw.length * 0.5); i < raw.length; i++) {
-      if (raw[i].y >= maxYVal) { maxYVal = raw[i].y; maxYIdx = i; }
-    }
-    raw.splice(maxYIdx + 1);
     const pts = raw.map(p => `${p.x.toFixed(1)}% ${p.y.toFixed(1)}%`);
     pts.push('100% 100%', '0% 100%');
     const fill = document.getElementById('mountains-fill');
