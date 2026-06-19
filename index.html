@@ -1561,12 +1561,15 @@ function bgClose(e,id){ if(e.target.classList.contains('overlay')) close1(id); }
       if(dx>10||dyAbs>10) dirLocked=dx>dyAbs?'h':'v';
       else return;
     }
-    if(dirLocked==='h'){dragging=false;sheet.style.transform='';sheet.style.transition='';if(overlay)overlay.style.background='';return;}
+    if(dirLocked==='h'){dragging=false;sheet.style.transform='';sheet.style.transition='';if(overlay){overlay.style.background='';overlay.style.backdropFilter='';overlay.style.webkitBackdropFilter='';}return;}
     if(dy>0&&sheet.scrollTop<=0){
       e.preventDefault();
       sheet.style.transform='translateY('+Math.min(dy,300)+'px)';
       if(overlay){
-        overlay.style.background='rgba(0,0,0,'+Math.max(0,.45-dy/400)+')';
+        var p=Math.max(0,1-dy/300);
+        overlay.style.background='rgba(0,0,0,'+(.45*p)+')';
+        var bl='blur('+(6*p)+'px)';
+        overlay.style.backdropFilter=bl;overlay.style.webkitBackdropFilter=bl;
       }
     }else if(dy<0&&sheet.scrollTop+sheet.clientHeight>=sheet.scrollHeight-1){
       e.preventDefault();
@@ -1581,8 +1584,10 @@ function bgClose(e,id){ if(e.target.classList.contains('overlay')) close1(id); }
     if(dy>80){
       _s.style.transform='translateY(100%)';
       if(_o){
-        _o.style.transition='background .2s ease';
+        var tr='background .2s ease,backdrop-filter .2s ease,-webkit-backdrop-filter .2s ease';
+        _o.style.transition=tr;
         _o.style.background='rgba(0,0,0,0)';
+        _o.style.backdropFilter='blur(0px)';_o.style.webkitBackdropFilter='blur(0px)';
       }
       setTimeout(function(){
         if(_o) _o.style.transition='none';
@@ -1591,12 +1596,13 @@ function bgClose(e,id){ if(e.target.classList.contains('overlay')) close1(id); }
         if(_o){
           void _o.offsetHeight;
           _o.style.transition='';_o.style.background='';
+          _o.style.backdropFilter='';_o.style.webkitBackdropFilter='';
         }
         restoreNavPill();
       },200);
     }else{
       _s.style.transform='';
-      if(_o){_o.style.background='';}
+      if(_o){_o.style.background='';_o.style.backdropFilter='';_o.style.webkitBackdropFilter='';}
     }
     sheet=null;overlay=null;
   },{passive:true});
