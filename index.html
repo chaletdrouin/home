@@ -770,11 +770,11 @@
     <div class="ff-row">
       <div class="ff">
         <label class="fl">Arrivée</label>
-        <input class="fi" id="f-start" type="date" onclick="this.showPicker?.()">
+        <input class="fi" id="f-start" type="date" readonly onclick="this.readOnly=false;this.showPicker?.();this.readOnly=true;">
       </div>
       <div class="ff">
         <label class="fl">Départ</label>
-        <input class="fi" id="f-end" type="date" onclick="this.showPicker?.()">
+        <input class="fi" id="f-end" type="date" readonly onclick="this.readOnly=false;this.showPicker?.();this.readOnly=true;">
       </div>
     </div>
     <div class="btns">
@@ -828,11 +828,11 @@
     <div class="ff-row">
       <div class="ff">
         <label class="fl">Arrivée</label>
-        <input class="fi" id="e-start" type="date" onclick="this.showPicker?.()">
+        <input class="fi" id="e-start" type="date" readonly onclick="this.readOnly=false;this.showPicker?.();this.readOnly=true;">
       </div>
       <div class="ff">
         <label class="fl">Départ</label>
-        <input class="fi" id="e-end" type="date" onclick="this.showPicker?.()">
+        <input class="fi" id="e-end" type="date" readonly onclick="this.readOnly=false;this.showPicker?.();this.readOnly=true;">
       </div>
     </div>
     <div class="btns">
