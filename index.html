@@ -911,8 +911,18 @@ function isAnnualOpen(){ return document.getElementById('view-year').classList.c
 function nav(d){
   if(isAnnualOpen()){
     cY += d;
-    renderAnnual();
-    updateHdr();
+    const grid = document.getElementById('year-grid');
+    grid.classList.remove('slide-out-left','slide-out-right','slide-in-left','slide-in-right');
+    grid.classList.add(d > 0 ? 'slide-out-left' : 'slide-out-right');
+    setTimeout(function(){
+      grid.classList.remove('slide-out-left','slide-out-right');
+      renderAnnual();
+      updateHdr();
+      grid.classList.add(d > 0 ? 'slide-in-left' : 'slide-in-right');
+      setTimeout(function(){
+        grid.classList.remove('slide-in-left','slide-in-right');
+      }, 180);
+    }, 180);
     return;
   }
   slideDir = d;
@@ -922,15 +932,12 @@ function nav(d){
 
 function goToday(){
   const now = new Date();
+  cY = now.getFullYear(); cM = now.getMonth();
   if(isAnnualOpen()){
-    cY = now.getFullYear();
-    renderAnnual();
-    updateHdr();
+    closeAnnual();
     return;
   }
-  const d = now.getMonth() > cM || now.getFullYear() > cY ? 1 : -1;
-  slideDir = (now.getFullYear() === cY && now.getMonth() === cM) ? 0 : d;
-  cY = now.getFullYear(); cM = now.getMonth();
+  slideDir = 0;
   render();
 }
 
@@ -957,8 +964,7 @@ function closeAnnual(){
 function updateHdr(){
   if(isAnnualOpen()){
     document.getElementById('month-lbl').textContent = cY;
-    const now = new Date();
-    document.getElementById('btn-today').classList.toggle('hidden', cY === now.getFullYear());
+    document.getElementById('btn-today').classList.remove('hidden');
   } else {
     document.getElementById('month-lbl').textContent = MONTHS[cM]+' '+cY;
     updateTodayBtn();
