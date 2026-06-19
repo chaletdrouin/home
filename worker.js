@@ -330,34 +330,6 @@ export default {
       return new Response(null, { status: 204, headers: CORS });
     }
 
-    // ── Instructions ──
-
-    // GET /instructions
-    if (req.method === 'GET' && path === '/instructions') {
-      const items = (await env.BOOKINGS.get('instructions', 'json')) || [];
-      return json(items);
-    }
-
-    // POST /instructions
-    if (req.method === 'POST' && path === '/instructions') {
-      let body;
-      try { body = await req.json(); } catch { return json({ error: 'Invalid JSON' }, 400); }
-      if (!body.name) return json({ error: 'name required' }, 400);
-      const items = (await env.BOOKINGS.get('instructions', 'json')) || [];
-      const item = { id: crypto.randomUUID(), name: String(body.name).slice(0, 200), cat: String(body.cat || 'Autre').slice(0, 40) };
-      items.push(item);
-      await env.BOOKINGS.put('instructions', JSON.stringify(items));
-      return json(item, 201);
-    }
-
-    // DELETE /instructions/:id
-    const mDocDel = path.match(/^\/instructions\/([0-9a-f-]+)$/i);
-    if (req.method === 'DELETE' && mDocDel) {
-      const items = (await env.BOOKINGS.get('instructions', 'json')) || [];
-      await env.BOOKINGS.put('instructions', JSON.stringify(items.filter(i => i.id !== mDocDel[1])));
-      return new Response(null, { status: 204, headers: CORS });
-    }
-
     return new Response('Not found', { status: 404, headers: CORS });
   },
 };
