@@ -584,16 +584,23 @@
     @media (max-width:900px) { .inv-cols { column-count:2; } }
     @media (max-width:639px) { .inv-cols { column-count:unset; } }
     .inv-tabs {
-      display: none; gap: 6px; padding: 12px 0;
+      display: none; gap: 0; padding: 12px 0;
       overflow-x: auto; flex-shrink: 0; -webkit-overflow-scrolling: touch;
+      background: rgba(0,0,0,.35); border-radius: 22px; padding: 3px;
     }
     .inv-tab {
-      padding: 6px 14px; border-radius: 8px; font-size: 13px; font-weight: 500;
-      background: var(--bg); border: .5px solid var(--border);
-      color: var(--text2); cursor: pointer; white-space: nowrap;
-      transition: background .15s, color .15s, border-color .15s;
+      padding: 0 14px; height: 30px; border-radius: 19px;
+      font-size: 13px; font-weight: 500;
+      background: none; border: none;
+      color: rgba(255,255,255,.35); cursor: pointer; white-space: nowrap;
+      transition: background .25s, color .2s;
+      display: flex; align-items: center; justify-content: center;
     }
-    .inv-tab.active { background: var(--blue); color: #fff; border-color: transparent; }
+    .inv-tab.active {
+      background: rgba(255,255,255,.12);
+      color: rgba(255,255,255,.92);
+      box-shadow: 0 1px 4px rgba(0,0,0,.3);
+    }
     @media (max-width:639px) {
       .inv-tabs { display: flex; }
       .inv-col-section { display: none; }
