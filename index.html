@@ -158,6 +158,11 @@
       overflow: hidden; white-space: nowrap; max-width: 110px;
     }
     .hdr-today.hidden { max-width: 0; opacity: 0; padding: 5px 0; border-color: transparent; pointer-events: none; }
+    .hdr-book {
+      margin-left: auto;
+      padding: 6px 14px; font-size: 13px; font-weight: 600;
+      border-radius: 8px; white-space: nowrap;
+    }
 
     /* ── Mobile ── */
     @media (max-width: 639px) {
@@ -187,6 +192,7 @@
       .nav-icon { width: 24px; height: 24px; display: block !important; }
       .nav-settings { margin-top: 0; margin-bottom: 0; }
       .hdr-brand-mobile { display: flex; }
+      .hdr-book { display: none; }
       .views-slider {
         position: relative; overflow: hidden;
       }
@@ -644,6 +650,7 @@
       <button class="hdr-nav" onclick="nav(-1)">‹</button>
       <div class="hdr-title" id="month-lbl" onclick="isAnnualOpen()?closeAnnual():showAnnual()"></div>
       <button class="hdr-nav" onclick="nav(1)">›</button>
+      <button class="btn btn-p hdr-book" onclick="openCreate(null)">Réserver</button>
     </div>
   </div>
   <div class="views-slider" id="views-slider">
