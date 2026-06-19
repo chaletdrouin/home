@@ -64,7 +64,8 @@
       box-shadow: inset 0 1px 0 rgba(255,255,255,.06), 0 2px 8px rgba(0,0,0,.15);
       backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
       transition: top .3s cubic-bezier(.4,0,.2,1), left .3s cubic-bezier(.4,0,.2,1),
-                  width .3s cubic-bezier(.4,0,.2,1), height .3s cubic-bezier(.4,0,.2,1);
+                  width .3s cubic-bezier(.4,0,.2,1), height .3s cubic-bezier(.4,0,.2,1),
+                  opacity .2s;
       pointer-events: none;
       z-index: 0;
     }
@@ -1113,6 +1114,9 @@ function openDay(ds) {
 
 function openSettings() {
   updateNotifStatus();
+  document.querySelectorAll('.nav-item:not(.nav-settings)').forEach(function(b){ b.classList.remove('active'); });
+  document.querySelector('.nav-settings').classList.add('active');
+  document.getElementById('nav-pill').style.opacity = '0';
   open1('m-settings');
 }
 
@@ -1466,9 +1470,7 @@ function showToast(msg, btnLabel, btnCb) {
   }, 4000);
 }
 
-function open1(id){ document.getElementById(id).classList.add('open'); }
-function close1(id){
-  document.getElementById(id).classList.remove('open');
+function restoreNavPill(){
   var isMobile = window.innerWidth <= 639;
   var idx = 0;
   if (isMobile) {
@@ -1481,7 +1483,15 @@ function close1(id){
     idx = isDoc ? 2 : isInv ? 1 : 0;
   }
   document.querySelectorAll('.nav-item:not(.nav-settings)').forEach(function(b,i){ b.classList.toggle('active', i===idx); });
+  document.querySelector('.nav-settings').classList.remove('active');
+  var pill = document.getElementById('nav-pill');
+  if(pill) pill.style.opacity = '';
   moveNavPill(idx);
+}
+function open1(id){ document.getElementById(id).classList.add('open'); }
+function close1(id){
+  document.getElementById(id).classList.remove('open');
+  restoreNavPill();
 }
 function bgClose(e,id){ if(e.target.classList.contains('overlay')) close1(id); }
 
@@ -1536,6 +1546,7 @@ function bgClose(e,id){ if(e.target.classList.contains('overlay')) close1(id); }
         document.querySelectorAll('.overlay.open').forEach(function(o){o.classList.remove('open');});
         if(sheet){sheet.style.transform='';sheet.style.transition='';}
         if(overlay){overlay.style.transition='';overlay.style.background='';overlay.style.backdropFilter='';overlay.style.webkitBackdropFilter='';}
+        restoreNavPill();
       },200);
     }else{
       sheet.style.transform='';
