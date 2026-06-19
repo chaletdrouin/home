@@ -428,10 +428,15 @@
       transition: border-color .15s;
     }
     .fi:focus { border-color: var(--blue); }
-    .fi[type="date"] { cursor: pointer; }
-    .fi[type="date"]:focus { outline: none; box-shadow: none; caret-color: transparent; }
-    .fi[type="date"]::selection { background: transparent; }
-    .fi[type="date"]::-moz-selection { background: transparent; }
+    .fi[type="date"] {
+      cursor: pointer; -webkit-user-select: none; user-select: none;
+      caret-color: transparent;
+    }
+    .fi[type="date"]:focus { outline: none; box-shadow: none; border-color: var(--blue); }
+    .fi[type="date"]::selection { background: transparent; color: inherit; }
+    .fi[type="date"]::-moz-selection { background: transparent; color: inherit; }
+    .fi[type="date"]::-webkit-datetime-edit-fields-wrapper { pointer-events: none; }
+    .fi[type="date"]::-webkit-datetime-edit { pointer-events: none; }
 
     .btns { display: flex; gap: 10px; margin-top: 20px; }
     .btn {
