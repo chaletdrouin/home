@@ -146,7 +146,7 @@
     .hdr-content.active { display: flex; align-items: center; }
     .hdr-inv { gap: 10px; }
     .inv-tabs-hdr { display: flex !important; flex: 1; min-width: 0; padding: 0 !important; justify-content: flex-start; }
-    .inv-add.open ~ .inv-tabs-hdr { display: none !important; }
+    .inv-tabs-hdr.hidden { display: none !important; }
     .hdr-nav-row {
       display: flex; align-items: center; justify-content: space-between;
       position: relative; width: 100%;
@@ -682,13 +682,13 @@
       </div>
     </div>
     <div class="hdr-content hdr-inv" id="hdr-inv">
+      <div class="inv-tabs inv-tabs-hdr" id="inv-tabs"></div>
       <div class="inv-add" id="inv-add">
         <select class="fi inv-add-field" id="f-inv-cat">
           <option>Épicerie</option><option>Condiments</option><option>Boissons</option><option>Frais</option><option>Entretien</option><option>Autre</option>
         </select>
         <input class="fi inv-add-field" id="f-inv-name" type="text" placeholder="Ajouter…" onkeydown="if(event.key==='Enter')addInvItem()">
       </div>
-      <div class="inv-tabs inv-tabs-hdr" id="inv-tabs"></div>
       <button class="btn btn-p inv-add-btn" id="inv-add-btn" onclick="invAddClick()">+</button>
     </div>
     <div class="hdr-content hdr-doc" id="hdr-doc">
@@ -1322,10 +1322,12 @@ function renderInventory(animate) {
 function invAddClick() {
   const form = document.getElementById('inv-add');
   const btn = document.getElementById('inv-add-btn');
+  const tabs = document.getElementById('inv-tabs');
   if (form.classList.contains('open')) {
     addInvItem();
   } else {
     form.classList.add('open');
+    tabs.classList.add('hidden');
     btn.innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>';
     setTimeout(() => document.getElementById('f-inv-name').focus(), 300);
   }
@@ -1333,7 +1335,9 @@ function invAddClick() {
 function closeInvAdd() {
   const form = document.getElementById('inv-add');
   const btn = document.getElementById('inv-add-btn');
+  const tabs = document.getElementById('inv-tabs');
   form.classList.remove('open');
+  tabs.classList.remove('hidden');
   btn.textContent = '+';
 }
 
