@@ -733,7 +733,7 @@
       <h3>Inventaire</h3>
       <ul>
         <li>Organisé en colonnes par catégorie</li>
-        <li>Utilisez les boutons <strong>Aucun / Un peu / Max</strong> pour indiquer les quantités</li>
+        <li>Utilisez les boutons <strong>Vide / Bon / Plein</strong> pour indiquer les quantités</li>
         <li>Ajoutez des articles avec le formulaire en bas</li>
       </ul>
     </div>
@@ -1339,9 +1339,9 @@ function renderInventory(animate) {
         <div class="inv-name">${esc(item.name)}</div>
         <div class="inv-toggle">
           <div class="inv-pill" data-v="${q}"></div>
-          <button class="inv-opt${q===0?' on':''}" onclick="setInvQty('${item.id}',0,this)">Aucun</button>
-          <button class="inv-opt${q===1?' on':''}" onclick="setInvQty('${item.id}',1,this)">Un peu</button>
-          <button class="inv-opt${q===2?' on':''}" onclick="setInvQty('${item.id}',2,this)">Max</button>
+          <button class="inv-opt${q===0?' on':''}" onclick="setInvQty('${item.id}',0,this)">Vide</button>
+          <button class="inv-opt${q===1?' on':''}" onclick="setInvQty('${item.id}',1,this)">Bon</button>
+          <button class="inv-opt${q===2?' on':''}" onclick="setInvQty('${item.id}',2,this)">Plein</button>
         </div>
         <button class="inv-del" onclick="deleteInvItem('${item.id}')" title="Supprimer">✕</button>`;
       section.appendChild(row);
