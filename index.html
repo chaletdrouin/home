@@ -1469,9 +1469,17 @@ function showToast(msg, btnLabel, btnCb) {
 function open1(id){ document.getElementById(id).classList.add('open'); }
 function close1(id){
   document.getElementById(id).classList.remove('open');
-  var isInv = document.getElementById('view-inv').classList.contains('active');
-  var isDoc = document.getElementById('view-doc').classList.contains('active');
-  var idx = isDoc ? 2 : isInv ? 1 : 0;
+  var isMobile = window.innerWidth <= 639;
+  var idx = 0;
+  if (isMobile) {
+    document.querySelectorAll('.view-panel').forEach(function(p, i) {
+      if (p.classList.contains('slide-active')) idx = i;
+    });
+  } else {
+    var isInv = document.getElementById('view-inv').classList.contains('active');
+    var isDoc = document.getElementById('view-doc').classList.contains('active');
+    idx = isDoc ? 2 : isInv ? 1 : 0;
+  }
   document.querySelectorAll('.nav-item:not(.nav-settings)').forEach(function(b,i){ b.classList.toggle('active', i===idx); });
   moveNavPill(idx);
 }
