@@ -429,14 +429,14 @@
     }
     .fi:focus { border-color: var(--blue); }
     .fi[type="date"] {
-      cursor: pointer; -webkit-user-select: none; user-select: none;
-      caret-color: transparent;
+      cursor: pointer; color-scheme: dark;
     }
-    .fi[type="date"]:focus { outline: none; box-shadow: none; border-color: var(--blue); }
-    .fi[type="date"]::selection { background: transparent; color: inherit; }
-    .fi[type="date"]::-moz-selection { background: transparent; color: inherit; }
-    .fi[type="date"]::-webkit-datetime-edit-fields-wrapper { pointer-events: none; }
-    .fi[type="date"]::-webkit-datetime-edit { pointer-events: none; }
+    .fi[type="date"]:focus { outline: none; box-shadow: none; border-color: var(--border); }
+    .fi[type="date"]::-webkit-datetime-edit-year-field:focus,
+    .fi[type="date"]::-webkit-datetime-edit-month-field:focus,
+    .fi[type="date"]::-webkit-datetime-edit-day-field:focus {
+      background: none; color: var(--text); outline: none;
+    }
 
     .btns { display: flex; gap: 10px; margin-top: 20px; }
     .btn {
