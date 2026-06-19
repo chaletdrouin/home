@@ -159,7 +159,7 @@
     }
     .hdr-today.hidden { max-width: 0; opacity: 0; padding: 5px 0; border-color: transparent; pointer-events: none; }
     .hdr-book {
-      margin-left: auto;
+      margin-left: auto; flex: none;
       padding: 5px 10px; font-size: 13px; font-weight: 500;
       border-radius: 8px; white-space: nowrap;
     }
@@ -918,9 +918,7 @@ function updateTodayBtn(){
 }
 
 function showAnnual(){
-  document.getElementById('view-cal').style.display = 'none';
-  document.getElementById('view-inv').classList.remove('active');
-  document.getElementById('view-doc').classList.remove('active');
+  document.getElementById('views-slider').style.display = 'none';
   document.getElementById('view-year').classList.add('active');
   renderAnnual();
   updateHdr();
@@ -928,7 +926,7 @@ function showAnnual(){
 
 function closeAnnual(){
   document.getElementById('view-year').classList.remove('active');
-  document.getElementById('view-cal').style.display = '';
+  document.getElementById('views-slider').style.display = '';
   render();
 }
 
