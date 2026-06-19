@@ -145,7 +145,7 @@
     .hdr-content { display: none; min-height: 38px; }
     .hdr-content.active { display: flex; align-items: center; }
     .hdr-inv { gap: 10px; }
-    .inv-tabs-hdr { display: flex !important; flex: 1; min-width: 0; padding: 0 !important; overflow-x: auto; }
+    .inv-tabs-hdr { display: flex !important; padding: 4px !important; }
     .hdr-nav-row {
       display: flex; align-items: center; justify-content: space-between;
       position: relative; width: 100%;
@@ -584,12 +584,13 @@
     @media (max-width:900px) { .inv-cols { column-count:2; } }
     @media (max-width:639px) { .inv-cols { column-count:unset; } }
     .inv-tabs {
-      display: none; gap: 0; padding: 12px 0;
+      display: none; gap: 0;
       overflow-x: auto; flex-shrink: 0; -webkit-overflow-scrolling: touch;
-      background: rgba(0,0,0,.35); border-radius: 22px; padding: 3px;
+      background: rgba(0,0,0,.35); border-radius: 22px; padding: 4px;
+      width: fit-content;
     }
     .inv-tab {
-      padding: 0 14px; height: 30px; border-radius: 19px;
+      padding: 0 14px; height: 32px; border-radius: 18px;
       font-size: 13px; font-weight: 500;
       background: none; border: none;
       color: rgba(255,255,255,.35); cursor: pointer; white-space: nowrap;
