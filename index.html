@@ -614,19 +614,11 @@
     /* ── Mode d'emploi ── */
     .doc-view { flex:1; display:none; flex-direction:column; min-height:0; }
     .doc-view.active { display:flex; }
-    .doc-hdr {
-      display: flex; align-items: center;
-      padding: calc(10px + env(safe-area-inset-top)) 14px 10px;
-      border-bottom: 1px solid var(--border);
-      background: var(--bg); flex-shrink: 0;
-      font-size: 16px; font-weight: 700; letter-spacing: -.01em;
+    .doc-item {
+      display: flex; align-items: center; gap: 8px;
+      padding: 10px 0; border-bottom: 1px solid var(--border);
     }
-    .doc-body { flex: 1; overflow-y: auto; padding: 16px 14px; }
-    .doc-section { margin-bottom:18px; }
-    .doc-section h3 { font-size:15px; font-weight:600; color:var(--blue); margin-bottom:8px; }
-    .doc-section p, .doc-section li { font-size:14px; color:var(--text2); line-height:1.6; }
-    .doc-section ul { padding-left:18px; }
-    .doc-section li { margin-bottom:4px; }
+    .doc-name { flex: 1; font-size: 14px; font-weight: 500; min-width: 0; }
 
     /* ── Edit button in day detail ── */
     .bk-edit {
@@ -707,46 +699,18 @@
   </div>
 
   <div class="view-panel slide-right doc-view" id="view-doc">
-    <div class="doc-hdr"></div>
-    <div class="doc-body">
-    <div class="doc-section">
-      <h3>Calendrier</h3>
-      <ul>
-        <li>Glissez à gauche/droite pour changer de mois</li>
-        <li>Cliquez sur le titre du mois pour afficher la vue annuelle</li>
-        <li>Cliquez sur une journée pour voir les réservations</li>
-        <li>Utilisez le bouton <strong>+</strong> pour créer une réservation</li>
-        <li>Le bouton <strong>Aujourd'hui</strong> apparaît quand vous quittez le mois courant</li>
-      </ul>
+    <div class="inv-hdr">
+      <div class="inv-add" id="doc-add">
+        <select class="fi inv-add-field" id="f-doc-cat">
+          <option>Eau</option><option>Gaz</option><option>Électricité</option><option>Autre</option>
+        </select>
+        <input class="fi inv-add-field" id="f-doc-name" type="text" placeholder="Ajouter…" onkeydown="if(event.key==='Enter')addDocItem()">
+      </div>
+      <button class="btn btn-p inv-add-btn" id="doc-add-btn" onclick="docAddClick()">+</button>
     </div>
-    <div class="doc-section">
-      <h3>Réservations</h3>
-      <ul>
-        <li>Les réservations apparaissent comme des barres colorées continues</li>
-        <li>Cliquez sur une barre ou un jour pour voir le détail</li>
-        <li>Vous pouvez modifier ou supprimer une réservation depuis le détail du jour</li>
-      </ul>
-    </div>
-    <div class="doc-section">
-      <h3>Inventaire</h3>
-      <ul>
-        <li>Organisé en colonnes par catégorie</li>
-        <li>Utilisez les boutons <strong>Vide / Bon / Plein</strong> pour indiquer les quantités</li>
-        <li>Ajoutez des articles avec le formulaire en bas</li>
-      </ul>
-    </div>
-    <div class="doc-section">
-      <h3>Notifications</h3>
-      <ul>
-        <li>Activez les notifications dans <strong>Paramètres</strong></li>
-        <li>Recevez une alerte à chaque nouvelle réservation, modification ou suppression</li>
-      </ul>
-    </div>
-    <div class="doc-section">
-      <h3>Installation</h3>
-      <p>Sur iPhone : Safari → Partager → Sur l'écran d'accueil.<br>
-         Sur Android : Chrome → Menu → Installer l'application.</p>
-    </div>
+    <div class="inv-content">
+      <div class="inv-tabs" id="doc-tabs"></div>
+      <div class="inv-cols" id="doc-body"></div>
     </div>
   </div>
   </div>
@@ -1286,6 +1250,15 @@ async function showView(name) {
     }
     renderInventory();
   }
+  if (name === 'doc') {
+    if (!instructions.length) {
+      try {
+        const r = await fetch(API + '/instructions');
+        if (r.ok) instructions = await r.json();
+      } catch {}
+    }
+    renderDoc();
+  }
 }
 
 const CAT_ORDER = ['Épicerie','Condiments','Boissons','Frais','Entretien','Autre'];
@@ -1407,6 +1380,103 @@ async function deleteInvItem(id) {
     await fetch(API + '/inventory/' + id, { method: 'DELETE' });
     inventory = inventory.filter(i => i.id !== id);
     renderInventory();
+  } catch {}
+}
+
+// ── Mode d'emploi (instructions) ──
+
+let instructions = [];
+const DOC_CAT_ORDER = ['Eau','Gaz','Électricité','Autre'];
+let docActiveCat = null;
+
+function renderDoc() {
+  const body = document.getElementById('doc-body');
+  const tabsWrap = document.getElementById('doc-tabs');
+  body.innerHTML = '';
+  tabsWrap.innerHTML = '';
+  if (!instructions.length) {
+    body.innerHTML = '<div class="empty">Aucune instruction</div>';
+    return;
+  }
+  const groups = {};
+  instructions.forEach(item => {
+    const c = item.cat || 'Autre';
+    (groups[c] = groups[c] || []).push(item);
+  });
+  const cats = Object.keys(groups).sort((a, b) => {
+    const ia = DOC_CAT_ORDER.indexOf(a), ib = DOC_CAT_ORDER.indexOf(b);
+    return (ia === -1 ? 99 : ia) - (ib === -1 ? 99 : ib);
+  });
+  if (!docActiveCat || cats.indexOf(docActiveCat) === -1) docActiveCat = cats[0];
+  cats.forEach(cat => {
+    const tab = document.createElement('button');
+    tab.className = 'inv-tab' + (cat === docActiveCat ? ' active' : '');
+    tab.textContent = cat;
+    tab.onclick = function(){ docActiveCat = cat; renderDoc(); };
+    tabsWrap.appendChild(tab);
+  });
+  cats.forEach((cat, ci) => {
+    const section = document.createElement('div');
+    section.className = 'inv-col-section' + (cat === docActiveCat ? ' active' : '');
+    const hdr = document.createElement('div');
+    hdr.className = 'inv-cat';
+    hdr.textContent = cat;
+    section.appendChild(hdr);
+    groups[cat].forEach(item => {
+      const row = document.createElement('div');
+      row.className = 'doc-item';
+      row.innerHTML = `
+        <div class="doc-name">${esc(item.name)}</div>
+        <button class="inv-del" onclick="deleteDocItem('${item.id}')" title="Supprimer">✕</button>`;
+      section.appendChild(row);
+    });
+    body.appendChild(section);
+  });
+}
+
+function docAddClick() {
+  const form = document.getElementById('doc-add');
+  const btn = document.getElementById('doc-add-btn');
+  if (form.classList.contains('open')) {
+    addDocItem();
+  } else {
+    form.classList.add('open');
+    btn.innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>';
+    setTimeout(() => document.getElementById('f-doc-name').focus(), 300);
+  }
+}
+function closeDocAdd() {
+  const form = document.getElementById('doc-add');
+  const btn = document.getElementById('doc-add-btn');
+  form.classList.remove('open');
+  btn.textContent = '+';
+}
+
+async function addDocItem() {
+  const inp = document.getElementById('f-doc-name');
+  const cat = document.getElementById('f-doc-cat').value;
+  const name = inp.value.trim();
+  if (!name) { closeDocAdd(); return; }
+  try {
+    const r = await fetch(API + '/instructions', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ name, cat })
+    });
+    if (r.ok) {
+      const item = await r.json();
+      instructions.push(item);
+      inp.value = '';
+      renderDoc();
+    }
+  } catch {}
+}
+
+async function deleteDocItem(id) {
+  try {
+    await fetch(API + '/instructions/' + id, { method: 'DELETE' });
+    instructions = instructions.filter(i => i.id !== id);
+    renderDoc();
   } catch {}
 }
 
