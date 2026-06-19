@@ -142,9 +142,12 @@
       font-size: 16px; font-weight: 700; letter-spacing: -.01em;
       align-items: center; justify-content: space-between;
     }
+    .hdr-content { display: none; }
+    .hdr-content.active { display: flex; align-items: center; }
+    .hdr-inv { gap: 10px; }
     .hdr-nav-row {
       display: flex; align-items: center; justify-content: space-between;
-      position: relative;
+      position: relative; width: 100%;
     }
     .hdr-group { display: flex; align-items: center; gap: 8px; }
     .hdr-title {
@@ -478,12 +481,6 @@
       min-height: 0;
     }
     .inv-view.active { display: flex; }
-    .inv-hdr {
-      display: flex; align-items: center; gap: 10px;
-      padding: calc(10px + env(safe-area-inset-top)) 14px 10px;
-      border-bottom: 1px solid var(--border);
-      background: var(--bg); flex-shrink: 0;
-    }
     .inv-cat {
       font-size: 13px; font-weight: 600; color: var(--text2);
       text-transform: uppercase; letter-spacing: .06em;
@@ -614,11 +611,6 @@
     /* ── Mode d'emploi ── */
     .doc-view { flex:1; display:none; flex-direction:column; min-height:0; }
     .doc-view.active { display:flex; }
-    .doc-hdr {
-      padding: calc(12px + env(safe-area-inset-top)) 14px 12px;
-      border-bottom: 1px solid var(--border);
-      background: var(--bg); flex-shrink: 0;
-    }
     .doc-tabs-always { display: flex !important; }
     .doc-body { flex: 1; overflow-y: auto; padding: 14px; }
     .doc-block {
@@ -673,15 +665,33 @@
     <div class="hdr-mountains-mobile">
       <img src="moutains-header.png" alt="" class="hdr-mountains-img">
     </div>
-    <div class="hdr-nav-row">
-      <div class="hdr-group">
-        <button class="hdr-today hidden" id="btn-today" onclick="goToday()">Aujourd'hui</button>
-        <button class="hdr-nav" onclick="nav(-1)">‹</button>
+    <div class="hdr-content hdr-cal active" id="hdr-cal">
+      <div class="hdr-nav-row">
+        <div class="hdr-group">
+          <button class="hdr-today hidden" id="btn-today" onclick="goToday()">Aujourd'hui</button>
+          <button class="hdr-nav" onclick="nav(-1)">‹</button>
+        </div>
+        <div class="hdr-title" id="month-lbl" onclick="isAnnualOpen()?closeAnnual():showAnnual()"></div>
+        <div class="hdr-group">
+          <button class="hdr-nav" onclick="nav(1)">›</button>
+          <button class="btn btn-p hdr-book" onclick="openCreate(null)">Réserver</button>
+        </div>
       </div>
-      <div class="hdr-title" id="month-lbl" onclick="isAnnualOpen()?closeAnnual():showAnnual()"></div>
-      <div class="hdr-group">
-        <button class="hdr-nav" onclick="nav(1)">›</button>
-        <button class="btn btn-p hdr-book" onclick="openCreate(null)">Réserver</button>
+    </div>
+    <div class="hdr-content hdr-inv" id="hdr-inv">
+      <div class="inv-add" id="inv-add">
+        <select class="fi inv-add-field" id="f-inv-cat">
+          <option>Épicerie</option><option>Condiments</option><option>Boissons</option><option>Frais</option><option>Entretien</option><option>Autre</option>
+        </select>
+        <input class="fi inv-add-field" id="f-inv-name" type="text" placeholder="Ajouter…" onkeydown="if(event.key==='Enter')addInvItem()">
+      </div>
+      <button class="btn btn-p inv-add-btn" id="inv-add-btn" onclick="invAddClick()">+</button>
+    </div>
+    <div class="hdr-content hdr-doc" id="hdr-doc">
+      <div class="inv-tabs doc-tabs-always">
+        <button class="inv-tab active" onclick="switchDocTab(0,this)">Eau</button>
+        <button class="inv-tab" onclick="switchDocTab(1,this)">Gaz</button>
+        <button class="inv-tab" onclick="switchDocTab(2,this)">Électricité</button>
       </div>
     </div>
   </div>
@@ -692,15 +702,6 @@
   </div>
 
   <div class="view-panel slide-right inv-view" id="view-inv">
-    <div class="inv-hdr">
-      <div class="inv-add" id="inv-add">
-        <select class="fi inv-add-field" id="f-inv-cat">
-          <option>Épicerie</option><option>Condiments</option><option>Boissons</option><option>Frais</option><option>Entretien</option><option>Autre</option>
-        </select>
-        <input class="fi inv-add-field" id="f-inv-name" type="text" placeholder="Ajouter…" onkeydown="if(event.key==='Enter')addInvItem()">
-      </div>
-      <button class="btn btn-p inv-add-btn" id="inv-add-btn" onclick="invAddClick()">+</button>
-    </div>
     <div class="inv-content">
       <div class="inv-tabs" id="inv-tabs"></div>
       <div class="inv-cols" id="inv-body"></div>
@@ -708,13 +709,6 @@
   </div>
 
   <div class="view-panel slide-right doc-view" id="view-doc">
-    <div class="doc-hdr">
-      <div class="inv-tabs doc-tabs-always">
-        <button class="inv-tab active" onclick="switchDocTab(0,this)">Eau</button>
-        <button class="inv-tab" onclick="switchDocTab(1,this)">Gaz</button>
-        <button class="inv-tab" onclick="switchDocTab(2,this)">Électricité</button>
-      </div>
-    </div>
     <div class="doc-body">
       <div class="doc-block active" data-doc="0">
         <p></p>
@@ -1223,10 +1217,12 @@ async function showView(name) {
   moveNavPill(idx);
 
   const isMobile = window.innerWidth <= 639;
-  const hdr = document.querySelector('.hdr');
   const cal = document.getElementById('view-cal');
   const inv = document.getElementById('view-inv');
   const doc = document.getElementById('view-doc');
+
+  document.querySelectorAll('.hdr-content').forEach(function(c) { c.classList.remove('active'); });
+  document.getElementById('hdr-' + name).classList.add('active');
 
   document.getElementById('view-year').classList.remove('active');
 
@@ -1238,15 +1234,12 @@ async function showView(name) {
       else if (i < idx) p.classList.add('slide-left');
       else p.classList.add('slide-right');
     });
-    hdr.style.display = name === 'cal' ? '' : 'none';
   } else {
-    hdr.style.display = 'none';
     cal.style.display = 'none';
     inv.classList.remove('active');
     doc.classList.remove('active');
 
     if (name === 'cal') {
-      hdr.style.display = '';
       cal.style.display = '';
     } else if (name === 'inv') {
       inv.classList.add('active');
