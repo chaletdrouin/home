@@ -439,13 +439,16 @@
     /* ── Inventory view ── */
     .inv-view {
       flex: 1; display: none; flex-direction: column;
-      padding: calc(16px + env(safe-area-inset-top)) 16px 8px; min-height: 0; overflow-y: auto;
+      min-height: 0;
     }
     .inv-view.active { display: flex; }
-    .inv-title {
-      font-size: 19px; font-weight: 700; margin-bottom: 14px;
+    .inv-hdr {
       display: flex; align-items: center; gap: 10px;
+      padding: calc(10px + env(safe-area-inset-top)) 14px 10px;
+      border-bottom: 1px solid var(--border);
+      background: var(--bg); flex-shrink: 0;
     }
+    .inv-hdr-title { font-size: 16px; font-weight: 700; flex: 1; }
     .inv-cat {
       font-size: 13px; font-weight: 600; color: var(--text2);
       text-transform: uppercase; letter-spacing: .06em;
@@ -453,10 +456,11 @@
     }
     .inv-cat:first-child { padding-top: 0; }
     .inv-item {
-      display: flex; align-items: center; gap: 10px;
-      padding: 10px 0; border-bottom: 1px solid var(--border);
+      display: flex; align-items: center; gap: 8px;
+      padding: 8px 0; border-bottom: 1px solid var(--border);
     }
-    .inv-name { flex: 1; font-size: 16px; font-weight: 500; min-width: 0; }
+    .inv-content { flex: 1; overflow-y: auto; padding: 0 14px 8px; }
+    .inv-name { flex: 1; font-size: 14px; font-weight: 500; min-width: 0; }
     .inv-toggle {
       display: flex; flex-shrink: 0; position: relative;
       background: var(--bg2); border-radius: 8px;
@@ -568,9 +572,16 @@
     }
 
     /* ── Mode d'emploi ── */
-    .doc-view { flex:1; display:none; flex-direction:column; padding:calc(16px + env(safe-area-inset-top)) 20px 16px; min-height:0; overflow-y:auto; }
+    .doc-view { flex:1; display:none; flex-direction:column; min-height:0; }
     .doc-view.active { display:flex; }
-    .doc-title { font-size:19px; font-weight:700; margin-bottom:16px; }
+    .doc-hdr {
+      display: flex; align-items: center;
+      padding: calc(10px + env(safe-area-inset-top)) 14px 10px;
+      border-bottom: 1px solid var(--border);
+      background: var(--bg); flex-shrink: 0;
+      font-size: 16px; font-weight: 700;
+    }
+    .doc-body { flex: 1; overflow-y: auto; padding: 16px 14px; }
     .doc-section { margin-bottom:18px; }
     .doc-section h3 { font-size:15px; font-weight:600; color:var(--blue); margin-bottom:8px; }
     .doc-section p, .doc-section li { font-size:14px; color:var(--text2); line-height:1.6; }
@@ -634,20 +645,25 @@
   </div>
 
   <div class="view-panel slide-right inv-view" id="view-inv">
-    <div class="inv-title">Inventaire</div>
-    <div class="inv-tabs" id="inv-tabs"></div>
-    <div class="inv-cols" id="inv-body"></div>
-    <div class="inv-add" id="inv-add">
-      <select class="fi inv-add-field" id="f-inv-cat" style="flex:none;width:auto;padding:10px 8px;font-size:14px;">
-        <option>Épicerie</option><option>Condiments</option><option>Boissons</option><option>Frais</option><option>Entretien</option><option>Autre</option>
-      </select>
-      <input class="fi inv-add-field" id="f-inv-name" type="text" placeholder="Ajouter…" style="font-size:16px" onkeydown="if(event.key==='Enter')addInvItem()">
+    <div class="inv-hdr">
+      <div class="inv-hdr-title">Inventaire</div>
       <button class="btn btn-p inv-add-btn" id="inv-add-btn" onclick="invAddClick()">+</button>
+    </div>
+    <div class="inv-content">
+      <div class="inv-add" id="inv-add">
+        <select class="fi inv-add-field" id="f-inv-cat" style="flex:none;width:auto;padding:10px 8px;font-size:14px;">
+          <option>Épicerie</option><option>Condiments</option><option>Boissons</option><option>Frais</option><option>Entretien</option><option>Autre</option>
+        </select>
+        <input class="fi inv-add-field" id="f-inv-name" type="text" placeholder="Ajouter…" style="font-size:16px" onkeydown="if(event.key==='Enter')addInvItem()">
+      </div>
+      <div class="inv-tabs" id="inv-tabs"></div>
+      <div class="inv-cols" id="inv-body"></div>
     </div>
   </div>
 
   <div class="view-panel slide-right doc-view" id="view-doc">
-    <div class="doc-title">Mode d'emploi</div>
+    <div class="doc-hdr">Mode d'emploi</div>
+    <div class="doc-body">
     <div class="doc-section">
       <h3>Calendrier</h3>
       <ul>
@@ -685,6 +701,7 @@
       <h3>Installation</h3>
       <p>Sur iPhone : Safari → Partager → Sur l'écran d'accueil.<br>
          Sur Android : Chrome → Menu → Installer l'application.</p>
+    </div>
     </div>
   </div>
   </div>
