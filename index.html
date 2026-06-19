@@ -1097,7 +1097,7 @@ function openDay(ds) {
       const row=document.createElement('div');
       row.className='bk-row fade-up';
       row.style.animationDelay = (i * 40) + 'ms';
-      row.innerHTML=`<div class="bk-dot" style="background:${b.color}"></div>
+      row.innerHTML=`<div class="bk-dot" style="background:var(--blue)"></div>
         <div class="bk-info">
           <div class="bk-name">${esc(b.description||'—')}</div>
           <div class="bk-dates">${fmtD(b.start)} → ${fmtD(b.end)}</div>
