@@ -183,16 +183,17 @@
       .nav-settings { margin-top: 0; margin-bottom: 0; }
       .hdr-brand-mobile { display: block; }
       .views-slider {
-        flex-direction: row; flex-wrap: nowrap; overflow: hidden;
+        position: relative; overflow: hidden;
       }
       .views-slider > .view-panel {
-        flex: 0 0 100% !important; width: 100%;
+        position: absolute; inset: 0;
         display: flex !important; flex-direction: column;
-        min-height: 0; overflow-y: auto;
+        transform: translateX(100%);
+        transition: transform .3s ease;
       }
-      .views-slider > .view-panel:first-child {
-        margin-left: 0;
-        transition: margin-left .3s ease;
+      .views-slider > .view-panel.slide-active {
+        position: relative;
+        transform: translateX(0);
       }
     }
 
@@ -622,7 +623,7 @@
     </div>
   </div>
   <div class="views-slider" id="views-slider">
-  <div class="view-panel cal-outer" id="view-cal">
+  <div class="view-panel slide-active cal-outer" id="view-cal">
     <div class="dow-row" id="dow"></div>
     <div class="cal-grid" id="grid"></div>
   </div>
@@ -1181,7 +1182,8 @@ async function showView(name) {
   document.getElementById('view-year').classList.remove('active');
 
   if (isMobile) {
-    document.querySelector('.views-slider > .view-panel').style.marginLeft = (-idx * 100) + '%';
+    const panels = document.querySelectorAll('.view-panel');
+    panels.forEach((p, i) => p.classList.toggle('slide-active', i === idx));
     hdr.style.display = name === 'cal' ? '' : 'none';
   } else {
     hdr.style.display = 'none';
