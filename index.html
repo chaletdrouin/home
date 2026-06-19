@@ -932,12 +932,14 @@ function nav(d){
 
 function goToday(){
   const now = new Date();
-  cY = now.getFullYear(); cM = now.getMonth();
   if(isAnnualOpen()){
+    cY = now.getFullYear(); cM = now.getMonth();
     closeAnnual();
     return;
   }
-  slideDir = 0;
+  const d = (now.getFullYear() > cY || (now.getFullYear() === cY && now.getMonth() > cM)) ? 1 : -1;
+  slideDir = (now.getFullYear() === cY && now.getMonth() === cM) ? 0 : d;
+  cY = now.getFullYear(); cM = now.getMonth();
   render();
 }
 
