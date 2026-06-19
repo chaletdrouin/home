@@ -530,9 +530,9 @@
     }
     .inv-del:hover { color: var(--red); }
     .inv-add-input {
-      flex: 1; font-size: 14px; padding: 6px 10px;
+      flex: 1; font-size: 16px; padding: 6px 10px;
       background: var(--bg2); border: 1px solid var(--border); border-radius: 8px;
-      color: var(--text);
+      color: var(--text); min-width: 0;
     }
     .inv-add-btn {
       flex: none; min-width: 38px; height: 38px; padding: 0 12px !important;
@@ -1310,30 +1310,47 @@ function invAddClick() {
   if (!section) return;
   const row = document.createElement('div');
   row.className = 'inv-item inv-add-row';
-  row.innerHTML = '<input class="fi inv-add-input" type="text" placeholder="Nom…" autofocus>';
+  row.dataset.qty = '1';
+  row.innerHTML = `<input class="fi inv-add-input" type="text" placeholder="Nom…" autofocus>
+    <div class="inv-toggle">
+      <div class="inv-pill" data-v="1"></div>
+      <button class="inv-opt" onclick="setAddQty(this,0)">Vide</button>
+      <button class="inv-opt on" onclick="setAddQty(this,1)">Bon</button>
+      <button class="inv-opt" onclick="setAddQty(this,2)">Plein</button>
+    </div>`;
   section.appendChild(row);
   const inp = row.querySelector('input');
   inp.focus();
   inp.addEventListener('keydown', function(e) {
-    if (e.key === 'Enter') commitInvAdd(inp, cat);
+    if (e.key === 'Enter') commitInvAdd(row, cat);
     if (e.key === 'Escape') row.remove();
   });
   inp.addEventListener('blur', function() {
-    setTimeout(function() { if (row.parentNode) commitInvAdd(inp, cat); }, 100);
+    setTimeout(function() { if (row.parentNode) commitInvAdd(row, cat); }, 150);
   });
   const content = document.querySelector('.inv-content');
   if (content) content.scrollTop = content.scrollHeight;
 }
 
-async function commitInvAdd(inp, cat) {
-  const row = inp.closest('.inv-add-row');
+function setAddQty(btn, level) {
+  const row = btn.closest('.inv-add-row');
+  row.dataset.qty = level;
+  row.querySelector('.inv-pill').setAttribute('data-v', level);
+  row.querySelectorAll('.inv-opt').forEach((o, i) => o.classList.toggle('on', i === level));
+}
+
+async function commitInvAdd(row, cat) {
+  if (row._committed) return;
+  const inp = row.querySelector('input');
   const name = inp.value.trim();
-  if (!name) { if (row) row.remove(); return; }
+  if (!name) { row.remove(); return; }
+  row._committed = true;
+  const qty = parseInt(row.dataset.qty) || 1;
   try {
     const r = await fetch(API + '/inventory', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ name, cat, qty: 1 })
+      body: JSON.stringify({ name, cat, qty })
     });
     if (r.ok) {
       const item = await r.json();
