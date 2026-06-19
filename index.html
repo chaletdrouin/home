@@ -133,9 +133,12 @@
       align-items: center; justify-content: space-between;
     }
     .hdr-nav-row {
-      display: flex; align-items: center; gap: 8px;
+      display: flex; align-items: center; justify-content: space-between;
+      position: relative;
     }
+    .hdr-group { display: flex; align-items: center; gap: 8px; }
     .hdr-title {
+      position: absolute; left: 50%; transform: translateX(-50%);
       font-size: 16px; font-weight: 600;
       letter-spacing: -.01em; color: var(--text2);
       cursor: pointer; padding: 4px 8px; border-radius: 8px;
@@ -646,11 +649,15 @@
   <div class="hdr">
     <div class="hdr-brand-mobile">Chalet Drouin <button class="hdr-add" onclick="openCreate(null)">+</button></div>
     <div class="hdr-nav-row">
-      <button class="hdr-today hidden" id="btn-today" onclick="goToday()">Aujourd'hui</button>
-      <button class="hdr-nav" style="margin-left:auto" onclick="nav(-1)">‹</button>
+      <div class="hdr-group">
+        <button class="hdr-nav" onclick="nav(-1)">‹</button>
+        <button class="hdr-today hidden" id="btn-today" onclick="goToday()">Aujourd'hui</button>
+      </div>
       <div class="hdr-title" id="month-lbl" onclick="isAnnualOpen()?closeAnnual():showAnnual()"></div>
-      <button class="hdr-nav" style="margin-right:auto" onclick="nav(1)">›</button>
-      <button class="btn btn-p hdr-book" onclick="openCreate(null)">Réserver</button>
+      <div class="hdr-group">
+        <button class="btn btn-p hdr-book" onclick="openCreate(null)">Réserver</button>
+        <button class="hdr-nav" onclick="nav(1)">›</button>
+      </div>
     </div>
   </div>
   <div class="views-slider" id="views-slider">
