@@ -127,6 +127,7 @@
     .hdr-brand-mobile {
       display: none;
       font-size: 16px; font-weight: 700; letter-spacing: -.01em;
+      align-items: center; justify-content: space-between;
     }
     .hdr-nav-row {
       display: flex; align-items: center; gap: 8px;
@@ -151,7 +152,7 @@
       background: var(--bg2); border: .5px solid var(--border); border-radius: 8px;
       color: var(--text); cursor: pointer;
       transition: max-width .22s ease, opacity .22s ease, padding .22s ease;
-      overflow: hidden; white-space: nowrap; max-width: 80px;
+      overflow: hidden; white-space: nowrap; max-width: 110px;
     }
     .hdr-today.hidden { max-width: 0; opacity: 0; padding: 5px 0; border-color: transparent; pointer-events: none; }
 
@@ -181,7 +182,7 @@
       }
       .nav-icon { width: 22px; height: 22px; display: block !important; }
       .nav-settings { margin-top: 0; margin-bottom: 0; }
-      .hdr-brand-mobile { display: block; }
+      .hdr-brand-mobile { display: flex; }
       .views-slider {
         position: relative; overflow: hidden;
       }
@@ -448,7 +449,7 @@
       border-bottom: 1px solid var(--border);
       background: var(--bg); flex-shrink: 0;
     }
-    .inv-hdr-title { font-size: 16px; font-weight: 700; flex: 1; }
+    .inv-hdr-title { font-size: 16px; font-weight: 700; flex: 1; letter-spacing: -.01em; }
     .inv-cat {
       font-size: 13px; font-weight: 600; color: var(--text2);
       text-transform: uppercase; letter-spacing: .06em;
@@ -579,7 +580,7 @@
       padding: calc(10px + env(safe-area-inset-top)) 14px 10px;
       border-bottom: 1px solid var(--border);
       background: var(--bg); flex-shrink: 0;
-      font-size: 16px; font-weight: 700;
+      font-size: 16px; font-weight: 700; letter-spacing: -.01em;
     }
     .doc-body { flex: 1; overflow-y: auto; padding: 16px 14px; }
     .doc-section { margin-bottom:18px; }
@@ -629,9 +630,8 @@
 
 <div class="main">
   <div class="hdr">
-    <div class="hdr-brand-mobile">Chalet Drouin</div>
+    <div class="hdr-brand-mobile">Chalet Drouin <button class="hdr-add" onclick="openCreate(null)">+</button></div>
     <div class="hdr-nav-row">
-      <button class="hdr-add" onclick="openCreate(null)">+</button>
       <button class="hdr-today hidden" id="btn-today" onclick="goToday()">Aujourd'hui</button>
       <button class="hdr-nav" onclick="nav(-1)">‹</button>
       <div class="hdr-title" id="month-lbl" onclick="isAnnualOpen()?closeAnnual():showAnnual()"></div>
