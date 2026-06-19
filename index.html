@@ -109,7 +109,7 @@
       flex-shrink: 0;
       border-bottom: 1px solid var(--border);
       background: var(--bg);
-      position: relative; overflow: visible;
+      position: relative; overflow: hidden;
     }
     .hdr-mountains-mobile {
       display: none; position: absolute; inset: 0;
@@ -145,8 +145,7 @@
     .hdr-content { display: none; min-height: 38px; }
     .hdr-content.active { display: flex; align-items: center; }
     .hdr-inv { gap: 10px; }
-    .inv-tabs-hdr { display: flex !important; flex: 1; min-width: 0; padding: 0 !important; justify-content: flex-start; }
-    .inv-tabs-hdr.hidden { display: none !important; }
+    .inv-tabs-hdr { display: flex !important; flex: 1; min-width: 0; padding: 0 !important; overflow-x: auto; }
     .hdr-nav-row {
       display: flex; align-items: center; justify-content: space-between;
       position: relative; width: 100%;
@@ -530,20 +529,10 @@
       color: var(--text3); font-size: 16px; cursor: pointer;
     }
     .inv-del:hover { color: var(--red); }
-    .inv-add {
-      display: flex; gap: 0; min-width: 0;
-      align-items: center;
-    }
-    .inv-add.open { flex: 1; }
-    .inv-add-field {
-      font-size: 14px;
-      flex: 0 0 0; min-width: 0; overflow: hidden; opacity: 0;
-      padding: 8px 0; border-width: 0; margin: 0;
-      transition: flex .3s ease, opacity .2s .05s ease, padding .3s ease, border-width .3s ease, margin .3s ease;
-    }
-    .inv-add.open .inv-add-field {
-      flex: 1 1 0; opacity: 1;
-      padding: 8px 10px; border-width: 1px; margin-right: 8px;
+    .inv-add-input {
+      flex: 1; font-size: 14px; padding: 6px 10px;
+      background: var(--bg2); border: 1px solid var(--border); border-radius: 8px;
+      color: var(--text);
     }
     .inv-add-btn {
       flex: none; min-width: 38px; height: 38px; padding: 0 12px !important;
@@ -683,12 +672,6 @@
     </div>
     <div class="hdr-content hdr-inv" id="hdr-inv">
       <div class="inv-tabs inv-tabs-hdr" id="inv-tabs"></div>
-      <div class="inv-add" id="inv-add">
-        <select class="fi inv-add-field" id="f-inv-cat">
-          <option>Épicerie</option><option>Condiments</option><option>Boissons</option><option>Frais</option><option>Entretien</option><option>Autre</option>
-        </select>
-        <input class="fi inv-add-field" id="f-inv-name" type="text" placeholder="Ajouter…" onkeydown="if(event.key==='Enter')addInvItem()">
-      </div>
       <button class="btn btn-p inv-add-btn" id="inv-add-btn" onclick="invAddClick()">+</button>
     </div>
     <div class="hdr-content hdr-doc" id="hdr-doc">
@@ -1320,32 +1303,32 @@ function renderInventory(animate) {
 }
 
 function invAddClick() {
-  const form = document.getElementById('inv-add');
-  const btn = document.getElementById('inv-add-btn');
-  const tabs = document.getElementById('inv-tabs');
-  if (form.classList.contains('open')) {
-    addInvItem();
-  } else {
-    form.classList.add('open');
-    tabs.classList.add('hidden');
-    btn.innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>';
-    setTimeout(() => document.getElementById('f-inv-name').focus(), 300);
-  }
-}
-function closeInvAdd() {
-  const form = document.getElementById('inv-add');
-  const btn = document.getElementById('inv-add-btn');
-  const tabs = document.getElementById('inv-tabs');
-  form.classList.remove('open');
-  tabs.classList.remove('hidden');
-  btn.textContent = '+';
+  const existing = document.querySelector('.inv-add-row');
+  if (existing) { existing.querySelector('input').focus(); return; }
+  const cat = invActiveCat || CAT_ORDER[0];
+  const section = document.querySelector('.inv-col-section.active');
+  if (!section) return;
+  const row = document.createElement('div');
+  row.className = 'inv-item inv-add-row';
+  row.innerHTML = '<input class="fi inv-add-input" type="text" placeholder="Nom…" autofocus>';
+  section.appendChild(row);
+  const inp = row.querySelector('input');
+  inp.focus();
+  inp.addEventListener('keydown', function(e) {
+    if (e.key === 'Enter') commitInvAdd(inp, cat);
+    if (e.key === 'Escape') row.remove();
+  });
+  inp.addEventListener('blur', function() {
+    setTimeout(function() { if (row.parentNode) commitInvAdd(inp, cat); }, 100);
+  });
+  const content = document.querySelector('.inv-content');
+  if (content) content.scrollTop = content.scrollHeight;
 }
 
-async function addInvItem() {
-  const inp = document.getElementById('f-inv-name');
-  const cat = document.getElementById('f-inv-cat').value;
+async function commitInvAdd(inp, cat) {
+  const row = inp.closest('.inv-add-row');
   const name = inp.value.trim();
-  if (!name) { closeInvAdd(); return; }
+  if (!name) { if (row) row.remove(); return; }
   try {
     const r = await fetch(API + '/inventory', {
       method: 'POST',
@@ -1355,9 +1338,7 @@ async function addInvItem() {
     if (r.ok) {
       const item = await r.json();
       inventory.push(item);
-      inp.value = '';
       renderInventory();
-      closeInvAdd();
     }
   } catch { showToast('Erreur réseau'); }
 }
