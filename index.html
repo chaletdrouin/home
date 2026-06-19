@@ -1158,9 +1158,6 @@ function openDay(ds) {
 
 function openSettings() {
   updateNotifStatus();
-  document.querySelectorAll('.nav-item:not(.nav-settings)').forEach(function(b){ b.classList.remove('active'); });
-  document.querySelector('.nav-settings').classList.add('active');
-  document.getElementById('nav-pill').style.opacity = '0';
   open1('m-settings');
 }
 
