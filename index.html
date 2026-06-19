@@ -484,7 +484,6 @@
       border-bottom: 1px solid var(--border);
       background: var(--bg); flex-shrink: 0;
     }
-    .inv-hdr-title { font-size: 16px; font-weight: 700; flex: 1; letter-spacing: -.01em; }
     .inv-cat {
       font-size: 13px; font-weight: 600; color: var(--text2);
       text-transform: uppercase; letter-spacing: .06em;
@@ -533,23 +532,22 @@
     }
     .inv-del:hover { color: var(--red); }
     .inv-add {
-      display: flex; gap: 0; padding: 0; flex-shrink: 0;
-      align-items: center; justify-content: flex-end;
+      display: flex; gap: 0; flex: 1; min-width: 0;
+      align-items: center;
     }
-    .inv-add.open { padding: 14px 0; }
     .inv-add-field {
-      font-size: 15px;
+      font-size: 14px;
       flex: 0 0 0; min-width: 0; overflow: hidden; opacity: 0;
-      padding: 10px 0; border-width: 0; margin: 0;
+      padding: 8px 0; border-width: 0; margin: 0;
       transition: flex .3s ease, opacity .2s .05s ease, padding .3s ease, border-width .3s ease, margin .3s ease;
     }
     .inv-add.open .inv-add-field {
       flex: 1 1 0; opacity: 1;
-      padding: 10px 12px; border-width: 1px; margin-right: 8px;
+      padding: 8px 10px; border-width: 1px; margin-right: 8px;
     }
     .inv-add-btn {
-      flex: none; min-width: 44px; height: 44px; padding: 0 14px !important;
-      font-size: 24px !important; font-weight: 600; border-radius: 10px;
+      flex: none; min-width: 38px; height: 38px; padding: 0 12px !important;
+      font-size: 22px !important; font-weight: 600; border-radius: 10px;
       display: flex; align-items: center; justify-content: center;
       line-height: 1; padding-bottom: 2px !important;
     }
@@ -694,16 +692,15 @@
 
   <div class="view-panel slide-right inv-view" id="view-inv">
     <div class="inv-hdr">
-      <div class="inv-hdr-title"></div>
+      <div class="inv-add" id="inv-add">
+        <select class="fi inv-add-field" id="f-inv-cat">
+          <option>Épicerie</option><option>Condiments</option><option>Boissons</option><option>Frais</option><option>Entretien</option><option>Autre</option>
+        </select>
+        <input class="fi inv-add-field" id="f-inv-name" type="text" placeholder="Ajouter…" onkeydown="if(event.key==='Enter')addInvItem()">
+      </div>
       <button class="btn btn-p inv-add-btn" id="inv-add-btn" onclick="invAddClick()">+</button>
     </div>
     <div class="inv-content">
-      <div class="inv-add" id="inv-add">
-        <select class="fi inv-add-field" id="f-inv-cat" style="flex:none;width:auto;padding:10px 8px;font-size:14px;">
-          <option>Épicerie</option><option>Condiments</option><option>Boissons</option><option>Frais</option><option>Entretien</option><option>Autre</option>
-        </select>
-        <input class="fi inv-add-field" id="f-inv-name" type="text" placeholder="Ajouter…" style="font-size:16px" onkeydown="if(event.key==='Enter')addInvItem()">
-      </div>
       <div class="inv-tabs" id="inv-tabs"></div>
       <div class="inv-cols" id="inv-body"></div>
     </div>
