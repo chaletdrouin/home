@@ -499,31 +499,31 @@
     .inv-name { flex: 1; font-size: 14px; font-weight: 500; min-width: 0; }
     .inv-toggle {
       display: flex; flex-shrink: 0; position: relative;
-      background: rgba(120,120,128,.12); border-radius: 9px;
-      padding: 2px;
+      background: rgba(0,0,0,.35); border-radius: 22px;
+      padding: 3px;
     }
     .inv-pill {
-      position: absolute; top: 2px; bottom: 2px;
-      width: calc((100% - 4px) / 3); border-radius: 7px;
-      transition: left .2s ease;
+      position: absolute; top: 3px; bottom: 3px;
+      width: calc((100% - 6px) / 3); border-radius: 19px;
+      transition: left .25s cubic-bezier(.4,0,.2,1);
       background: rgba(255,255,255,.12);
-      box-shadow: 0 1px 3px rgba(0,0,0,.2), 0 0 0 .5px rgba(255,255,255,.06);
+      box-shadow: 0 1px 4px rgba(0,0,0,.3);
       pointer-events: none;
     }
-    .inv-pill[data-v="0"] { left: 2px; }
-    .inv-pill[data-v="1"] { left: calc((100% - 4px) / 3 + 2px); }
-    .inv-pill[data-v="2"] { left: calc((100% - 4px) / 3 * 2 + 2px); }
+    .inv-pill[data-v="0"] { left: 3px; }
+    .inv-pill[data-v="1"] { left: calc((100% - 6px) / 3 + 3px); }
+    .inv-pill[data-v="2"] { left: calc((100% - 6px) / 3 * 2 + 3px); }
     .inv-opt {
       flex: 1; margin: 0; padding: 0;
-      height: 28px; min-width: 0; padding: 0 10px;
-      font-size: 12px; font-weight: 600; line-height: 1; letter-spacing: -.1px;
-      color: rgba(255,255,255,.4); cursor: pointer; position: relative; z-index: 1;
+      height: 30px; min-width: 0; padding: 0 12px;
+      font-size: 13px; font-weight: 500; line-height: 1;
+      color: rgba(255,255,255,.35); cursor: pointer; position: relative; z-index: 1;
       border: none; background: none;
       display: flex; align-items: center; justify-content: center;
       -webkit-appearance: none; appearance: none;
       transition: color .2s; white-space: nowrap;
     }
-    .inv-opt.on { color: rgba(255,255,255,.9); }
+    .inv-opt.on { color: rgba(255,255,255,.92); }
     .inv-del {
       padding: 4px 8px; background: none; border: none;
       color: var(--text3); font-size: 16px; cursor: pointer;
