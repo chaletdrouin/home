@@ -109,11 +109,11 @@
       flex-shrink: 0;
       border-bottom: 1px solid var(--border);
       background: var(--bg);
-      position: relative; overflow: hidden;
+      position: relative; overflow: visible;
     }
     .hdr-mountains-mobile {
       display: none; position: absolute; inset: 0;
-      pointer-events: none;
+      pointer-events: none; overflow: hidden;
     }
     .hdr-mountains-img {
       position: absolute; top: env(safe-area-inset-top); left: 0;
