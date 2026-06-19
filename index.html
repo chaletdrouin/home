@@ -363,6 +363,7 @@
     .overlay {
       position: fixed; inset: 0;
       background: rgba(0,0,0,.45);
+      backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px);
       display: flex; align-items: flex-end;
       z-index: 200; opacity: 0; pointer-events: none;
       transition: opacity .2s;
@@ -1584,9 +1585,13 @@ function bgClose(e,id){ if(e.target.classList.contains('overlay')) close1(id); }
         _o.style.background='rgba(0,0,0,0)';
       }
       setTimeout(function(){
+        if(_o) _o.style.transition='none';
         document.querySelectorAll('.overlay.open').forEach(function(o){o.classList.remove('open');});
         _s.style.transform='';_s.style.transition='';
-        if(_o){_o.style.transition='';_o.style.background='';}
+        if(_o){
+          void _o.offsetHeight;
+          _o.style.transition='';_o.style.background='';
+        }
         restoreNavPill();
       },200);
     }else{
