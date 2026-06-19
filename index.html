@@ -499,9 +499,10 @@
     }
     .inv-del:hover { color: var(--red); }
     .inv-add {
-      display: flex; gap: 0; padding: 14px 0; flex-shrink: 0;
+      display: flex; gap: 0; padding: 0; flex-shrink: 0;
       align-items: center; justify-content: flex-end;
     }
+    .inv-add.open { padding: 14px 0; }
     .inv-add-field {
       font-size: 15px;
       flex: 0 0 0; min-width: 0; overflow: hidden; opacity: 0;
@@ -1526,8 +1527,6 @@ function bgClose(e,id){ if(e.target.classList.contains('overlay')) close1(id); }
       sheet.style.transform='translateY('+Math.min(dy,300)+'px)';
       if(overlay){
         overlay.style.background='rgba(0,0,0,'+Math.max(0,.45-dy/400)+')';
-        var bl='blur('+Math.max(0,6-dy*6/200)+'px)';
-        overlay.style.backdropFilter=bl;overlay.style.webkitBackdropFilter=bl;
       }
     }else if(dy<0&&sheet.scrollTop+sheet.clientHeight>=sheet.scrollHeight-1){
       e.preventDefault();
@@ -1542,19 +1541,18 @@ function bgClose(e,id){ if(e.target.classList.contains('overlay')) close1(id); }
     if(dy>80){
       _s.style.transform='translateY(100%)';
       if(_o){
-        var tr='background .2s ease,backdrop-filter .2s ease,-webkit-backdrop-filter .2s ease';
-        _o.style.transition=tr;_o.style.background='rgba(0,0,0,0)';
-        _o.style.backdropFilter='blur(0px)';_o.style.webkitBackdropFilter='blur(0px)';
+        _o.style.transition='background .2s ease';
+        _o.style.background='rgba(0,0,0,0)';
       }
       setTimeout(function(){
         document.querySelectorAll('.overlay.open').forEach(function(o){o.classList.remove('open');});
         _s.style.transform='';_s.style.transition='';
-        if(_o){_o.style.transition='';_o.style.background='';_o.style.backdropFilter='';_o.style.webkitBackdropFilter='';}
+        if(_o){_o.style.transition='';_o.style.background='';}
         restoreNavPill();
       },200);
     }else{
       _s.style.transform='';
-      if(_o){_o.style.background='';_o.style.backdropFilter='';_o.style.webkitBackdropFilter='';}
+      if(_o){_o.style.background='';}
     }
     sheet=null;overlay=null;
   },{passive:true});
