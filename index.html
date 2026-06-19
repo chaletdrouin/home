@@ -144,7 +144,9 @@
     }
     .hdr-content { display: none; min-height: 38px; }
     .hdr-content.active { display: flex; align-items: center; }
-    .hdr-inv { gap: 10px; }
+    .hdr-inv { gap: 10px; flex: 1; min-width: 0; }
+    .inv-tabs-hdr { display: flex !important; flex: 1; min-width: 0; padding: 0 !important; }
+    .inv-add.open ~ .inv-tabs-hdr { display: none !important; }
     .hdr-nav-row {
       display: flex; align-items: center; justify-content: space-between;
       position: relative; width: 100%;
@@ -685,6 +687,7 @@
         </select>
         <input class="fi inv-add-field" id="f-inv-name" type="text" placeholder="Ajouter…" onkeydown="if(event.key==='Enter')addInvItem()">
       </div>
+      <div class="inv-tabs inv-tabs-hdr" id="inv-tabs"></div>
       <button class="btn btn-p inv-add-btn" id="inv-add-btn" onclick="invAddClick()">+</button>
     </div>
     <div class="hdr-content hdr-doc" id="hdr-doc">
@@ -703,7 +706,6 @@
 
   <div class="view-panel slide-right inv-view" id="view-inv">
     <div class="inv-content">
-      <div class="inv-tabs" id="inv-tabs"></div>
       <div class="inv-cols" id="inv-body"></div>
     </div>
   </div>
