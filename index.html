@@ -143,8 +143,8 @@
       align-items: center; justify-content: space-between;
     }
     .hdr-content { display: none; min-height: 38px; }
-    .hdr-content.active { display: flex; align-items: center; }
-    .hdr-inv { gap: 10px; }
+    .hdr-content.active { display: flex; align-items: center; gap: 10px; }
+    .hdr-cal .hdr-nav-row { flex: 1; min-width: 0; }
     .inv-tabs-hdr { display: flex !important; padding: 4px !important; }
     .hdr-nav-row {
       display: flex; align-items: center;
@@ -182,9 +182,9 @@
     .hdr-today.hidden { opacity: .15; pointer-events: none; }
     .hdr-book.btn {
       flex: 0 0 auto;
-      height: 32px; padding: 0 12px !important; font-size: 13px !important; font-weight: 500;
-      background: none !important; border: none; border-radius: 18px;
-      color: var(--blue) !important; white-space: nowrap;
+      height: 40px; padding: 0 14px !important; font-size: 13px !important; font-weight: 600;
+      background: var(--blue) !important; border: none; border-radius: 22px;
+      color: #fff !important; white-space: nowrap;
     }
 
     /* ── Mobile ── */
@@ -676,8 +676,8 @@
         <button class="hdr-nav" onclick="nav(-1)">‹</button>
         <div class="hdr-title" id="month-lbl" onclick="isAnnualOpen()?closeAnnual():showAnnual()"></div>
         <button class="hdr-nav" onclick="nav(1)">›</button>
-        <button class="btn btn-p hdr-book" onclick="openCreate(null)">Réserver</button>
       </div>
+      <button class="btn btn-p hdr-book" onclick="openCreate(null)">Réserver</button>
     </div>
     <div class="hdr-content hdr-inv" id="hdr-inv">
       <div class="inv-tabs inv-tabs-hdr" id="inv-tabs"></div>
