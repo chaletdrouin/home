@@ -771,7 +771,7 @@
     <div id="day-body"></div>
     <div class="btns" style="margin-top:14px">
       <button class="btn btn-c" onclick="close1('m-day')">Fermer</button>
-      <button class="btn btn-p" onclick="createFromDay()">+ Réserver</button>
+      <button class="btn btn-p" onclick="createFromDay()">Réserver</button>
     </div>
   </div>
 </div>
@@ -1091,7 +1091,8 @@ function openDay(ds) {
   body.innerHTML='';
 
   if(!bks.length){
-    body.innerHTML='<div class="empty">Aucune réservation</div>';
+    openCreate(ds);
+    return;
   } else {
     bks.forEach((b, i)=>{
       const row=document.createElement('div');
