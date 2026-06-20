@@ -1375,27 +1375,19 @@ async function showView(name) {
     document.getElementById('view-year').classList.remove('active');
   }
 
+  const panels = document.querySelectorAll('.view-panel');
+  panels.forEach((p, i) => {
+    p.classList.remove('slide-active', 'slide-left', 'slide-right');
+    if (i === idx) p.classList.add('slide-active');
+    else if (i < idx) p.classList.add('slide-left');
+    else p.classList.add('slide-right');
+  });
+  cal.style.display = idx === 0 ? '' : 'none';
+  inv.classList.toggle('active', idx === 1);
+  doc.classList.toggle('active', idx === 2);
   if (isMobile) {
     document.body.classList.add('sliding');
-    const panels = document.querySelectorAll('.view-panel');
-    panels.forEach((p, i) => {
-      p.classList.remove('slide-active', 'slide-left', 'slide-right');
-      if (i === idx) p.classList.add('slide-active');
-      else if (i < idx) p.classList.add('slide-left');
-      else p.classList.add('slide-right');
-    });
     setTimeout(function(){ document.body.classList.remove('sliding'); }, 350);
-  } else {
-    const panels = document.querySelectorAll('.view-panel');
-    panels.forEach((p, i) => {
-      p.classList.remove('slide-active', 'slide-left', 'slide-right');
-      if (i === idx) p.classList.add('slide-active');
-      else if (i < idx) p.classList.add('slide-left');
-      else p.classList.add('slide-right');
-    });
-    cal.style.display = idx === 0 ? '' : 'none';
-    inv.classList.toggle('active', idx === 1);
-    doc.classList.toggle('active', idx === 2);
   }
 
   if (name === 'inv') {
@@ -1899,10 +1891,12 @@ new ResizeObserver(function(){
 }).observe(document.getElementById('sidebar'));
 window.addEventListener('resize', function(){
   updateTodayBtn();
-  document.querySelectorAll('.inv-tabs').forEach(function(c) {
-    var p = c.querySelector('.tab-pill');
-    if (p) { p.style.transition = 'none'; moveTabPill(c, true); requestAnimationFrame(function(){ p.style.transition = ''; }); }
-  });
+  setTimeout(function(){
+    document.querySelectorAll('.inv-tabs').forEach(function(c) {
+      var p = c.querySelector('.tab-pill');
+      if (p) { p.style.transition = 'none'; moveTabPill(c, true); requestAnimationFrame(function(){ p.style.transition = ''; }); }
+    });
+  }, 150);
 });
 
 // Swipe navigation
