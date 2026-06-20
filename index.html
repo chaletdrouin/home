@@ -130,6 +130,8 @@
       pointer-events: none;
     }
     @media (pointer: coarse) and (orientation: landscape) {
+      .sidebar { transition: padding .3s ease, width .3s ease; }
+      .main { transition: padding .3s ease; }
       body.notch-left .sidebar { padding-left: 70px; width: 250px; }
       body.notch-left .sidebar-mountains-wrap { margin-left: -70px; }
       body.notch-left .sidebar-notch-sep { display: block; left: 59px; }
@@ -1847,7 +1849,8 @@ function updateNotchSide() {
   } else if (o === 'landscape-secondary') {
     document.body.classList.remove('notch-left');
     document.body.classList.add('notch-right');
-  } else if (!document.body.classList.contains('notch-left') && !document.body.classList.contains('notch-right')) {
+  } else {
+    document.body.classList.remove('notch-right');
     document.body.classList.add('notch-left');
   }
 }
