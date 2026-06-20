@@ -898,7 +898,7 @@
     <div class="settings-row" id="install-row" style="display:none">
       <div class="settings-info">
         <div class="settings-label">Installation</div>
-        <div class="settings-desc">Ajouter à l'écran d'accueil</div>
+        <div class="settings-desc" id="install-desc">Ajouter à l'écran d'accueil</div>
       </div>
       <button class="btn btn-p" id="install-btn" onclick="installApp()" style="flex:none;padding:10px 16px;font-size:14px;">Installer</button>
     </div>
@@ -1289,6 +1289,9 @@ function openDay(ds) {
 }
 
 var deferredInstallPrompt = null;
+var isStandalone = window.matchMedia('(display-mode: standalone)').matches || navigator.standalone;
+var isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+
 window.addEventListener('beforeinstallprompt', function(e) {
   e.preventDefault();
   deferredInstallPrompt = e;
@@ -1302,6 +1305,12 @@ function installApp() {
   if (!deferredInstallPrompt) return;
   deferredInstallPrompt.prompt();
   deferredInstallPrompt.userChoice.then(function() { deferredInstallPrompt = null; document.getElementById('install-row').style.display = 'none'; });
+}
+
+if (isIOS && !isStandalone) {
+  document.getElementById('install-row').style.display = '';
+  document.getElementById('install-desc').textContent = 'Dans Safari, appuie sur Partager puis « Sur l\'écran d\'accueil »';
+  document.getElementById('install-btn').style.display = 'none';
 }
 
 function openSettings() {
