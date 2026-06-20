@@ -130,16 +130,13 @@
       pointer-events: none;
     }
     @media (pointer: coarse) and (orientation: landscape) {
-      .sidebar { padding-left: 70px; width: 250px; }
-      .sidebar-mountains-wrap { margin-left: -70px; }
-      .sidebar-notch-sep { display: block; left: 59px; }
-      .nav-pill { left: 70px; }
-      .main { padding-right: 60px; padding-left: 10px; }
-      body.notch-right .sidebar { padding-left: 10px; width: auto; }
-      body.notch-right .sidebar-mountains-wrap { margin-left: 0; }
-      body.notch-right .sidebar-notch-sep { display: none; }
-      body.notch-right .nav-pill { left: 10px; }
-      body.notch-right .main { padding-left: 10px; }
+      body.notch-left .sidebar { padding-left: 70px; width: 250px; }
+      body.notch-left .sidebar-mountains-wrap { margin-left: -70px; }
+      body.notch-left .sidebar-notch-sep { display: block; left: 59px; }
+      body.notch-left .nav-pill { left: 70px; }
+      body.notch-left .main { padding-right: 10px; padding-left: 10px; }
+      body.notch-right .sidebar { padding-left: 10px; }
+      body.notch-right .main { padding-right: 60px; padding-left: 10px; }
     }
     .sidebar-mountains-fill {
       position: absolute;
@@ -1850,6 +1847,8 @@ function updateNotchSide() {
 }
 updateNotchSide();
 if (screen.orientation) screen.orientation.addEventListener('change', updateNotchSide);
+window.matchMedia('(orientation: landscape)').addEventListener('change', updateNotchSide);
+window.addEventListener('resize', updateNotchSide);
 
 // Init nav pill
 requestAnimationFrame(function(){
