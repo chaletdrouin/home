@@ -610,7 +610,6 @@
       display: flex; flex-shrink: 0; position: relative;
       background: rgba(0,0,0,.35); border-radius: 22px;
       padding: 3px;
-      transform: translateZ(0);
       border: .5px solid rgba(255,255,255,.08);
       box-shadow: inset 0 1px 0 rgba(255,255,255,.04), 0 2px 8px rgba(0,0,0,.2);
       backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
@@ -1495,6 +1494,11 @@ function renderInventory(animate, slideDir) {
     });
     body.appendChild(section);
   });
+  requestAnimationFrame(repaintToggles);
+}
+
+function repaintToggles() {
+  document.querySelectorAll('.inv-toggle').forEach(function(t){ t.style.display = 'none'; t.offsetHeight; t.style.display = ''; });
 }
 
 function invAddClick() {
@@ -1513,8 +1517,9 @@ function invAddClick() {
       <button class="inv-opt on" onclick="setAddQty(this,1)">Bon</button>
       <button class="inv-opt" onclick="setAddQty(this,2)">Plein</button>
     </div>
-    <button class="inv-del" onclick="this.closest('.inv-add-row').remove()">✕</button>`;
+    <button class="inv-del" onclick="this.closest('.inv-add-row').remove();requestAnimationFrame(repaintToggles)">✕</button>`;
   section.appendChild(row);
+  requestAnimationFrame(repaintToggles);
   const inp = row.querySelector('input');
   inp.focus();
   inp.addEventListener('keydown', function(e) {
