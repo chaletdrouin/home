@@ -1231,14 +1231,6 @@ function renderGrid() {
         }
       }
 
-      const total=bookings.filter(b=>b.start<=ds&&b.end>=ds).length;
-      if(total>maxLane){
-        const m=document.createElement('div');
-        m.className='bk-more';
-        m.textContent='+'+(total-maxLane);
-        div.appendChild(m);
-      }
-
       grid.appendChild(div);
     });
   }
