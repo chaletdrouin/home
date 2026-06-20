@@ -595,28 +595,35 @@
       overflow-x: auto; flex-shrink: 0; -webkit-overflow-scrolling: touch;
       background: rgba(0,0,0,.35); border-radius: 22px; padding: 4px;
     }
+    .inv-tabs { position: relative; }
+    .tab-pill {
+      position: absolute; top: 4px; bottom: 4px; border-radius: 19px;
+      background: rgba(255,255,255,.18);
+      box-shadow: 0 1px 4px rgba(0,0,0,.3);
+      pointer-events: none;
+      transition: left .25s cubic-bezier(.4,0,.2,1), width .25s cubic-bezier(.4,0,.2,1);
+    }
     .inv-tab {
       padding: 0 14px; height: 32px; border-radius: 19px;
       font-size: 13px; font-weight: 500;
       background: none; border: none;
       color: rgba(255,255,255,.5); cursor: pointer; white-space: nowrap;
-      transition: background .25s, color .2s;
+      transition: color .2s;
       display: flex; align-items: center; justify-content: center;
+      position: relative; z-index: 1;
     }
     .inv-tab.active {
-      background: rgba(255,255,255,.18);
       color: #fff; font-weight: 600;
-      box-shadow: 0 1px 4px rgba(0,0,0,.3);
     }
     @media (max-width:639px) {
       .inv-tabs { display: flex; }
       .inv-col-section { display: none; }
       .inv-col-section.active { display: block; }
     }
-    @keyframes sec-slide-in-left { from { transform: translateX(-30px); opacity: 0; } to { transform: none; opacity: 1; } }
-    @keyframes sec-slide-in-right { from { transform: translateX(30px); opacity: 0; } to { transform: none; opacity: 1; } }
-    .sec-slide-left { animation: sec-slide-in-left .2s ease both; }
-    .sec-slide-right { animation: sec-slide-in-right .2s ease both; }
+    @keyframes sec-slide-in-left { from { transform: translateX(-100%); opacity: 0; } to { transform: none; opacity: 1; } }
+    @keyframes sec-slide-in-right { from { transform: translateX(100%); opacity: 0; } to { transform: none; opacity: 1; } }
+    .sec-slide-left { animation: sec-slide-in-left .25s cubic-bezier(.4,0,.2,1) both; }
+    .sec-slide-right { animation: sec-slide-in-right .25s cubic-bezier(.4,0,.2,1) both; }
 
     /* ── Mode d'emploi ── */
     .doc-view { flex:1; display:none; flex-direction:column; min-height:0; }
@@ -690,10 +697,11 @@
       <button class="btn btn-p inv-add-btn" id="inv-add-btn" onclick="invAddClick()">+</button>
     </div>
     <div class="hdr-content hdr-doc" id="hdr-doc">
-      <div class="inv-tabs doc-tabs-always">
-        <button class="inv-tab active" onclick="switchDocTab(0,this)">Eau</button>
-        <button class="inv-tab" onclick="switchDocTab(1,this)">Gaz</button>
-        <button class="inv-tab" onclick="switchDocTab(2,this)">Électricité</button>
+      <div class="inv-tabs doc-tabs-always" id="doc-tabs">
+        <button class="inv-tab active" onclick="switchDocTab(0)">Eau</button>
+        <button class="inv-tab" onclick="switchDocTab(1)">Gaz</button>
+        <button class="inv-tab" onclick="switchDocTab(2)">Électricité</button>
+        <div class="tab-pill"></div>
       </div>
     </div>
   </div>
@@ -1269,10 +1277,25 @@ const CAT_ORDER = ['Épicerie','Condiments','Boissons','Frais','Entretien','Autr
 
 let invActiveCat = null;
 
+function moveTabPill(container) {
+  var pill = container.querySelector('.tab-pill');
+  var active = container.querySelector('.inv-tab.active');
+  if (!pill || !active) return;
+  pill.style.left = active.offsetLeft + 'px';
+  pill.style.width = active.offsetWidth + 'px';
+}
+
 function switchInvCat(cat, dir) {
-  var oldCat = invActiveCat;
   invActiveCat = cat;
-  renderInventory(false, dir);
+  var tabsWrap = document.getElementById('inv-tabs');
+  tabsWrap.querySelectorAll('.inv-tab').forEach(function(t) { t.classList.toggle('active', t.textContent === cat); });
+  moveTabPill(tabsWrap);
+  document.querySelectorAll('.inv-col-section').forEach(function(s) {
+    var isActive = s.querySelector('.inv-cat') && s.querySelector('.inv-cat').textContent === cat;
+    s.classList.toggle('active', isActive);
+    s.classList.remove('sec-slide-left', 'sec-slide-right');
+    if (isActive && dir) s.classList.add(dir > 0 ? 'sec-slide-right' : 'sec-slide-left');
+  });
 }
 
 function renderInventory(animate, slideDir) {
@@ -1304,6 +1327,10 @@ function renderInventory(animate, slideDir) {
     };
     tabsWrap.appendChild(tab);
   });
+  var pill = document.createElement('div');
+  pill.className = 'tab-pill';
+  tabsWrap.appendChild(pill);
+  requestAnimationFrame(function() { moveTabPill(tabsWrap); });
   cats.forEach((cat, ci) => {
     const section = document.createElement('div');
     var slideClass = (cat === invActiveCat && slideDir) ? (slideDir > 0 ? ' sec-slide-right' : ' sec-slide-left') : '';
@@ -1420,7 +1447,9 @@ var docActiveIdx = 0;
 function switchDocTab(idx) {
   var dir = idx > docActiveIdx ? 1 : -1;
   docActiveIdx = idx;
-  document.querySelectorAll('.doc-tabs-always .inv-tab').forEach((t, i) => t.classList.toggle('active', i === idx));
+  var container = document.getElementById('doc-tabs');
+  container.querySelectorAll('.inv-tab').forEach((t, i) => t.classList.toggle('active', i === idx));
+  moveTabPill(container);
   document.querySelectorAll('.doc-block').forEach((b, i) => {
     b.classList.toggle('active', i === idx);
     b.classList.remove('sec-slide-left', 'sec-slide-right');
@@ -1430,20 +1459,22 @@ function switchDocTab(idx) {
 
 // ── Swipe between sections ──
 function addSectionSwipe(el, getCats, getActive, onSwipe) {
-  var sx, sy, swiping;
+  var sx, sy, locked;
   el.addEventListener('touchstart', function(e) {
-    sx = e.touches[0].clientX; sy = e.touches[0].clientY; swiping = null;
+    sx = e.touches[0].clientX; sy = e.touches[0].clientY; locked = null;
   }, { passive: true });
   el.addEventListener('touchmove', function(e) {
-    if (swiping === false) return;
+    if (locked === 'v') return;
     var dx = e.touches[0].clientX - sx, dy = e.touches[0].clientY - sy;
-    if (swiping === null) swiping = Math.abs(dx) > Math.abs(dy) && Math.abs(dx) > 10;
-    if (swiping) e.preventDefault();
+    if (locked === null && (Math.abs(dx) > 8 || Math.abs(dy) > 8)) {
+      locked = Math.abs(dx) > Math.abs(dy) ? 'h' : 'v';
+    }
+    if (locked === 'h') e.preventDefault();
   }, { passive: false });
   el.addEventListener('touchend', function(e) {
-    if (!swiping) return;
+    if (locked !== 'h') return;
     var dx = e.changedTouches[0].clientX - sx;
-    if (Math.abs(dx) < 40) return;
+    if (Math.abs(dx) < 30) return;
     var cats = getCats(), idx = getActive(cats);
     var next = idx + (dx < 0 ? 1 : -1);
     if (next >= 0 && next < cats.length) onSwipe(cats, next, dx < 0 ? 1 : -1);
@@ -1685,7 +1716,10 @@ showSkeleton();
 load();
 
 // Init nav pill
-requestAnimationFrame(function(){ moveNavPill(0); });
+requestAnimationFrame(function(){
+  moveNavPill(0);
+  moveTabPill(document.getElementById('doc-tabs'));
+});
 window.addEventListener('resize', function(){
   var active = document.querySelector('.nav-item:not(.nav-settings).active');
   if(active){ var btns = document.querySelectorAll('.nav-item:not(.nav-settings)'); btns.forEach(function(b,i){ if(b===active) moveNavPill(i); }); }
