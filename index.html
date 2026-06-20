@@ -1899,6 +1899,10 @@ new ResizeObserver(function(){
 }).observe(document.getElementById('sidebar'));
 window.addEventListener('resize', function(){
   updateTodayBtn();
+  document.querySelectorAll('.inv-tabs').forEach(function(c) {
+    var p = c.querySelector('.tab-pill');
+    if (p) { p.style.transition = 'none'; moveTabPill(c, true); requestAnimationFrame(function(){ p.style.transition = ''; }); }
+  });
 });
 
 // Swipe navigation
