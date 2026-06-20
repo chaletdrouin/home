@@ -160,9 +160,10 @@
       cursor: pointer; padding: 0 12px; height: 32px; border-radius: 19px;
       background: rgba(255,255,255,.22); border: none;
       box-shadow: 0 2px 6px rgba(0,0,0,.35);
-      transition: background .25s, transform .18s cubic-bezier(.4,0,.2,1);
+      transition: background .25s;
       display: flex; align-items: center; justify-content: center;
     }
+    #month-lbl-txt { transition: transform .18s cubic-bezier(.4,0,.2,1); }
     .hdr-title:hover { background: rgba(255,255,255,.28); }
     .hdr-nav {
       width: 32px; height: 32px;
@@ -688,7 +689,7 @@
       <button class="hdr-today hidden" id="btn-today" onclick="goToday()">Aujourd'hui</button>
       <div class="hdr-nav-row">
         <button class="hdr-nav" onclick="nav(-1)">‹</button>
-        <div class="hdr-title" id="month-lbl" onclick="isAnnualOpen()?closeAnnual():showAnnual()"></div>
+        <div class="hdr-title" id="month-lbl" onclick="isAnnualOpen()?closeAnnual():showAnnual()"><span id="month-lbl-txt"></span></div>
         <button class="hdr-nav" onclick="nav(1)">›</button>
       </div>
       <button class="btn btn-p hdr-book" onclick="openCreate(null)">Réserver</button>
@@ -921,7 +922,7 @@ function nav(d){
   if (!calSwipe) {
     var arrows = document.querySelectorAll('.hdr-nav-row .hdr-nav');
     var arrow = d < 0 ? arrows[0] : arrows[1];
-    var ml = document.getElementById('month-lbl');
+    var ml = document.getElementById('month-lbl-txt');
     if (arrow) {
       arrow.style.width = '0';
       arrow.style.opacity = '0';
@@ -972,10 +973,10 @@ function closeAnnual(){
 
 function updateHdr(){
   if(isAnnualOpen()){
-    document.getElementById('month-lbl').textContent = cY;
+    document.getElementById('month-lbl-txt').textContent = cY;
     document.getElementById('btn-today').classList.remove('hidden');
   } else {
-    document.getElementById('month-lbl').textContent = MONTHS[cM]+' '+cY;
+    document.getElementById('month-lbl-txt').textContent = MONTHS[cM]+' '+cY;
     updateTodayBtn();
   }
 }
@@ -1013,7 +1014,7 @@ function renderAnnual(){
 }
 
 function render() {
-  document.getElementById('month-lbl').textContent = MONTHS[cM]+' '+cY;
+  document.getElementById('month-lbl-txt').textContent = MONTHS[cM]+' '+cY;
   updateTodayBtn();
   const grid = document.getElementById('grid');
 
@@ -1753,7 +1754,7 @@ window.addEventListener('resize', function(){
 (function() {
   let sx=0,sy=0,active=false,locked=null,swipeArrow=null,swipeDir=0;
   var THRESHOLD=50, MAX_DRAG=120;
-  var lbl=document.getElementById('month-lbl');
+  var lbl=document.getElementById('month-lbl-txt');
   function getArrows(){ return document.querySelectorAll('.hdr-nav-row .hdr-nav'); }
   function resetLbl(){ lbl.style.transition=''; lbl.style.transform=''; }
   document.addEventListener('touchstart',function(e){
