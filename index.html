@@ -1271,6 +1271,9 @@ async function showView(name) {
     }
     renderInventory();
   }
+  if (name === 'doc') {
+    requestAnimationFrame(function() { moveTabPill(document.getElementById('doc-tabs')); });
+  }
 }
 
 const CAT_ORDER = ['Épicerie','Condiments','Entretien'];
