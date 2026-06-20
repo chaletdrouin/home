@@ -1219,7 +1219,7 @@ function renderGrid() {
             const span=endCol-col+1;
             const lbl=document.createElement('span');
             lbl.className='bk-lbl';
-            lbl.style.top=(isLandscapeMobile ? (20+lane*13) : (26+lane*19))+'px';
+            lbl.style.top=(isLandscapeMobile ? (20+lane*12) : (26+lane*19))+'px';
             lbl.style.width='calc('+span+'00% + '+(span-1)*1+'px)';
             lbl.textContent=esc(bk.description);
             div.appendChild(lbl);
@@ -1900,8 +1900,15 @@ new ResizeObserver(function(){
   refreshPill();
   requestAnimationFrame(function(){ pill.style.transition = ''; });
 }).observe(document.getElementById('sidebar'));
+var lastOrient = window.matchMedia('(orientation: landscape)').matches;
 window.addEventListener('resize', function(){
   updateTodayBtn();
+  var nowOrient = window.matchMedia('(orientation: landscape)').matches;
+  if (nowOrient !== lastOrient) {
+    lastOrient = nowOrient;
+    slideDir = 0;
+    render();
+  }
   setTimeout(function(){
     document.querySelectorAll('.inv-tabs').forEach(function(c) {
       var p = c.querySelector('.tab-pill');
