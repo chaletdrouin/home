@@ -116,9 +116,10 @@
       pointer-events: none; overflow: hidden;
     }
     .hdr-mountains-img {
-      position: absolute; bottom: 0; left: 0;
-      width: 100%; display: block;
-      opacity: .25;
+      position: absolute; top: 0; left: 0;
+      width: 100%; height: calc(74px + env(safe-area-inset-top));
+      object-fit: cover; object-position: center bottom;
+      display: block; opacity: .25;
     }
     .sidebar-mountains-wrap {
       margin: 0 -10px -20px;
@@ -220,7 +221,7 @@
       .hdr-mountains-mobile { display: block; }
       .hdr { padding-top: calc(74px + env(safe-area-inset-top)); justify-content: flex-end; }
       .hdr-book.btn { font-size: 0 !important; width: 32px; height: 32px; padding: 0 !important; border-radius: 22px; display: flex; align-items: center; justify-content: center; }
-      .hdr-book.btn::after { content: '+'; font-size: 22px; font-weight: 300; line-height: 32px; color: #fff; }
+      .hdr-book.btn::after { content: '+'; font-size: 22px; font-weight: 300; color: #fff; display: block; width: 32px; height: 32px; text-align: center; line-height: 30px; }
       .views-slider {
         position: relative; overflow: hidden;
       }
@@ -550,7 +551,7 @@
       display: flex; align-items: center; justify-content: center;
       line-height: 1;
     }
-    .inv-add-btn::after { content: '+'; font-size: 22px; font-weight: 300; line-height: 32px; color: #fff; }
+    .inv-add-btn::after { content: '+'; font-size: 22px; font-weight: 300; color: #fff; display: block; width: 32px; height: 32px; text-align: center; line-height: 30px; }
     .inv-add-btn svg { display: block; }
 
     /* ── Loader ── */
