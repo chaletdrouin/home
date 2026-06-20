@@ -1272,7 +1272,7 @@ async function showView(name) {
     renderInventory();
   }
   if (name === 'doc') {
-    requestAnimationFrame(function() { moveTabPill(document.getElementById('doc-tabs')); });
+    requestAnimationFrame(function() { moveTabPill(document.getElementById('doc-tabs'), true); });
   }
 }
 
@@ -1280,12 +1280,15 @@ const CAT_ORDER = ['Épicerie','Condiments','Entretien'];
 
 let invActiveCat = null;
 
-function moveTabPill(container) {
+function moveTabPill(container, instant) {
   var pill = container.querySelector('.tab-pill');
   var active = container.querySelector('.inv-tab.active');
   if (!pill || !active) return;
+  if (instant) pill.style.transition = 'none';
   pill.style.left = active.offsetLeft + 'px';
   pill.style.width = active.offsetWidth + 'px';
+  if (instant) void pill.offsetHeight;
+  if (instant) pill.style.transition = '';
 }
 
 function switchInvCat(cat, dir) {
