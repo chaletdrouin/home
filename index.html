@@ -697,7 +697,7 @@
 
     /* ── Pull to refresh ── */
     .ptr-spinner {
-      position: fixed; top: 0; left: 50%; z-index: 9999;
+      position: fixed; top: env(safe-area-inset-top, 0px); left: 50%; z-index: 9999;
       width: 28px; height: 28px;
       transform: translateX(-50%) translateY(-40px);
       transition: transform .25s ease, opacity .25s ease;
