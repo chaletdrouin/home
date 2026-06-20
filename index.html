@@ -1494,6 +1494,9 @@ function renderInventory(animate, slideDir) {
     });
     body.appendChild(section);
   });
+  requestAnimationFrame(function(){
+    body.querySelectorAll('.inv-toggle').forEach(function(t){ t.style.display = 'none'; t.offsetHeight; t.style.display = ''; });
+  });
 }
 
 function invAddClick() {
