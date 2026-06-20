@@ -670,6 +670,16 @@
     @keyframes cellPop { 0%{transform:scale(1)} 30%{transform:scale(1.22)} 60%{transform:scale(.94)} 100%{transform:scale(1)} }
     .dc:active .dn { animation: cellPop .4s cubic-bezier(.34,1.56,.64,1); }
 
+    /* ── Landscape mobile: compact bookings ── */
+    @media (pointer: coarse) and (orientation: landscape) {
+      .dn { width: 18px; height: 18px; font-size: 11px; }
+      .bk { min-height: 12px; line-height: 12px; font-size: 9px; }
+      .bk-lbl { height: 12px; line-height: 12px; font-size: 9px; }
+      .bk-spacer { min-height: 12px; }
+      .bk-more { font-size: 9px; }
+      .dc { padding: 2px 3px 1px; gap: 0; }
+    }
+
     /* ── Fade up stagger ── */
     @keyframes fadeUp { from{opacity:0;transform:translateY(8px)} to{opacity:1;transform:translateY(0)} }
     .fade-up { animation: fadeUp .25s ease both; }
@@ -1178,7 +1188,8 @@ function renderGrid() {
       laneEnds[lane]=bk.end;
       bkLane.set(bk.id,lane);
     }
-    const maxLane=Math.min(laneEnds.length,3);
+    const isLandscapeMobile = window.matchMedia('(pointer: coarse) and (orientation: landscape)').matches;
+    const maxLane=Math.min(laneEnds.length, isLandscapeMobile ? 2 : 3);
 
     week.forEach((cell,col)=>{
       const ds=ymd(cell.date);
@@ -1208,7 +1219,7 @@ function renderGrid() {
             const span=endCol-col+1;
             const lbl=document.createElement('span');
             lbl.className='bk-lbl';
-            lbl.style.top=(26+lane*19)+'px';
+            lbl.style.top=(isLandscapeMobile ? (20+lane*13) : (26+lane*19))+'px';
             lbl.style.width='calc('+span+'00% + '+(span-1)*1+'px)';
             lbl.textContent=esc(bk.description);
             div.appendChild(lbl);
