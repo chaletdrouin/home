@@ -698,13 +698,15 @@
     /* ── Pull to refresh ── */
     .ptr-spinner {
       position: fixed; top: env(safe-area-inset-top, 0px); left: 50%; z-index: 9999;
-      width: 28px; height: 28px;
-      transform: translateX(-50%) translateY(-40px);
+      width: 34px; height: 34px;
+      transform: translateX(-50%) translateY(-50px);
       transition: transform .25s ease, opacity .25s ease;
       opacity: 0; pointer-events: none;
-      border: 2.5px solid rgba(255,255,255,.15);
+      border: 3.5px solid rgba(255,255,255,.15);
       border-top-color: #fff;
       border-radius: 50%;
+      background: var(--bg2);
+      box-shadow: 0 2px 12px rgba(0,0,0,.4);
     }
     .ptr-spinner.visible { opacity: 1; }
     .ptr-spinner.refreshing { animation: spin .6s linear infinite; }
