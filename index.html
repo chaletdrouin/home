@@ -1311,7 +1311,7 @@ function installApp() {
 
 if (isIOS && !isStandalone) {
   document.getElementById('install-row').style.display = '';
-  document.getElementById('install-desc').textContent = 'Dans Safari, appuie sur Partager puis « Sur l\'écran d\'accueil »';
+  document.getElementById('install-desc').innerHTML = 'Appuie sur <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-3px"><path d="M4 12v7a2 2 0 002 2h12a2 2 0 002-2v-7"/><polyline points="16 6 12 2 8 6"/><line x1="12" y1="2" x2="12" y2="15"/></svg> puis <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-3px"><rect x="3" y="3" width="18" height="18" rx="3"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg> Sur l\'écran d\'accueil';
   document.getElementById('install-btn').style.display = 'none';
 }
 
