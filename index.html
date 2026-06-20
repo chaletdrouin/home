@@ -643,6 +643,10 @@
       color: var(--text3); font-size: 16px; cursor: pointer;
     }
     .inv-del:hover { color: var(--red); }
+    .inv-add-confirm {
+      padding: 4px 8px; background: none; border: none;
+      color: var(--blue); font-size: 20px; font-weight: 300; cursor: pointer;
+    }
     .inv-add-input {
       flex: 1; font-size: 16px; padding: 6px 10px;
       background: var(--bg2); border: 1px solid var(--border); border-radius: 8px;
@@ -1511,7 +1515,8 @@ function invAddClick() {
       <button class="inv-opt" onclick="setAddQty(this,0)">Vide</button>
       <button class="inv-opt on" onclick="setAddQty(this,1)">Bon</button>
       <button class="inv-opt" onclick="setAddQty(this,2)">Plein</button>
-    </div>`;
+    </div>
+    <button class="inv-add-confirm" onclick="commitInvAdd(this.closest('.inv-add-row'),'${cat}')">+</button>`;
   section.appendChild(row);
   const inp = row.querySelector('input');
   inp.focus();
