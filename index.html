@@ -36,7 +36,7 @@
     }
     body {
       display: flex; flex-direction: row;
-      position: fixed; inset: 0;
+      height: 100%;
       overscroll-behavior: none;
     }
     .main {
@@ -1751,7 +1751,12 @@ requestAnimationFrame(function(){
   moveNavPill(0);
   moveTabPill(document.getElementById('doc-tabs'));
 });
+function setAppHeight(){
+  document.body.style.height = window.innerHeight + 'px';
+}
+setAppHeight();
 window.addEventListener('resize', function(){
+  setAppHeight();
   var active = document.querySelector('.nav-item:not(.nav-settings).active');
   if(active){ var btns = document.querySelectorAll('.nav-item:not(.nav-settings)'); btns.forEach(function(b,i){ if(b===active) moveNavPill(i); }); }
   updateTodayBtn();
