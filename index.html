@@ -238,13 +238,13 @@
 
     /* ── Mobile ── */
     @media (max-width: 639px) and (pointer: coarse) {
-      body { flex-direction: column; bottom: calc(-1 * env(safe-area-inset-bottom, 0px)); }
+      body { flex-direction: column; }
       .main { order: 1; flex: 1; min-height: 0; }
       .sidebar {
         order: 2; width: auto; height: auto;
         flex: 0 0 auto;
         flex-direction: row; align-items: flex-start;
-        padding: 8px 8px env(safe-area-inset-bottom, 0px);
+        padding: 8px 8px 0;
         border-right: none; border-top: 1px solid var(--border);
         background: var(--bg);
         gap: 0;
@@ -1922,6 +1922,15 @@ function updateNotchSide() {
 }
 updateNotchSide();
 if (screen.orientation) screen.orientation.addEventListener('change', updateNotchSide);
+
+// Fix iOS standalone viewport height
+function setAppHeight() {
+  if (matchMedia('(pointer:coarse)').matches) {
+    document.body.style.height = window.innerHeight + 'px';
+  }
+}
+setAppHeight();
+window.addEventListener('resize', setAppHeight);
 
 // Init nav pill
 var pillInited = false;
