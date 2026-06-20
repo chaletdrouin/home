@@ -1540,6 +1540,7 @@ function setAddQty(btn, level) {
   pill.style.transition = 'left .25s cubic-bezier(.4,0,.2,1)';
   pill.setAttribute('data-v', level);
   row.querySelectorAll('.inv-opt').forEach((o, i) => o.classList.toggle('on', i === level));
+  requestAnimationFrame(repaintToggles);
 }
 
 async function commitInvAdd(row, cat) {
@@ -1573,6 +1574,7 @@ async function setInvQty(id, level, btn) {
     pill.style.transition = 'left .25s cubic-bezier(.4,0,.2,1)';
     pill.setAttribute('data-v', level);
     toggle.querySelectorAll('.inv-opt').forEach((o, i) => o.classList.toggle('on', i === level));
+    requestAnimationFrame(repaintToggles);
   }
   try {
     await fetch(API + '/inventory/' + id, {
