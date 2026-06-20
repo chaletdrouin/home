@@ -88,7 +88,7 @@
       stroke: currentColor; fill: none; stroke-width: 2;
       stroke-linecap: round; stroke-linejoin: round;
     }
-    @media (min-width: 640px) {
+    @media (min-width: 640px), (pointer: fine) {
       .nav-item .nav-icon { display: none; }
     }
     .nav-settings {
@@ -231,13 +231,8 @@
       color: #fff !important; white-space: nowrap;
     }
 
-    /* ── Desktop min-width ── */
-    @media (pointer: fine) {
-      body { min-width: 800px; }
-    }
-
     /* ── Mobile ── */
-    @media (max-width: 639px) {
+    @media (max-width: 639px) and (pointer: coarse) {
       body { flex-direction: column; }
       .main { order: 1; flex: 1; min-height: 0; }
       .sidebar {
@@ -504,7 +499,7 @@
     .sheet-title { font-size: 19px; font-weight: 700; margin-bottom: 18px; }
 
     /* ── Desktop modals ── */
-    @media (min-width: 640px) {
+    @media (min-width: 640px), (pointer: fine) {
       .overlay {
         background: rgba(0,0,0,.25);
         backdrop-filter: blur(6px);
