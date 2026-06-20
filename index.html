@@ -146,6 +146,7 @@
     .hdr-content.active { display: flex; align-items: center; gap: 10px; }
     .hdr-cal .hdr-nav-row { flex: 1; min-width: 0; }
     .inv-tabs-hdr { display: flex !important; padding: 4px !important; flex: 1; min-width: 0; }
+    .inv-tabs-hdr .inv-tab { flex: 1; }
     .hdr-nav-row {
       display: flex; align-items: center;
       background: rgba(0,0,0,.35); border-radius: 22px; padding: 4px;
@@ -593,7 +594,6 @@
       display: none; gap: 0;
       overflow-x: auto; flex-shrink: 0; -webkit-overflow-scrolling: touch;
       background: rgba(0,0,0,.35); border-radius: 22px; padding: 4px;
-      width: fit-content;
     }
     .inv-tab {
       padding: 0 14px; height: 32px; border-radius: 19px;
@@ -617,7 +617,8 @@
     /* ── Mode d'emploi ── */
     .doc-view { flex:1; display:none; flex-direction:column; min-height:0; }
     .doc-view.active { display:flex; }
-    .doc-tabs-always { display: flex !important; padding: 4px !important; }
+    .doc-tabs-always { display: flex !important; padding: 4px !important; flex: 1; }
+    .doc-tabs-always .inv-tab { flex: 1; }
     .doc-body { flex: 1; overflow-y: auto; padding: 14px; }
     .doc-block {
       display: none;
