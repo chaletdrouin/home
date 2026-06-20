@@ -88,7 +88,7 @@
       stroke: currentColor; fill: none; stroke-width: 2;
       stroke-linecap: round; stroke-linejoin: round;
     }
-    @media (min-width: 640px) and (min-height: 501px) {
+    @media (min-width: 640px) {
       .nav-item .nav-icon { display: none; }
     }
     .nav-settings {
@@ -192,7 +192,7 @@
 
     /* ── Desktop header: arrows on sides, title alone in center ── */
     .hdr-nav-prev, .hdr-nav-next { display: none; }
-    @media (min-width: 640px) and (min-height: 501px) {
+    @media (min-width: 640px) and (pointer: fine) {
       .hdr-nav-mob { display: none; }
       .hdr-nav-prev, .hdr-nav-next { display: flex; }
       .hdr-nav-row {
@@ -230,7 +230,7 @@
     }
 
     /* ── Mobile ── */
-    @media (max-width: 639px), (max-height: 500px) and (orientation: landscape) {
+    @media (max-width: 639px) {
       body { flex-direction: column; }
       .main { order: 1; flex: 1; min-height: 0; }
       .sidebar {
@@ -442,7 +442,7 @@
       grid-template-columns: repeat(3, 1fr);
       gap: 12px; flex: 1;
     }
-    @media (max-width: 639px), (max-height: 500px) and (orientation: landscape) { .year-grid { grid-template-columns: repeat(2, 1fr); } }
+    @media (max-width: 639px) { .year-grid { grid-template-columns: repeat(2, 1fr); } }
     .ym {
       background: var(--bg2); border-radius: 12px; padding: 12px;
       cursor: pointer; transition: background .1s;
@@ -489,7 +489,7 @@
     .sheet-title { font-size: 19px; font-weight: 700; margin-bottom: 18px; }
 
     /* ── Desktop modals ── */
-    @media (min-width: 640px) and (min-height: 501px) {
+    @media (min-width: 640px) {
       .overlay {
         background: rgba(0,0,0,.25);
         backdrop-filter: blur(6px);
@@ -587,7 +587,7 @@
       padding: 16px 0 6px; border-bottom: 1px solid var(--border);
     }
     .inv-cat:first-child { padding-top: 0; }
-    @media (max-width: 639px), (max-height: 500px) and (orientation: landscape) {
+    @media (max-width: 639px) {
       .inv-cat { display: none; }
     }
     .inv-item {
@@ -682,7 +682,7 @@
     .inv-cols { column-count:3; column-gap:64px; column-rule:1px solid var(--border); flex:1; min-height:0; overflow-y:auto; padding-bottom:8px; }
     .inv-col-section { break-inside:avoid; margin-bottom:8px; }
     @media (max-width:900px) { .inv-cols { column-count:2; } }
-    @media (max-width: 639px), (max-height: 500px) and (orientation: landscape) { .inv-cols { column-count:unset; } }
+    @media (max-width: 639px) { .inv-cols { column-count:unset; } }
     .inv-tabs {
       display: none; gap: 0;
       overflow-x: auto; flex-shrink: 0; -webkit-overflow-scrolling: touch;
@@ -708,7 +708,7 @@
     .inv-tab.active {
       color: #fff; font-weight: 600;
     }
-    @media (max-width: 639px), (max-height: 500px) and (orientation: landscape) {
+    @media (max-width: 639px) {
       .inv-tabs { display: flex; }
       .inv-col-section { display: none; }
       .inv-col-section.active { display: block; }
@@ -1011,7 +1011,7 @@ function nav(d){
     return;
   }
   slideDir = d;
-  if (!calSwipe && (window.innerWidth <= 639 || (window.innerHeight <= 500 && window.innerWidth > window.innerHeight))) {
+  if (!calSwipe && (window.innerWidth <= 639)) {
     var arrows = document.querySelectorAll('.hdr-nav-row .hdr-nav');
     var arrow = d < 0 ? arrows[0] : arrows[1];
     var tl = document.getElementById('month-lbl');
@@ -1047,7 +1047,7 @@ function updateTodayBtn(){
   const btn = document.getElementById('btn-today');
   const now = new Date();
   btn.classList.toggle('hidden', cY === now.getFullYear() && cM === now.getMonth());
-  btn.textContent = window.innerWidth <= 639 || (window.innerHeight <= 500 && window.innerWidth > window.innerHeight) ? 'Auj.' : 'Aujourd\'hui';
+  btn.textContent = window.innerWidth <= 639 ? 'Auj.' : 'Aujourd\'hui';
 }
 
 function showAnnual(){
@@ -1320,7 +1320,7 @@ function moveNavPill(idx) {
   const btns = sidebar.querySelectorAll('.nav-item:not(.nav-settings)');
   const btn = btns[idx];
   if (!pill || !btn) return;
-  const isMobile = window.innerWidth <= 639 || (window.innerHeight <= 500 && window.innerWidth > window.innerHeight);
+  const isMobile = window.innerWidth <= 639;
   if (isMobile) {
     pill.style.top = (btn.offsetTop) + 'px';
     pill.style.left = (btn.offsetLeft) + 'px';
@@ -1340,7 +1340,7 @@ async function showView(name) {
   navBtns.forEach((b, i) => b.classList.toggle('active', i === idx));
   moveNavPill(idx);
 
-  const isMobile = window.innerWidth <= 639 || (window.innerHeight <= 500 && window.innerWidth > window.innerHeight);
+  const isMobile = window.innerWidth <= 639;
   const cal = document.getElementById('view-cal');
   const inv = document.getElementById('view-inv');
   const doc = document.getElementById('view-doc');
@@ -1726,7 +1726,7 @@ function showToast(msg, btnLabel, btnCb) {
 }
 
 function restoreNavPill(){
-  var isMobile = window.innerWidth <= 639 || (window.innerHeight <= 500 && window.innerWidth > window.innerHeight);
+  var isMobile = window.innerWidth <= 639;
   var idx = 0;
   if (isMobile) {
     document.querySelectorAll('.view-panel').forEach(function(p, i) {
