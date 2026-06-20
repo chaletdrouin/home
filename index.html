@@ -1273,7 +1273,7 @@ async function showView(name) {
   }
 }
 
-const CAT_ORDER = ['Épicerie','Condiments','Boissons','Frais','Entretien','Autre'];
+const CAT_ORDER = ['Épicerie','Condiments','Entretien'];
 
 let invActiveCat = null;
 
@@ -1309,7 +1309,7 @@ function renderInventory(animate, slideDir) {
   }
   const groups = {};
   inventory.forEach(item => {
-    const c = item.cat || 'Autre';
+    const c = item.cat || 'Épicerie';
     (groups[c] = groups[c] || []).push(item);
   });
   const cats = Object.keys(groups).sort((a, b) => {

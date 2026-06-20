@@ -263,15 +263,6 @@ export default {
       { name: 'Moutarde', cat: 'Condiments' },
       { name: 'Ketchup', cat: 'Condiments' },
       { name: 'Herbes de Provence', cat: 'Condiments' },
-      { name: 'Café', cat: 'Boissons' },
-      { name: 'Thé', cat: 'Boissons' },
-      { name: 'Eau', cat: 'Boissons' },
-      { name: 'Jus de fruits', cat: 'Boissons' },
-      { name: 'Lait', cat: 'Frais' },
-      { name: 'Beurre', cat: 'Frais' },
-      { name: 'Œufs', cat: 'Frais' },
-      { name: 'Pain', cat: 'Frais' },
-      { name: 'Fromage', cat: 'Frais' },
       { name: 'Papier toilette', cat: 'Entretien' },
       { name: 'Savon', cat: 'Entretien' },
       { name: 'Liquide vaisselle', cat: 'Entretien' },
@@ -302,7 +293,7 @@ export default {
       try { body = await req.json(); } catch { return json({ error: 'Invalid JSON' }, 400); }
       if (!body.name) return json({ error: 'name required' }, 400);
       const items = await getInventory();
-      const item = { id: crypto.randomUUID(), name: String(body.name).slice(0, 80), cat: String(body.cat || 'Autre').slice(0, 40), qty: Number(body.qty) || 1 };
+      const item = { id: crypto.randomUUID(), name: String(body.name).slice(0, 80), cat: String(body.cat || 'Épicerie').slice(0, 40), qty: Number(body.qty) || 1 };
       items.push(item);
       await env.BOOKINGS.put('inventory', JSON.stringify(items));
       return json(item, 201);
