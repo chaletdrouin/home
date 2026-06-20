@@ -190,11 +190,14 @@
     }
     @media (hover: hover) { .hdr-nav:hover { color: rgba(255,255,255,.85); } }
 
-    /* ── Desktop header: individual buttons instead of pill ── */
+    /* ── Desktop header: arrows on sides, title alone in center ── */
+    .hdr-nav-prev, .hdr-nav-next { display: none; }
     @media (min-width: 640px) {
+      .hdr-nav-mob { display: none; }
+      .hdr-nav-prev, .hdr-nav-next { display: flex; }
       .hdr-nav-row {
-        background: none; border-radius: 0; padding: 0; gap: 6px;
-        justify-content: center;
+        background: none; border-radius: 0; padding: 0;
+        flex: 1; justify-content: center;
       }
       .hdr-title {
         flex: 0 0 auto;
@@ -205,7 +208,7 @@
       .hdr-nav {
         width: 32px; height: 32px; border-radius: 22px;
         background: rgba(255,255,255,.12); color: rgba(255,255,255,.7);
-        font-size: 17px;
+        font-size: 17px; flex: 0 0 auto;
       }
       .hdr-nav:hover { background: rgba(255,255,255,.18); color: #fff; }
     }
@@ -724,13 +727,15 @@
   <div class="hdr">
     <div class="hdr-mountains-mobile"></div>
     <div class="hdr-content hdr-cal active" id="hdr-cal">
+      <button class="hdr-nav hdr-nav-prev" onclick="nav(-1)">‹</button>
       <button class="hdr-today hidden" id="btn-today" onclick="goToday()">Aujourd'hui</button>
       <div class="hdr-nav-row">
-        <button class="hdr-nav" onclick="nav(-1)">‹</button>
+        <button class="hdr-nav hdr-nav-mob" onclick="nav(-1)">‹</button>
         <div class="hdr-title" id="month-lbl" onclick="isAnnualOpen()?closeAnnual():showAnnual()"><span id="month-lbl-txt"></span></div>
-        <button class="hdr-nav" onclick="nav(1)">›</button>
+        <button class="hdr-nav hdr-nav-mob" onclick="nav(1)">›</button>
       </div>
       <button class="btn btn-p hdr-book" onclick="openCreate(null)">Réserver</button>
+      <button class="hdr-nav hdr-nav-next" onclick="nav(1)">›</button>
     </div>
     <div class="hdr-content hdr-inv" id="hdr-inv">
       <div class="inv-tabs inv-tabs-hdr" id="inv-tabs"></div>
