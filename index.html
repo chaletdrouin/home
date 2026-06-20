@@ -170,7 +170,8 @@
       color: rgba(255,255,255,.55); font-size: 18px;
       cursor: pointer; display: flex; align-items: center; justify-content: center;
       padding: 0; padding-bottom: 2px;
-      transition: color .15s;
+      transition: color .15s, width .18s cubic-bezier(.4,0,.2,1), opacity .18s;
+      overflow: hidden; flex-shrink: 0;
     }
     .hdr-nav:hover { color: rgba(255,255,255,.85); }
     .hdr-today {
@@ -916,6 +917,16 @@ function nav(d){
     return;
   }
   slideDir = d;
+  var arrows = document.querySelectorAll('.hdr-nav-row .hdr-nav');
+  var arrow = d < 0 ? arrows[0] : arrows[1];
+  if (arrow) {
+    arrow.style.width = '0';
+    arrow.style.opacity = '0';
+    setTimeout(function() {
+      arrow.style.width = '';
+      arrow.style.opacity = '';
+    }, 200);
+  }
   cM+=d; if(cM>11){cM=0;cY++;} if(cM<0){cM=11;cY--;}
   render();
 }
