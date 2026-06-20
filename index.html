@@ -1261,7 +1261,15 @@ async function showView(name) {
   document.querySelectorAll('.hdr-content').forEach(function(c) { c.classList.remove('active'); });
   document.getElementById('hdr-' + name).classList.add('active');
 
-  document.getElementById('view-year').classList.remove('active');
+  if (name === 'cal') {
+    var now = new Date();
+    cY = now.getFullYear(); cM = now.getMonth();
+    document.getElementById('view-year').classList.remove('active');
+    document.getElementById('views-slider').style.display = '';
+    render();
+  } else {
+    document.getElementById('view-year').classList.remove('active');
+  }
 
   if (isMobile) {
     const panels = document.querySelectorAll('.view-panel');
