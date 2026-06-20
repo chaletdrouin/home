@@ -1841,14 +1841,18 @@ load();
 
 function updateNotchSide() {
   var o = (screen.orientation || {}).type || '';
-  document.body.classList.remove('notch-left', 'notch-right');
-  if (o === 'landscape-primary') document.body.classList.add('notch-left');
-  else if (o === 'landscape-secondary') document.body.classList.add('notch-right');
+  if (o === 'landscape-primary') {
+    document.body.classList.remove('notch-right');
+    document.body.classList.add('notch-left');
+  } else if (o === 'landscape-secondary') {
+    document.body.classList.remove('notch-left');
+    document.body.classList.add('notch-right');
+  } else if (!document.body.classList.contains('notch-left') && !document.body.classList.contains('notch-right')) {
+    document.body.classList.add('notch-left');
+  }
 }
 updateNotchSide();
 if (screen.orientation) screen.orientation.addEventListener('change', updateNotchSide);
-window.matchMedia('(orientation: landscape)').addEventListener('change', updateNotchSide);
-window.addEventListener('resize', updateNotchSide);
 
 // Init nav pill
 requestAnimationFrame(function(){
