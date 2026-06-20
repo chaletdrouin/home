@@ -1872,9 +1872,12 @@ requestAnimationFrame(function(){
   moveTabPill(document.getElementById('doc-tabs'));
 });
 window.addEventListener('resize', function(){
+  var pill = document.getElementById('nav-pill');
+  pill.style.transition = 'none';
   setTimeout(function(){
     var active = document.querySelector('.nav-item:not(.nav-settings).active');
     if(active){ var btns = document.querySelectorAll('.nav-item:not(.nav-settings)'); btns.forEach(function(b,i){ if(b===active) moveNavPill(i); }); }
+    requestAnimationFrame(function(){ pill.style.transition = ''; });
   }, 100);
   updateTodayBtn();
 });
