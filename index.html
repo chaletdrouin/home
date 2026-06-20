@@ -88,7 +88,7 @@
       stroke: currentColor; fill: none; stroke-width: 2;
       stroke-linecap: round; stroke-linejoin: round;
     }
-    @media (pointer: fine) {
+    @media (min-width: 640px) {
       .nav-item .nav-icon { display: none; }
     }
     .nav-settings {
@@ -206,7 +206,7 @@
     }
 
     /* ── Mobile ── */
-    @media (pointer: coarse) {
+    @media (max-width: 639px) {
       body { flex-direction: column; }
       .main { order: 1; flex: 1; min-height: 0; }
       .sidebar {
@@ -369,7 +369,7 @@
       grid-template-columns: repeat(3, 1fr);
       gap: 12px; flex: 1;
     }
-    @media (pointer: coarse) { .year-grid { grid-template-columns: repeat(2, 1fr); } }
+    @media (max-width: 639px) { .year-grid { grid-template-columns: repeat(2, 1fr); } }
     .ym {
       background: var(--bg2); border-radius: 12px; padding: 12px;
       cursor: pointer; transition: background .1s;
@@ -416,7 +416,7 @@
     .sheet-title { font-size: 19px; font-weight: 700; margin-bottom: 18px; }
 
     /* ── Desktop modals ── */
-    @media (pointer: fine) {
+    @media (min-width: 640px) {
       .overlay {
         background: rgba(0,0,0,.25);
         backdrop-filter: blur(6px);
@@ -514,7 +514,7 @@
       padding: 16px 0 6px; border-bottom: 1px solid var(--border);
     }
     .inv-cat:first-child { padding-top: 0; }
-    @media (pointer: coarse) {
+    @media (max-width: 639px) {
       .inv-cat { display: none; }
     }
     .inv-item {
@@ -609,7 +609,7 @@
     .inv-cols { column-count:3; column-gap:64px; column-rule:1px solid var(--border); flex:1; min-height:0; overflow-y:auto; padding-bottom:8px; }
     .inv-col-section { break-inside:avoid; margin-bottom:8px; }
     @media (max-width:900px) { .inv-cols { column-count:2; } }
-    @media (pointer: coarse) { .inv-cols { column-count:unset; } }
+    @media (max-width: 639px) { .inv-cols { column-count:unset; } }
     .inv-tabs {
       display: none; gap: 0;
       overflow-x: auto; flex-shrink: 0; -webkit-overflow-scrolling: touch;
@@ -635,7 +635,7 @@
     .inv-tab.active {
       color: #fff; font-weight: 600;
     }
-    @media (pointer: coarse) {
+    @media (max-width: 639px) {
       .inv-tabs { display: flex; }
       .inv-col-section { display: none; }
       .inv-col-section.active { display: block; }
@@ -972,7 +972,7 @@ function updateTodayBtn(){
   const btn = document.getElementById('btn-today');
   const now = new Date();
   btn.classList.toggle('hidden', cY === now.getFullYear() && cM === now.getMonth());
-  btn.textContent = window.matchMedia('(pointer: coarse)').matches ? 'Auj.' : 'Aujourd\'hui';
+  btn.textContent = window.innerWidth <= 639 ? 'Auj.' : 'Aujourd\'hui';
 }
 
 function showAnnual(){
@@ -1245,7 +1245,7 @@ function moveNavPill(idx) {
   const btns = sidebar.querySelectorAll('.nav-item:not(.nav-settings)');
   const btn = btns[idx];
   if (!pill || !btn) return;
-  const isMobile = window.matchMedia('(pointer: coarse)').matches;
+  const isMobile = window.innerWidth <= 639;
   if (isMobile) {
     pill.style.top = (btn.offsetTop) + 'px';
     pill.style.left = (btn.offsetLeft) + 'px';
@@ -1265,7 +1265,7 @@ async function showView(name) {
   navBtns.forEach((b, i) => b.classList.toggle('active', i === idx));
   moveNavPill(idx);
 
-  const isMobile = window.matchMedia('(pointer: coarse)').matches;
+  const isMobile = window.innerWidth <= 639;
   const cal = document.getElementById('view-cal');
   const inv = document.getElementById('view-inv');
   const doc = document.getElementById('view-doc');
@@ -1651,7 +1651,7 @@ function showToast(msg, btnLabel, btnCb) {
 }
 
 function restoreNavPill(){
-  var isMobile = window.matchMedia('(pointer: coarse)').matches;
+  var isMobile = window.innerWidth <= 639;
   var idx = 0;
   if (isMobile) {
     document.querySelectorAll('.view-panel').forEach(function(p, i) {
