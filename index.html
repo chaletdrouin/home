@@ -194,7 +194,7 @@
 
     /* ── Desktop header: arrows on sides, title alone in center ── */
     .hdr-nav-prev, .hdr-nav-next { display: none; }
-    @media (min-width: 640px) and (pointer: fine) {
+    @media (pointer: fine) {
       .hdr-nav-mob { display: none; }
       .hdr-nav-prev, .hdr-nav-next { display: flex; }
       .hdr-nav-row {
@@ -229,6 +229,10 @@
       height: 32px; padding: 0 12px !important; font-size: 13px !important; font-weight: 600;
       background: var(--blue) !important; border: none; border-radius: 22px;
       color: #fff !important; white-space: nowrap;
+    }
+
+    @media (pointer: fine) {
+      body { min-width: 900px; }
     }
 
     /* ── Mobile ── */
