@@ -963,7 +963,7 @@ function nav(d){
     return;
   }
   slideDir = d;
-  if (!calSwipe) {
+  if (!calSwipe && window.innerWidth <= 639) {
     var arrows = document.querySelectorAll('.hdr-nav-row .hdr-nav');
     var arrow = d < 0 ? arrows[0] : arrows[1];
     var tl = document.getElementById('month-lbl');
