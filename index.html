@@ -882,6 +882,13 @@
   <div class="sheet">
     <div class="sheet-grip"></div>
     <div class="sheet-title">Paramètres</div>
+    <div class="settings-row" id="install-row" style="display:none">
+      <div class="settings-info">
+        <div class="settings-label">Installation</div>
+        <div class="settings-desc">Ajouter à l'écran d'accueil</div>
+      </div>
+      <button class="btn btn-p" id="install-btn" onclick="installApp()" style="flex:none;padding:10px 16px;font-size:14px;">Installer</button>
+    </div>
     <div class="settings-row">
       <div class="settings-info">
         <div class="settings-label">Notifications</div>
@@ -1266,6 +1273,22 @@ function openDay(ds) {
     });
   }
   open1('m-day');
+}
+
+var deferredInstallPrompt = null;
+window.addEventListener('beforeinstallprompt', function(e) {
+  e.preventDefault();
+  deferredInstallPrompt = e;
+  document.getElementById('install-row').style.display = '';
+});
+window.addEventListener('appinstalled', function() {
+  deferredInstallPrompt = null;
+  document.getElementById('install-row').style.display = 'none';
+});
+function installApp() {
+  if (!deferredInstallPrompt) return;
+  deferredInstallPrompt.prompt();
+  deferredInstallPrompt.userChoice.then(function() { deferredInstallPrompt = null; document.getElementById('install-row').style.display = 'none'; });
 }
 
 function openSettings() {
