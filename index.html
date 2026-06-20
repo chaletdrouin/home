@@ -1494,9 +1494,11 @@ function renderInventory(animate, slideDir) {
     });
     body.appendChild(section);
   });
-  requestAnimationFrame(function(){
-    body.querySelectorAll('.inv-toggle').forEach(function(t){ t.style.display = 'none'; t.offsetHeight; t.style.display = ''; });
-  });
+  requestAnimationFrame(repaintToggles);
+}
+
+function repaintToggles() {
+  document.querySelectorAll('.inv-toggle').forEach(function(t){ t.style.display = 'none'; t.offsetHeight; t.style.display = ''; });
 }
 
 function invAddClick() {
@@ -1515,8 +1517,9 @@ function invAddClick() {
       <button class="inv-opt on" onclick="setAddQty(this,1)">Bon</button>
       <button class="inv-opt" onclick="setAddQty(this,2)">Plein</button>
     </div>
-    <button class="inv-del" onclick="this.closest('.inv-add-row').remove()">✕</button>`;
+    <button class="inv-del" onclick="this.closest('.inv-add-row').remove();requestAnimationFrame(repaintToggles)">✕</button>`;
   section.appendChild(row);
+  requestAnimationFrame(repaintToggles);
   const inp = row.querySelector('input');
   inp.focus();
   inp.addEventListener('keydown', function(e) {
