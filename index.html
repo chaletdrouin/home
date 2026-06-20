@@ -145,7 +145,7 @@
     .hdr-content { display: none; min-height: 38px; position: relative; z-index: 1; }
     .hdr-content.active { display: flex; align-items: center; gap: 10px; }
     .hdr-cal .hdr-nav-row { flex: 1; min-width: 0; }
-    .inv-tabs-hdr { display: flex !important; padding: 4px !important; }
+    .inv-tabs-hdr { display: flex !important; padding: 4px !important; flex: 1; min-width: 0; }
     .hdr-nav-row {
       display: flex; align-items: center;
       background: rgba(0,0,0,.35); border-radius: 22px; padding: 4px;
@@ -872,8 +872,13 @@ async function load() {
     if (!r.ok) throw 0;
     bookings = await r.json();
   } catch { bookings=[]; }
+  try {
+    const r = await fetch(API+'/inventory');
+    if (r.ok) inventory = await r.json();
+  } catch {}
   document.getElementById('loader').classList.add('gone');
   render();
+  renderInventory();
 }
 
 let slideDir = 0;
