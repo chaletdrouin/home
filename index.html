@@ -280,6 +280,9 @@
         visibility: visible;
         transition: transform .3s ease, visibility 0s;
       }
+      body.no-transition .views-slider > .view-panel {
+        transition: none !important;
+      }
       .views-slider > .view-panel.slide-left {
         transform: translateX(-100%);
       }
@@ -1863,7 +1866,9 @@ requestAnimationFrame(function(){
   moveTabPill(document.getElementById('doc-tabs'));
 });
 window.addEventListener('resize', function(){
+  document.body.classList.add('no-transition');
   setTimeout(function(){
+    document.body.classList.remove('no-transition');
     var active = document.querySelector('.nav-item:not(.nav-settings).active');
     if(active){ var btns = document.querySelectorAll('.nav-item:not(.nav-settings)'); btns.forEach(function(b,i){ if(b===active) moveNavPill(i); }); }
   }, 100);
