@@ -227,11 +227,14 @@
       .views-slider > .view-panel {
         position: absolute; inset: 0;
         display: flex !important; flex-direction: column;
-        transition: transform .3s ease;
+        transition: transform .3s ease, visibility 0s .3s;
+        visibility: hidden;
       }
       .views-slider > .view-panel.slide-active {
         position: relative;
         transform: translateX(0);
+        visibility: visible;
+        transition: transform .3s ease, visibility 0s;
       }
       .views-slider > .view-panel.slide-left {
         transform: translateX(-100%);
