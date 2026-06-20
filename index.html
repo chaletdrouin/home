@@ -696,7 +696,19 @@
     @keyframes toastOut { from{opacity:1;transform:translateY(0)} to{opacity:0;transform:translateY(12px)} }
 
     /* ── Pull to refresh ── */
-    @keyframes spin { to{transform:translateX(-50%) translateY(calc(env(safe-area-inset-top) + 12px)) rotate(360deg)} }
+    .ptr-spinner {
+      position: fixed; top: 0; left: 50%; z-index: 9999;
+      width: 28px; height: 28px;
+      transform: translateX(-50%) translateY(-40px);
+      transition: transform .25s ease, opacity .25s ease;
+      opacity: 0; pointer-events: none;
+      border: 2.5px solid rgba(255,255,255,.15);
+      border-top-color: #fff;
+      border-radius: 50%;
+    }
+    .ptr-spinner.visible { opacity: 1; }
+    .ptr-spinner.refreshing { animation: spin .6s linear infinite; }
+    @keyframes spin { to { transform: translateX(-50%) rotate(360deg); } }
 
     /* ── Dates row ── */
     .ff-row { display:flex; gap:10px; }
@@ -792,6 +804,7 @@
   </div>
 </nav>
 
+<div class="ptr-spinner" id="ptr-spinner"></div>
 <div class="main">
   <div class="hdr">
     <div class="hdr-mountains-mobile"></div>
@@ -2023,6 +2036,41 @@ window.addEventListener('resize', function(){
 })();
 
 
+
+// Pull to refresh
+(function(){
+  var ptr = document.getElementById('ptr-spinner');
+  var startY = 0, pulling = false, triggered = false;
+  var THRESHOLD = 80, MAX = 120;
+  document.addEventListener('touchstart', function(e) {
+    if (e.target.closest('.sheet') || e.target.closest('.overlay')) return;
+    if (e.target.closest('.inv-cols') || e.target.closest('.doc-body')) return;
+    startY = e.touches[0].clientY;
+    pulling = true; triggered = false;
+  }, {passive: true});
+  document.addEventListener('touchmove', function(e) {
+    if (!pulling || triggered) return;
+    var dy = e.touches[0].clientY - startY;
+    if (dy < 0) { pulling = false; return; }
+    var progress = Math.min(dy / MAX, 1);
+    var offset = Math.round(progress * 60);
+    ptr.style.transform = 'translateX(-50%) translateY(' + (offset - 10) + 'px) rotate(' + Math.round(progress * 270) + 'deg)';
+    ptr.classList.toggle('visible', dy > 10);
+    if (dy > THRESHOLD) triggered = true;
+  }, {passive: true});
+  document.addEventListener('touchend', function() {
+    if (!pulling) return;
+    pulling = false;
+    if (triggered) {
+      ptr.classList.add('refreshing');
+      ptr.style.transform = 'translateX(-50%) translateY(50px)';
+      setTimeout(function(){ location.reload(); }, 400);
+    } else {
+      ptr.classList.remove('visible');
+      ptr.style.transform = '';
+    }
+  }, {passive: true});
+})();
 
 // Trace mountain ridge and generate clip-path
 (function() {
