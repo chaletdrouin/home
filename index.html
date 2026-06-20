@@ -184,7 +184,7 @@
     .hdr-today.hidden { opacity: .3; pointer-events: none; }
     .hdr-book.btn {
       flex: 0 0 auto;
-      height: 40px; padding: 0 14px !important; font-size: 13px !important; font-weight: 600;
+      height: 32px; padding: 0 12px !important; font-size: 13px !important; font-weight: 600;
       background: var(--blue) !important; border: none; border-radius: 22px;
       color: #fff !important; white-space: nowrap;
     }
@@ -219,7 +219,7 @@
       .hdr-brand-mobile { display: none; }
       .hdr-mountains-mobile { display: block; }
       .hdr { padding-top: calc(74px + env(safe-area-inset-top)); justify-content: flex-end; }
-      .hdr-book.btn { font-size: 0 !important; width: 40px; height: 40px; padding: 0 !important; border-radius: 22px; display: flex; align-items: center; justify-content: center; }
+      .hdr-book.btn { font-size: 0 !important; width: 32px; height: 32px; padding: 0 !important; border-radius: 22px; display: flex; align-items: center; justify-content: center; }
       .hdr-book.btn::after { content: '+'; font-size: 20px; font-weight: 600; line-height: 1; margin-top: -2px; color: #fff; }
       .views-slider {
         position: relative; overflow: hidden;
@@ -542,8 +542,8 @@
       color: var(--text); min-width: 0;
     }
     .inv-add-btn {
-      flex: none; min-width: 40px; height: 40px; padding: 0 !important;
-      font-size: 22px !important; font-weight: 600; border-radius: 22px;
+      flex: none; min-width: 32px; height: 32px; padding: 0 !important;
+      font-size: 20px !important; font-weight: 600; border-radius: 22px;
       display: flex; align-items: center; justify-content: center;
       line-height: 1;
     }
@@ -613,6 +613,10 @@
       .inv-col-section { display: none; }
       .inv-col-section.active { display: block; }
     }
+    @keyframes sec-slide-in-left { from { transform: translateX(-30px); opacity: 0; } to { transform: none; opacity: 1; } }
+    @keyframes sec-slide-in-right { from { transform: translateX(30px); opacity: 0; } to { transform: none; opacity: 1; } }
+    .sec-slide-left { animation: sec-slide-in-left .2s ease both; }
+    .sec-slide-right { animation: sec-slide-in-right .2s ease both; }
 
     /* ── Mode d'emploi ── */
     .doc-view { flex:1; display:none; flex-direction:column; min-height:0; }
@@ -1265,7 +1269,13 @@ const CAT_ORDER = ['Épicerie','Condiments','Boissons','Frais','Entretien','Autr
 
 let invActiveCat = null;
 
-function renderInventory(animate) {
+function switchInvCat(cat, dir) {
+  var oldCat = invActiveCat;
+  invActiveCat = cat;
+  renderInventory(false, dir);
+}
+
+function renderInventory(animate, slideDir) {
   const body = document.getElementById('inv-body');
   const tabsWrap = document.getElementById('inv-tabs');
   body.innerHTML = '';
@@ -1284,16 +1294,20 @@ function renderInventory(animate) {
     return (ia === -1 ? 99 : ia) - (ib === -1 ? 99 : ib);
   });
   if (!invActiveCat || cats.indexOf(invActiveCat) === -1) invActiveCat = cats[0];
-  cats.forEach(cat => {
+  cats.forEach((cat, ci) => {
     const tab = document.createElement('button');
     tab.className = 'inv-tab' + (cat === invActiveCat ? ' active' : '');
     tab.textContent = cat;
-    tab.onclick = function(){ invActiveCat = cat; renderInventory(); };
+    tab.onclick = function(){
+      var d = ci - cats.indexOf(invActiveCat);
+      switchInvCat(cat, d > 0 ? 1 : -1);
+    };
     tabsWrap.appendChild(tab);
   });
   cats.forEach((cat, ci) => {
     const section = document.createElement('div');
-    section.className = 'inv-col-section' + (animate ? ' fade-up' : '') + (cat === invActiveCat ? ' active' : '');
+    var slideClass = (cat === invActiveCat && slideDir) ? (slideDir > 0 ? ' sec-slide-right' : ' sec-slide-left') : '';
+    section.className = 'inv-col-section' + (animate ? ' fade-up' : '') + (cat === invActiveCat ? ' active' : '') + slideClass;
     if (animate) section.style.animationDelay = (ci * 50) + 'ms';
     const hdr = document.createElement('div');
     hdr.className = 'inv-cat';
@@ -1402,10 +1416,55 @@ async function deleteInvItem(id) {
   } catch {}
 }
 
-function switchDocTab(idx, btn) {
+var docActiveIdx = 0;
+function switchDocTab(idx) {
+  var dir = idx > docActiveIdx ? 1 : -1;
+  docActiveIdx = idx;
   document.querySelectorAll('.doc-tabs-always .inv-tab').forEach((t, i) => t.classList.toggle('active', i === idx));
-  document.querySelectorAll('.doc-block').forEach((b, i) => b.classList.toggle('active', i === idx));
+  document.querySelectorAll('.doc-block').forEach((b, i) => {
+    b.classList.toggle('active', i === idx);
+    b.classList.remove('sec-slide-left', 'sec-slide-right');
+    if (i === idx) b.classList.add(dir > 0 ? 'sec-slide-right' : 'sec-slide-left');
+  });
 }
+
+// ── Swipe between sections ──
+function addSectionSwipe(el, getCats, getActive, onSwipe) {
+  var sx, sy, swiping;
+  el.addEventListener('touchstart', function(e) {
+    sx = e.touches[0].clientX; sy = e.touches[0].clientY; swiping = null;
+  }, { passive: true });
+  el.addEventListener('touchmove', function(e) {
+    if (swiping === false) return;
+    var dx = e.touches[0].clientX - sx, dy = e.touches[0].clientY - sy;
+    if (swiping === null) swiping = Math.abs(dx) > Math.abs(dy) && Math.abs(dx) > 10;
+    if (swiping) e.preventDefault();
+  }, { passive: false });
+  el.addEventListener('touchend', function(e) {
+    if (!swiping) return;
+    var dx = e.changedTouches[0].clientX - sx;
+    if (Math.abs(dx) < 40) return;
+    var cats = getCats(), idx = getActive(cats);
+    var next = idx + (dx < 0 ? 1 : -1);
+    if (next >= 0 && next < cats.length) onSwipe(cats, next, dx < 0 ? 1 : -1);
+  }, { passive: true });
+}
+
+addSectionSwipe(document.getElementById('view-inv'),
+  function() {
+    var cats = [];
+    document.querySelectorAll('#inv-tabs .inv-tab').forEach(function(t) { cats.push(t.textContent); });
+    return cats;
+  },
+  function(cats) { return cats.indexOf(invActiveCat); },
+  function(cats, next, dir) { switchInvCat(cats[next], dir); }
+);
+
+addSectionSwipe(document.getElementById('view-doc'),
+  function() { return [0, 1, 2]; },
+  function() { return docActiveIdx; },
+  function(cats, next, dir) { switchDocTab(next); }
+);
 
 function openCreate(ds) {
   document.getElementById('f-desc').value='';
