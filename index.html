@@ -1868,8 +1868,14 @@ if (screen.orientation) screen.orientation.addEventListener('change', updateNotc
 
 // Init nav pill
 requestAnimationFrame(function(){
+  var pill = document.getElementById('nav-pill');
+  pill.style.transition = 'none';
   moveNavPill(0);
   moveTabPill(document.getElementById('doc-tabs'));
+  setTimeout(function(){
+    moveNavPill(0);
+    requestAnimationFrame(function(){ pill.style.transition = ''; });
+  }, 200);
 });
 window.addEventListener('resize', function(){
   var pill = document.getElementById('nav-pill');
