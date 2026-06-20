@@ -238,7 +238,7 @@
 
     /* ── Mobile ── */
     @media (max-width: 639px) and (pointer: coarse) {
-      body { flex-direction: column; }
+      body { flex-direction: column; bottom: calc(-1 * env(safe-area-inset-bottom, 0px)); }
       .main { order: 1; flex: 1; min-height: 0; }
       .sidebar {
         order: 2; width: auto; height: auto;
