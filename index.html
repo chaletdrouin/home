@@ -107,7 +107,7 @@
     /* ── Header ── */
     .hdr {
       display: flex; flex-direction: column;
-      padding: calc(10px + env(safe-area-inset-top)) 14px 10px; gap: 6px;
+      padding: calc(10px + env(safe-area-inset-top)) calc(14px + env(safe-area-inset-right)) 10px calc(14px + env(safe-area-inset-left)); gap: 6px;
       flex-shrink: 0;
       border-bottom: 1px solid var(--border);
       background: var(--bg);
@@ -196,7 +196,7 @@
         order: 2; width: auto; height: auto;
         flex: 0 0 auto;
         flex-direction: row; align-items: flex-start;
-        padding: 8px 8px 0;
+        padding: 8px calc(8px + env(safe-area-inset-right)) 0 calc(8px + env(safe-area-inset-left));
         border-right: none; border-top: 1px solid var(--border);
         background: var(--bg);
         gap: 0;
@@ -1752,8 +1752,10 @@ requestAnimationFrame(function(){
   moveTabPill(document.getElementById('doc-tabs'));
 });
 window.addEventListener('resize', function(){
-  var active = document.querySelector('.nav-item:not(.nav-settings).active');
-  if(active){ var btns = document.querySelectorAll('.nav-item:not(.nav-settings)'); btns.forEach(function(b,i){ if(b===active) moveNavPill(i); }); }
+  setTimeout(function(){
+    var active = document.querySelector('.nav-item:not(.nav-settings).active');
+    if(active){ var btns = document.querySelectorAll('.nav-item:not(.nav-settings)'); btns.forEach(function(b,i){ if(b===active) moveNavPill(i); }); }
+  }, 100);
   updateTodayBtn();
 });
 
