@@ -604,6 +604,7 @@
     }
     .inv-item:last-child { border-bottom: none; }
     .inv-content { flex: 1; overflow-y: auto; padding: 0 14px 8px; }
+    .inv-updated { font-size: 12px; color: var(--text3); text-align: center; padding: 12px 0 4px; }
     .inv-name { flex: 1; font-size: 14px; font-weight: 500; min-width: 0; }
     .inv-toggle {
       display: flex; flex-shrink: 0; position: relative;
@@ -1024,7 +1025,11 @@ async function load() {
   } catch { bookings=[]; }
   try {
     const r = await fetch(API+'/inventory');
-    if (r.ok) inventory = await r.json();
+    if (r.ok) {
+      const data = await r.json();
+      inventory = data.items || data;
+      invUpdatedAt = data.updatedAt || null;
+    }
   } catch {}
   document.getElementById('loader').classList.add('gone');
   render();
@@ -1374,6 +1379,7 @@ async function subscribePush() {
 }
 
 let inventory = [];
+var invUpdatedAt = null;
 
 function moveNavPill(idx) {
   const pill = document.getElementById('nav-pill');
@@ -1438,7 +1444,11 @@ async function showView(name) {
     if (!inventory.length) {
       try {
         const r = await fetch(API + '/inventory');
-        if (r.ok) inventory = await r.json();
+        if (r.ok) {
+          const data = await r.json();
+          inventory = data.items || data;
+          invUpdatedAt = data.updatedAt || null;
+        }
       } catch {}
     }
     renderInventory();
@@ -1536,6 +1546,13 @@ function renderInventory(animate, slideDir) {
     });
     body.appendChild(section);
   });
+  if (invUpdatedAt) {
+    var d = new Date(invUpdatedAt);
+    var lbl = document.createElement('div');
+    lbl.className = 'inv-updated';
+    lbl.textContent = 'Modifié le ' + d.toLocaleDateString('fr-FR', { day: 'numeric', month: 'long', year: 'numeric' }) + ' à ' + d.toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' });
+    body.appendChild(lbl);
+  }
   requestAnimationFrame(repaintToggles);
 }
 
@@ -1601,6 +1618,7 @@ async function commitInvAdd(row, cat) {
     if (r.ok) {
       const item = await r.json();
       inventory.push(item);
+      invUpdatedAt = new Date().toISOString();
       renderInventory();
     }
   } catch { showToast('Erreur réseau'); }
@@ -1624,6 +1642,12 @@ async function setInvQty(id, level, btn) {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ qty: level })
     });
+    invUpdatedAt = new Date().toISOString();
+    var el = document.querySelector('.inv-updated');
+    if (el) {
+      var d = new Date(invUpdatedAt);
+      el.textContent = 'Modifié le ' + d.toLocaleDateString('fr-FR', { day: 'numeric', month: 'long', year: 'numeric' }) + ' à ' + d.toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' });
+    }
   } catch {}
 }
 
@@ -1631,6 +1655,7 @@ async function deleteInvItem(id) {
   try {
     await fetch(API + '/inventory/' + id, { method: 'DELETE' });
     inventory = inventory.filter(i => i.id !== id);
+    invUpdatedAt = new Date().toISOString();
     renderInventory();
   } catch {}
 }

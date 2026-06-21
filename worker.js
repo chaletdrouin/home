@@ -284,7 +284,9 @@ export default {
 
     // GET /inventory
     if (req.method === 'GET' && path === '/inventory') {
-      return json(await getInventory());
+      const items = await getInventory();
+      const updated = await env.BOOKINGS.get('inventory_updated');
+      return json({ items, updatedAt: updated || null });
     }
 
     // POST /inventory
@@ -296,6 +298,7 @@ export default {
       const item = { id: crypto.randomUUID(), name: String(body.name).slice(0, 80), cat: String(body.cat || 'Épicerie').slice(0, 40), qty: Number(body.qty) || 1 };
       items.push(item);
       await env.BOOKINGS.put('inventory', JSON.stringify(items));
+      await env.BOOKINGS.put('inventory_updated', new Date().toISOString());
       return json(item, 201);
     }
 
@@ -310,6 +313,7 @@ export default {
       if (body.name !== undefined) items[idx].name = String(body.name).slice(0, 80);
       if (body.qty !== undefined) items[idx].qty = Math.max(0, Number(body.qty));
       await env.BOOKINGS.put('inventory', JSON.stringify(items));
+      await env.BOOKINGS.put('inventory_updated', new Date().toISOString());
       return json(items[idx]);
     }
 
@@ -318,6 +322,7 @@ export default {
     if (req.method === 'DELETE' && mInvDel) {
       const items = await getInventory();
       await env.BOOKINGS.put('inventory', JSON.stringify(items.filter(i => i.id !== mInvDel[1])));
+      await env.BOOKINGS.put('inventory_updated', new Date().toISOString());
       return new Response(null, { status: 204, headers: CORS });
     }
 
