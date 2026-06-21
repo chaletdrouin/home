@@ -1022,13 +1022,13 @@
               <path d="M100 406 L285 406" stroke="#999" stroke-width="11" stroke-linecap="round" fill="none"/>
 
               <!-- Eau (bleu, sous les éléments de vanne) -->
-              <path id="w2" class="water-path" d="M225 24 L225 264" stroke="#4f8ef7" stroke-width="6" stroke-linecap="round" fill="none" opacity="0"/>
-              <path id="w54" class="water-path" d="M120 90 L120 258 Q120 264 126 264 L225 264" stroke="#4f8ef7" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" fill="none" opacity="0"/>
-              <path id="w3a" class="water-path" d="M225 264 L225 365" stroke="#4f8ef7" stroke-width="6" stroke-linecap="butt" fill="none" opacity="0"/>
-              <path id="w3b" class="water-path" d="M225 380 L225 399" stroke="#4f8ef7" stroke-width="6" stroke-linecap="butt" fill="none" opacity="0"/>
-              <path id="w3c" class="water-path" d="M225 414 L225 440" stroke="#4f8ef7" stroke-width="6" stroke-linecap="butt" fill="none" opacity="0"/>
-              <path id="w6" class="water-path" d="M120 188 L38 188 Q32 188 32 194 L32 366 Q32 372 38 372 L290 372" stroke="#4f8ef7" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" fill="none" opacity="0"/>
-              <path id="w7" class="water-path" d="M100 406 L285 406" stroke="#4f8ef7" stroke-width="5" stroke-linecap="round" fill="none" opacity="0"/>
+              <path id="w2" class="water-path" d="M225 24 L225 264" stroke="#2563eb" stroke-width="8" stroke-linecap="round" fill="none" opacity="0"/>
+              <path id="w54" class="water-path" d="M120 90 L120 258 Q120 264 126 264 L225 264" stroke="#2563eb" stroke-width="7" stroke-linecap="round" stroke-linejoin="round" fill="none" opacity="0"/>
+              <path id="w3a" class="water-path" d="M225 264 L225 365" stroke="#2563eb" stroke-width="8" stroke-linecap="butt" fill="none" opacity="0"/>
+              <path id="w3b" class="water-path" d="M225 380 L225 399" stroke="#2563eb" stroke-width="8" stroke-linecap="butt" fill="none" opacity="0"/>
+              <path id="w3c" class="water-path" d="M225 414 L225 440" stroke="#2563eb" stroke-width="8" stroke-linecap="butt" fill="none" opacity="0"/>
+              <path id="w6" class="water-path" d="M120 188 L38 188 Q32 188 32 194 L32 366 Q32 372 38 372 L290 372" stroke="#2563eb" stroke-width="7" stroke-linecap="round" stroke-linejoin="round" fill="none" opacity="0"/>
+              <path id="w7" class="water-path" d="M100 406 L285 406" stroke="#2563eb" stroke-width="7" stroke-linecap="round" fill="none" opacity="0"/>
 
               <!-- Ligne pointillée réservoir / sous la marche -->
               <line x1="10" y1="72" x2="310" y2="72" stroke="var(--text3)" stroke-width="1.5" stroke-dasharray="6 4"/>
@@ -1036,8 +1036,6 @@
               <text x="10" y="89" fill="var(--text2)" font-size="11" font-weight="600">Sous la marche</text>
 
               <!-- Eau Y -->
-              <circle id="wj1" class="water-path" cx="225" cy="264" r="6" fill="#4f8ef7" opacity="0"/>
-              <circle id="wj2" class="water-path" cx="120" cy="188" r="6" fill="#4f8ef7" opacity="0"/>
 
               <!-- Extensions de purge (perpendiculaires, axe des badges, côté opposé levier) -->
               <!-- p1 : badge 1 (225,38), levier gauche → extension droite à y=38 -->
@@ -2217,12 +2215,12 @@ function setWaterMode(mode) {
 
   // Water flow
   var water = {
-    ete:      { w2:1, w54:1, w3a:0, w3b:0, w3c:0, w6:1, w7:0, wj1:1, wj2:1 },
-    hiver:    { w2:1, w54:0, w3a:1, w3b:1, w3c:1, w6:0, w7:0, wj1:1, wj2:0 },
-    hivernage:{ w2:0, w54:0, w3a:0, w3b:0, w3c:0, w6:0, w7:0, wj1:0, wj2:0 }
+    ete:      { w2:1, w54:1, w3a:0, w3b:0, w3c:0, w6:1, w7:0 },
+    hiver:    { w2:1, w54:0, w3a:1, w3b:1, w3c:1, w6:0, w7:0 },
+    hivernage:{ w2:0, w54:0, w3a:0, w3b:0, w3c:0, w6:0, w7:0 }
   };
   var wf = water[mode];
-  ['w2','w54','w3a','w3b','w3c','w6','w7','wj1','wj2'].forEach(function(id) {
+  ['w2','w54','w3a','w3b','w3c','w6','w7'].forEach(function(id) {
     var el = document.getElementById(id);
     if (el) el.setAttribute('opacity', wf[id] ? '0.7' : '0');
   });
