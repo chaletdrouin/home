@@ -767,6 +767,63 @@
     .doc-block p {
       font-size: 14px; color: var(--text2); line-height: 1.6; margin: 0;
     }
+    .doc-section { margin-bottom: 20px; }
+    .doc-section-title {
+      font-size: 15px; font-weight: 700; color: var(--text);
+      margin: 0 0 8px; display: flex; align-items: center; gap: 8px;
+    }
+    .doc-section-icon {
+      width: 28px; height: 28px; border-radius: 8px;
+      display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+    }
+    .doc-section-icon svg { width: 16px; height: 16px; }
+    .doc-card {
+      background: var(--bg2); border-radius: 12px; padding: 12px 14px; margin-bottom: 10px;
+    }
+    .doc-card p { font-size: 13px; color: var(--text2); line-height: 1.6; margin: 0; }
+    .doc-card strong { color: var(--text); }
+    .doc-card-label {
+      font-size: 11px; font-weight: 600; text-transform: uppercase;
+      letter-spacing: .05em; color: var(--text3); margin-bottom: 6px;
+    }
+    .doc-tip {
+      background: rgba(79,142,247,.1); border-radius: 10px; padding: 10px 12px;
+      font-size: 13px; color: var(--blue); line-height: 1.5;
+      display: flex; gap: 8px; align-items: flex-start; margin-bottom: 10px;
+    }
+    .doc-tip svg { flex-shrink: 0; margin-top: 1px; }
+    .doc-warn {
+      background: rgba(255,179,0,.1); border-radius: 10px; padding: 10px 12px;
+      font-size: 13px; color: #ffb300; line-height: 1.5;
+      display: flex; gap: 8px; align-items: flex-start; margin-bottom: 10px;
+    }
+    .doc-warn svg { flex-shrink: 0; margin-top: 1px; }
+    .doc-gauge {
+      display: flex; flex-direction: column; gap: 0;
+      border-radius: 10px; overflow: hidden; margin: 8px 0;
+    }
+    .doc-gauge-row {
+      display: flex; align-items: center; padding: 8px 12px;
+      font-size: 13px; font-weight: 600;
+    }
+    .doc-gauge-row:not(:last-child) { border-bottom: 1px solid rgba(255,255,255,.06); }
+    .doc-gauge-pct { width: 40px; }
+    .doc-gauge-v { width: 55px; text-align: right; font-variant-numeric: tabular-nums; }
+    .doc-gauge-bar { flex: 1; height: 6px; border-radius: 3px; background: rgba(255,255,255,.06); margin: 0 10px; position: relative; overflow: hidden; }
+    .doc-gauge-fill { position: absolute; left: 0; top: 0; bottom: 0; border-radius: 3px; }
+    .doc-link {
+      display: flex; align-items: center; gap: 10px;
+      background: var(--bg2); border-radius: 12px; padding: 12px 14px;
+      text-decoration: none; color: var(--text); font-size: 14px; font-weight: 600;
+      margin-bottom: 10px;
+    }
+    .doc-link:active { background: rgba(255,255,255,.08); }
+    .doc-link-icon {
+      width: 36px; height: 36px; border-radius: 8px; background: var(--blue);
+      display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+    }
+    .doc-link-icon svg { width: 20px; height: 20px; }
+    .doc-link-arrow { margin-left: auto; color: var(--text3); }
 
     /* ── Edit button in day detail ── */
     .bk-edit {
@@ -857,7 +914,90 @@
         <p></p>
       </div>
       <div class="doc-block" data-doc="2">
-        <p></p>
+
+        <div class="doc-section">
+          <div class="doc-section-title">
+            <div class="doc-section-icon" style="background:rgba(255,59,48,.15)">
+              <svg viewBox="0 0 24 24" fill="none" stroke="#ff3b30" stroke-width="2.5" stroke-linecap="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+            </div>
+            Interrupteur général
+          </div>
+          <div class="doc-card">
+            <div class="doc-card-label">Emplacement</div>
+            <p><strong>Bouton rouge dans les toilettes.</strong><br>Allumer en arrivant, éteindre en partant.</p>
+          </div>
+          <div class="doc-tip">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+            Pas besoin d'éteindre chaque disjoncteur au tableau — seul l'interrupteur général suffit.
+          </div>
+        </div>
+
+        <div class="doc-section">
+          <div class="doc-section-title">
+            <div class="doc-section-icon" style="background:rgba(255,204,0,.15)">
+              <svg viewBox="0 0 24 24" fill="none" stroke="#ffcc00" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+            </div>
+            Niveau des batteries
+          </div>
+          <div class="doc-card">
+            <div class="doc-card-label">Seuils de tension — Batteries 12V</div>
+            <div class="doc-gauge">
+              <div class="doc-gauge-row">
+                <span class="doc-gauge-pct" style="color:#34c759">100%</span>
+                <span class="doc-gauge-bar"><span class="doc-gauge-fill" style="width:100%;background:#34c759"></span></span>
+                <span class="doc-gauge-v">12.7 V</span>
+              </div>
+              <div class="doc-gauge-row">
+                <span class="doc-gauge-pct" style="color:#30d158">75%</span>
+                <span class="doc-gauge-bar"><span class="doc-gauge-fill" style="width:75%;background:#30d158"></span></span>
+                <span class="doc-gauge-v">12.5 V</span>
+              </div>
+              <div class="doc-gauge-row">
+                <span class="doc-gauge-pct" style="color:#ffcc00">50%</span>
+                <span class="doc-gauge-bar"><span class="doc-gauge-fill" style="width:50%;background:#ffcc00"></span></span>
+                <span class="doc-gauge-v">12.3 V</span>
+              </div>
+              <div class="doc-gauge-row">
+                <span class="doc-gauge-pct" style="color:#ff9f0a">25%</span>
+                <span class="doc-gauge-bar"><span class="doc-gauge-fill" style="width:25%;background:#ff9f0a"></span></span>
+                <span class="doc-gauge-v">12.1 V</span>
+              </div>
+              <div class="doc-gauge-row">
+                <span class="doc-gauge-pct" style="color:#ff3b30">0%</span>
+                <span class="doc-gauge-bar"><span class="doc-gauge-fill" style="width:8%;background:#ff3b30"></span></span>
+                <span class="doc-gauge-v">11.8 V</span>
+              </div>
+            </div>
+          </div>
+          <div class="doc-warn">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+            La tension affichée n'est fiable que lorsqu'il n'y a <strong>ni charge ni consommation</strong>. Couper les appareils et attendre quelques minutes pour une lecture précise.
+          </div>
+        </div>
+
+        <div class="doc-section">
+          <div class="doc-section-title">
+            <div class="doc-section-icon" style="background:rgba(79,142,247,.15)">
+              <svg viewBox="0 0 24 24" fill="none" stroke="#4f8ef7" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="2" width="14" height="20" rx="2"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg>
+            </div>
+            Monitoring
+          </div>
+          <a class="doc-link" href="https://apps.apple.com/app/victronconnect/id943840744" target="_blank" rel="noopener">
+            <div class="doc-link-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+            </div>
+            <div>
+              VictronConnect
+              <div style="font-size:12px;font-weight:400;color:var(--text3)">Charge et tension en temps réel</div>
+            </div>
+            <span class="doc-link-arrow">›</span>
+          </a>
+          <div class="doc-tip">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+            Connectez-vous en Bluetooth à proximité du régulateur pour voir l'état de charge et l'historique.
+          </div>
+        </div>
+
       </div>
     </div>
   </div>
