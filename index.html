@@ -821,7 +821,7 @@
     .pipe-btn.active { border-color: #4f8ef7; background: rgba(79,142,247,.12); }
     .pipe-btn svg { width: 20px; height: 20px; }
     .valve-part { transition: transform .5s ease; }
-    .valve-color { transition: stroke .5s ease, fill .5s ease; }
+    .valve-color { transition: stroke .5s ease, fill .5s ease, transform .5s ease; }
     .water-path { transition: opacity .5s ease; }
     .doc-gauge { margin: 8px 0; }
     .doc-gauge-bar-full {
@@ -1058,22 +1058,22 @@
               <!-- Purges (clapet arc + points) -->
               <g id="purge1">
                 <path class="valve-color" d="M 240 64 A 8 8 0 1 1 250 64" fill="none" stroke="#ff3b30" stroke-width="2" stroke-linecap="round"/>
-                <circle class="valve-color" id="p1-dot" cx="250" cy="64" r="2.5" fill="#ff3b30"/>
+                <circle class="valve-color" id="p1-dot" cx="250" cy="64" r="2.5" fill="#ff3b30" style="transform-origin:245px 57.8px"/>
                 <circle class="valve-color" cx="245" cy="58" r="3" fill="#ff3b30"/>
               </g>
               <g id="purge5">
                 <path class="valve-color" d="M 135 161 A 8 8 0 1 1 145 161" fill="none" stroke="#ff3b30" stroke-width="2" stroke-linecap="round"/>
-                <circle class="valve-color" id="p5-dot" cx="145" cy="161" r="2.5" fill="#ff3b30"/>
+                <circle class="valve-color" id="p5-dot" cx="145" cy="161" r="2.5" fill="#ff3b30" style="transform-origin:140px 154.8px"/>
                 <circle class="valve-color" cx="140" cy="155" r="3" fill="#ff3b30"/>
               </g>
               <g id="purge4">
                 <path class="valve-color" d="M 150 290 A 8 8 0 1 1 160 290" fill="none" stroke="#ff3b30" stroke-width="2" stroke-linecap="round"/>
-                <circle class="valve-color" id="p4-dot" cx="160" cy="290" r="2.5" fill="#ff3b30"/>
+                <circle class="valve-color" id="p4-dot" cx="160" cy="290" r="2.5" fill="#ff3b30" style="transform-origin:155px 283.8px"/>
                 <circle class="valve-color" cx="155" cy="284" r="3" fill="#ff3b30"/>
               </g>
               <g id="purge3">
                 <path class="valve-color" d="M 240 308 A 8 8 0 1 1 250 308" fill="none" stroke="#ff3b30" stroke-width="2" stroke-linecap="round"/>
-                <circle class="valve-color" id="p3-dot" cx="250" cy="308" r="2.5" fill="#ff3b30"/>
+                <circle class="valve-color" id="p3-dot" cx="250" cy="308" r="2.5" fill="#ff3b30" style="transform-origin:245px 301.8px"/>
                 <circle class="valve-color" cx="245" cy="302" r="3" fill="#ff3b30"/>
               </g>
 
@@ -1114,7 +1114,7 @@
               <!-- Vanne 3 : clapet -->
               <g id="v3-clapet">
                 <path class="valve-color" d="M 213 339 A 18 18 0 1 1 237 339" fill="none" stroke="#ff3b30" stroke-width="2.5" stroke-linecap="round"/>
-                <circle class="valve-color" id="v3-dot" cx="237" cy="339" r="3.5" fill="#ff3b30"/>
+                <circle class="valve-color" id="v3-dot" cx="237" cy="339" r="3.5" fill="#ff3b30" style="transform-origin:225px 325.6px"/>
               </g>
             </svg>
             <div class="pipe-btns">
@@ -2152,10 +2152,10 @@ function setWaterMode(mode) {
   }
 
   setLever('v1-lever', s.v1==='open', -90);
-  setLever('v5-lever', s.v5==='open', -90);
-  setLever('v4-lever', s.v4==='open', 90);
-  setLever('v6-lever', s.v6==='open', -90);
-  setLever('v7-lever', s.v7==='open', -90);
+  setLever('v5-lever', s.v5==='open', 90);
+  setLever('v4-lever', s.v4==='open', -90);
+  setLever('v6-lever', s.v6==='open', 90);
+  setLever('v7-lever', s.v7==='open', 90);
 
   // v2 (1/4 turn)
   var v2g = document.getElementById('v2-lever');
@@ -2176,19 +2176,23 @@ function setWaterMode(mode) {
       if (tag === 'circle') el.setAttribute('fill', v3open ? openColor : closedColor);
     });
     var v3dot = document.getElementById('v3-dot');
-    if (v3dot) v3dot.setAttribute('cx', v3open ? '213' : '237');
+    if (v3dot) v3dot.style.transform = v3open ? 'rotate(-276deg)' : '';
   }
 
   // Purges
+  var purgeOpen = s.purges==='open';
   ['purge1','purge5','purge4','purge3'].forEach(function(id) {
     var g = document.getElementById(id);
     if (!g) return;
-    var open = s.purges==='open';
     g.querySelectorAll('.valve-color').forEach(function(el) {
       var tag = el.tagName.toLowerCase();
-      if (tag === 'path') el.setAttribute('stroke', open ? openColor : closedColor);
-      if (tag === 'circle') el.setAttribute('fill', open ? openColor : closedColor);
+      if (tag === 'path') el.setAttribute('stroke', purgeOpen ? openColor : closedColor);
+      if (tag === 'circle') el.setAttribute('fill', purgeOpen ? openColor : closedColor);
     });
+  });
+  ['p1-dot','p5-dot','p4-dot','p3-dot'].forEach(function(id) {
+    var dot = document.getElementById(id);
+    if (dot) dot.style.transform = purgeOpen ? 'rotate(-283deg)' : '';
   });
 
   // Water flow
