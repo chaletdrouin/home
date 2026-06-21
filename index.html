@@ -804,16 +804,24 @@
       background: linear-gradient(to right, #ff3b30 0%, #ff9f0a 25%, #ffcc00 50%, #30d158 75%, #34c759 100%);
     }
     .doc-gauge-marker {
-      position: absolute; top: 0; bottom: 0; width: 2px; background: rgba(0,0,0,.5);
+      position: absolute; top: -4px; bottom: -4px; width: 2px; background: rgba(0,0,0,.5);
+      transform: translateX(-1px);
     }
-    .doc-gauge-labels {
-      display: flex; justify-content: space-between; padding: 6px 2px 0;
+    .doc-gauge-marker::after {
+      content: attr(data-v);
+      position: absolute; top: calc(100% + 6px); left: 50%;
+      transform: translateX(-50%);
+      font-size: 11px; font-weight: 600; color: var(--text2);
+      white-space: nowrap;
+    }
+    .doc-gauge-edge {
+      position: absolute; top: calc(100% + 6px);
       font-size: 11px; font-weight: 600; color: var(--text2);
     }
-    .doc-gauge-labels span { text-align: center; font-variant-numeric: tabular-nums; }
-    .doc-gauge-labels .doc-gl-v { font-size: 10px; color: var(--text3); }
+    .doc-gauge-edge.left { left: 4px; }
+    .doc-gauge-edge.right { right: 4px; }
     .doc-gauge-zones {
-      display: flex; margin-top: 8px; gap: 4px;
+      display: flex; margin-top: 30px; gap: 4px;
     }
     .doc-gauge-zone {
       flex: 1; border-radius: 8px; padding: 6px 0; text-align: center;
@@ -951,16 +959,11 @@
             <div class="doc-card-label">Seuils de tension — Batteries 12V</div>
             <div class="doc-gauge">
               <div class="doc-gauge-bar-full">
-                <div class="doc-gauge-marker" style="left:25%"></div>
-                <div class="doc-gauge-marker" style="left:50%"></div>
-                <div class="doc-gauge-marker" style="left:75%"></div>
-              </div>
-              <div class="doc-gauge-labels">
-                <span>11.8 V<br><span class="doc-gl-v">0%</span></span>
-                <span>12.1 V<br><span class="doc-gl-v">25%</span></span>
-                <span>12.3 V<br><span class="doc-gl-v">50%</span></span>
-                <span>12.5 V<br><span class="doc-gl-v">75%</span></span>
-                <span>12.7 V<br><span class="doc-gl-v">100%</span></span>
+                <div class="doc-gauge-marker" style="left:25%" data-v="12.1 V · 25%"></div>
+                <div class="doc-gauge-marker" style="left:50%" data-v="12.3 V · 50%"></div>
+                <div class="doc-gauge-marker" style="left:75%" data-v="12.5 V · 75%"></div>
+                <span class="doc-gauge-edge left">11.8 V</span>
+                <span class="doc-gauge-edge right">12.7 V</span>
               </div>
               <div class="doc-gauge-zones">
                 <div class="doc-gauge-zone" style="background:rgba(255,59,48,.15);color:#ff3b30">Critique</div>
