@@ -1000,21 +1000,25 @@
             <svg viewBox="0 0 320 460" fill="none" style="width:100%;max-width:320px;display:block;margin:0 auto">
               <text x="225" y="14" fill="var(--text3)" font-size="9" text-anchor="middle" font-weight="600">Arrivée réservoir</text>
 
-              <!-- Bordures des tuyaux (gris foncé, plus épais) -->
-              <g stroke="#666" stroke-linecap="round" fill="none">
-                <path d="M225 24 L225 264" stroke-width="10"/>
-                <path d="M225 264 L225 440" stroke-width="10"/>
-                <path d="M120 70 L120 258 Q120 264 126 264 L225 264" stroke-width="9" stroke-linejoin="round"/>
-                <path d="M120 188 L38 188 Q32 188 32 194 L32 366 Q32 372 38 372 L210 372 C 218 372 219 362 225 362 C 231 362 232 372 240 372 L290 372" stroke-width="9" stroke-linejoin="round"/>
-                <path d="M100 406 L210 406 C 218 406 219 396 225 396 C 231 396 232 406 240 406 L285 406" stroke-width="9"/>
-              </g>
-
-              <!-- Tuyaux (gris) -->
+              <!-- Tuyau 2 (arrivée réservoir) -->
+              <path d="M225 24 L225 264" stroke="#666" stroke-width="10" stroke-linecap="round" fill="none"/>
               <path d="M225 24 L225 264" stroke="#999" stroke-width="7" stroke-linecap="round" fill="none"/>
-              <path d="M225 264 L225 440" stroke="#999" stroke-width="7" stroke-linecap="round" fill="none"/>
+
+              <!-- Tuyau 5 + 4 -->
+              <path d="M120 70 L120 258 Q120 264 126 264 L225 264" stroke="#666" stroke-width="9" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
               <path d="M120 70 L120 258 Q120 264 126 264 L225 264" stroke="#999" stroke-width="6" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
-              <path d="M120 188 L38 188 Q32 188 32 194 L32 366 Q32 372 38 372 L210 372 C 218 372 219 362 225 362 C 231 362 232 372 240 372 L290 372" stroke="#999" stroke-width="6" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
-              <path d="M100 406 L210 406 C 218 406 219 396 225 396 C 231 396 232 406 240 406 L285 406" stroke="#999" stroke-width="6" stroke-linecap="round" fill="none"/>
+
+              <!-- Tuyau 3 (passe SOUS 6 et 7, dessiné avant) -->
+              <path d="M225 264 L225 440" stroke="#666" stroke-width="10" stroke-linecap="round" fill="none"/>
+              <path d="M225 264 L225 440" stroke="#999" stroke-width="7" stroke-linecap="round" fill="none"/>
+
+              <!-- Tuyau 6 (droit, PAR-DESSUS 3) -->
+              <path d="M120 188 L38 188 Q32 188 32 194 L32 366 Q32 372 38 372 L290 372" stroke="#666" stroke-width="9" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+              <path d="M120 188 L38 188 Q32 188 32 194 L32 366 Q32 372 38 372 L290 372" stroke="#999" stroke-width="6" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+
+              <!-- Tuyau 7 (droit, PAR-DESSUS 3) -->
+              <path d="M100 406 L285 406" stroke="#666" stroke-width="9" stroke-linecap="round" fill="none"/>
+              <path d="M100 406 L285 406" stroke="#999" stroke-width="6" stroke-linecap="round" fill="none"/>
 
               <!-- Ligne pointillée séparant réservoir / sous la marche -->
               <line x1="10" y1="72" x2="310" y2="72" stroke="var(--text3)" stroke-width="1.5" stroke-dasharray="6 4"/>
