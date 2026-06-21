@@ -997,47 +997,49 @@
             <p>Dévisser la marche de la terrasse (tournevis sur le meuble d'entrée à droite).</p>
           </div>
           <div class="doc-card" style="padding:10px 8px">
-            <svg viewBox="0 0 300 330" fill="none" style="width:100%;max-width:320px;display:block;margin:0 auto">
-              <!-- Tuyau principal d'arrivée depuis le réservoir (courbe depuis le haut-droite) -->
-              <path d="M288 22 C 282 70 252 98 202 116 C 192 120 184 134 178 148" stroke="#4f8ef7" stroke-width="6" stroke-linecap="round" fill="none"/>
-              <text x="250" y="40" fill="var(--text3)" font-size="8.5" text-anchor="middle" font-weight="600">Arrivée</text>
-              <text x="250" y="51" fill="var(--text3)" font-size="8.5" text-anchor="middle" font-weight="600">réservoir</text>
+            <svg viewBox="0 0 300 340" fill="none" style="width:100%;max-width:320px;display:block;margin:0 auto">
+              <!-- Arrivée du réservoir vers vanne 2 -->
+              <path d="M150 14 L150 44" stroke="#34c759" stroke-width="6" stroke-linecap="round" fill="none"/>
+              <text x="150" y="10" fill="var(--text3)" font-size="8.5" text-anchor="middle" font-weight="600">Arrivée réservoir</text>
 
-              <!-- Branche montante vers vanne 5 (bachal) -->
-              <path d="M178 148 L160 120" stroke="#4f8ef7" stroke-width="5" stroke-linecap="round" fill="none"/>
+              <!-- Premier Y : de la vanne 2 vers 3 (extérieur) et 4 -->
+              <path d="M150 62 L150 88" stroke="#4f8ef7" stroke-width="5" stroke-linecap="round" fill="none"/>
+              <path d="M150 88 C 128 98 104 106 92 118" stroke="#ff9f0a" stroke-width="5" stroke-linecap="round" fill="none"/>
+              <path d="M150 88 C 172 98 196 106 208 118" stroke="#4f8ef7" stroke-width="5" stroke-linecap="round" fill="none"/>
 
-              <!-- Branche droite vers vanne 2 (chalet) puis coude descendant vers vanne 3 -->
-              <path d="M178 156 L228 156 C 236 162 238 174 238 196" stroke="#4f8ef7" stroke-width="5" stroke-linecap="round" fill="none"/>
+              <!-- Purge derrière la vanne 4 -->
+              <path d="M220 128 L244 122" stroke="#ff3b30" stroke-width="4" stroke-linecap="round" fill="none"/>
+              <circle cx="250" cy="121" r="6" fill="#ff3b30"/>
+              <text x="250" y="124" fill="#fff" font-size="8" text-anchor="middle" font-weight="700">P</text>
+              <text x="266" y="123" fill="var(--text3)" font-size="8" text-anchor="start">purge</text>
 
-              <!-- Branche gauche vers vanne 6 (chalet + bachal) -->
-              <path d="M178 162 C 152 170 128 172 108 174" stroke="#4f8ef7" stroke-width="5" stroke-linecap="round" fill="none"/>
-
-              <!-- Branche descendante vers vanne 4 (purge) -->
-              <path d="M178 164 L178 206" stroke="#ff3b30" stroke-width="5" stroke-linecap="round" fill="none"/>
-
-              <!-- Flexible tressé vers la purge du ballon (vanne 7) -->
-              <path d="M102 176 C 66 214 78 288 118 320" stroke="#8a93a6" stroke-width="4.5" stroke-linecap="round" stroke-dasharray="1 4" fill="none"/>
-
-              <!-- Tuyau horizontal du bas avec vanne 7 -->
-              <path d="M118 320 L224 320" stroke="#ff3b30" stroke-width="5" stroke-linecap="round" fill="none"/>
-
-              <!-- Raccord central (manifold) -->
-              <circle cx="178" cy="156" r="7" fill="var(--bg2)" stroke="var(--text3)" stroke-width="2"/>
+              <!-- Deuxième Y : de la vanne 4 vers 5 (bachal) et 6 (chalet) -->
+              <path d="M208 138 L208 170" stroke="#4f8ef7" stroke-width="5" stroke-linecap="round" fill="none"/>
+              <path d="M208 170 C 190 182 168 190 158 200" stroke="#4f8ef7" stroke-width="5" stroke-linecap="round" fill="none"/>
+              <path d="M208 170 C 226 182 248 190 258 200" stroke="#4f8ef7" stroke-width="5" stroke-linecap="round" fill="none"/>
 
               <!-- Vannes (cercles numérotés) -->
-              <circle cx="155" cy="114" r="11" fill="#4f8ef7"/><text x="155" y="118" fill="#fff" font-size="11" text-anchor="middle" font-weight="700">5</text>
-              <circle cx="208" cy="156" r="11" fill="#4f8ef7"/><text x="208" y="160" fill="#fff" font-size="11" text-anchor="middle" font-weight="700">2</text>
-              <circle cx="238" cy="200" r="11" fill="#ff9f0a"/><text x="238" y="204" fill="#fff" font-size="11" text-anchor="middle" font-weight="700">3</text>
-              <circle cx="114" cy="174" r="11" fill="#4f8ef7"/><text x="114" y="178" fill="#fff" font-size="11" text-anchor="middle" font-weight="700">6</text>
-              <circle cx="178" cy="192" r="11" fill="#ff3b30"/><text x="178" y="196" fill="#fff" font-size="11" text-anchor="middle" font-weight="700">4</text>
-              <circle cx="165" cy="320" r="11" fill="#ff3b30"/><text x="165" y="324" fill="#fff" font-size="11" text-anchor="middle" font-weight="700">7</text>
+              <circle cx="150" cy="53" r="11" fill="#34c759"/><text x="150" y="57" fill="#fff" font-size="11" text-anchor="middle" font-weight="700">2</text>
+              <circle cx="88" cy="124" r="11" fill="#ff9f0a"/><text x="88" y="128" fill="#fff" font-size="11" text-anchor="middle" font-weight="700">3</text>
+              <circle cx="208" cy="128" r="11" fill="#4f8ef7"/><text x="208" y="132" fill="#fff" font-size="11" text-anchor="middle" font-weight="700">4</text>
+              <circle cx="152" cy="207" r="11" fill="#4f8ef7"/><text x="152" y="211" fill="#fff" font-size="11" text-anchor="middle" font-weight="700">5</text>
+              <circle cx="264" cy="207" r="11" fill="#4f8ef7"/><text x="264" y="211" fill="#fff" font-size="11" text-anchor="middle" font-weight="700">6</text>
+
+              <!-- Séparateur : tuyau du ballon en dessous -->
+              <line x1="20" y1="258" x2="280" y2="258" stroke="var(--border)" stroke-width="1" stroke-dasharray="3 3"/>
+              <text x="150" y="278" fill="var(--text3)" font-size="8.5" text-anchor="middle" font-style="italic">Ballon d'eau chaude — tuyau séparé, en dessous</text>
+
+              <!-- Tuyau du ballon avec vanne 7 (purge) -->
+              <path d="M90 308 L210 308" stroke="#ff3b30" stroke-width="5" stroke-linecap="round" fill="none"/>
+              <circle cx="150" cy="308" r="11" fill="#ff3b30"/><text x="150" y="312" fill="#fff" font-size="11" text-anchor="middle" font-weight="700">7</text>
             </svg>
             <div class="doc-valve-legend">
-              <div><span class="doc-valve-dot" style="background:#4f8ef7">6</span> Alimentation chalet</div>
-              <div><span class="doc-valve-dot" style="background:#4f8ef7">5</span> Alimentation bachal</div>
-              <div><span class="doc-valve-dot" style="background:#4f8ef7">2</span> Chalet + bachal</div>
-              <div><span class="doc-valve-dot" style="background:#ff9f0a">3</span> Tuyau extérieur (hiver)</div>
-              <div><span class="doc-valve-dot" style="background:#ff3b30">4</span> Purge chalet + bachal</div>
+              <div><span class="doc-valve-dot" style="background:#34c759">2</span> Arrivée réservoir</div>
+              <div><span class="doc-valve-dot" style="background:#ff9f0a">3</span> Robinet extérieur (hiver)</div>
+              <div><span class="doc-valve-dot" style="background:#4f8ef7">4</span> Vers chalet + bachal</div>
+              <div><span class="doc-valve-dot" style="background:#ff3b30">P</span> Purge (derrière le 4)</div>
+              <div><span class="doc-valve-dot" style="background:#4f8ef7">5</span> Bachal</div>
+              <div><span class="doc-valve-dot" style="background:#4f8ef7">6</span> Chalet</div>
               <div><span class="doc-valve-dot" style="background:#ff3b30">7</span> Purge ballon eau chaude</div>
             </div>
           </div>
