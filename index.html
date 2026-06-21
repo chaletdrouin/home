@@ -1019,17 +1019,38 @@
               <circle cx="225" cy="264" r="4.5" fill="var(--bg2)" stroke="var(--text2)" stroke-width="2"/>
               <circle cx="120" cy="188" r="4.5" fill="var(--bg2)" stroke="#4f8ef7" stroke-width="2"/>
 
-              <!-- Robinets de purge sur 3, 4 et 5 -->
+              <!-- Robinets de purge sur 3, 4 et 5 (perpendiculaires au tuyau) -->
               <g>
-                <path d="M120 128 L137 119" stroke="#ff3b30" stroke-width="3" stroke-linecap="round"/>
-                <circle cx="142" cy="116" r="5.5" fill="#ff3b30"/>
-                <path d="M175 277 L175 290" stroke="#ff3b30" stroke-width="3" stroke-linecap="round"/>
-                <circle cx="175" cy="295" r="5.5" fill="#ff3b30"/>
-                <path d="M238 298 L251 298" stroke="#ff3b30" stroke-width="3" stroke-linecap="round"/>
-                <circle cx="256" cy="298" r="5.5" fill="#ff3b30"/>
+                <!-- purge 5 : perpendiculaire (horizontale), dans l'axe de la vanne 5 -->
+                <line x1="120" y1="140" x2="143" y2="140" stroke="#ff3b30" stroke-width="3" stroke-linecap="round"/>
+                <rect x="146" y="135.5" width="9" height="9" rx="2" fill="#ff3b30"/>
+                <!-- purge 4 : perpendiculaire (verticale) -->
+                <line x1="175" y1="264" x2="175" y2="289" stroke="#ff3b30" stroke-width="3" stroke-linecap="round"/>
+                <rect x="170.5" y="290" width="9" height="9" rx="2" fill="#ff3b30"/>
+                <!-- purge 3 : perpendiculaire (horizontale) -->
+                <line x1="225" y1="316" x2="245" y2="316" stroke="#ff3b30" stroke-width="3" stroke-linecap="round"/>
+                <rect x="247" y="311.5" width="9" height="9" rx="2" fill="#ff3b30"/>
               </g>
 
-              <!-- Vannes (badges numérotés avec anneau de séparation) -->
+              <!-- Poignées de vanne (leviers rouges, comme sur la photo) -->
+              <g stroke="#ff3b30" stroke-width="5" stroke-linecap="round">
+                <line x1="238" y1="115" x2="251" y2="115"/>
+                <line x1="102" y1="140" x2="89" y2="140"/>
+                <line x1="175" y1="251" x2="175" y2="239"/>
+                <line x1="76" y1="175" x2="76" y2="163"/>
+                <line x1="212" y1="298" x2="199" y2="298"/>
+                <line x1="108" y1="379" x2="108" y2="391"/>
+              </g>
+              <g fill="#ff3b30">
+                <circle cx="254" cy="115" r="3.5"/>
+                <circle cx="86" cy="140" r="3.5"/>
+                <circle cx="175" cy="236" r="3.5"/>
+                <circle cx="76" cy="160" r="3.5"/>
+                <circle cx="196" cy="298" r="3.5"/>
+                <circle cx="108" cy="394" r="3.5"/>
+              </g>
+
+              <!-- Corps des vannes (badges numérotés, comme les pastilles de la photo) -->
               <g font-size="12" font-weight="700" text-anchor="middle">
                 <circle cx="225" cy="115" r="13" fill="var(--bg2)"/><circle cx="225" cy="115" r="11" fill="#34c759"/><text x="225" y="119" fill="#fff">2</text>
                 <circle cx="120" cy="140" r="13" fill="var(--bg2)"/><circle cx="120" cy="140" r="11" fill="#4f8ef7"/><text x="120" y="144" fill="#fff">5</text>
