@@ -2128,7 +2128,15 @@ function switchDocTab(idx) {
 }
 
 // ── Water pipe diagram modes ──
+var waterModeInited = false;
 function setWaterMode(mode) {
+  var svg = document.getElementById('pipe-svg');
+  if (!waterModeInited && svg) {
+    svg.style.setProperty('--t', '0s');
+    svg.querySelectorAll('.valve-part, .valve-color, .water-path').forEach(function(el) {
+      el.style.transition = 'none';
+    });
+  }
   document.querySelectorAll('.pipe-btn').forEach(function(b) {
     b.classList.toggle('active', b.dataset.mode === mode);
   });
@@ -2206,6 +2214,15 @@ function setWaterMode(mode) {
     var el = document.getElementById(id);
     if (el) el.setAttribute('opacity', wf[id] ? '0.7' : '0');
   });
+
+  if (!waterModeInited && svg) {
+    requestAnimationFrame(function(){ requestAnimationFrame(function(){
+      svg.querySelectorAll('.valve-part, .valve-color, .water-path').forEach(function(el) {
+        el.style.transition = '';
+      });
+      waterModeInited = true;
+    }); });
+  }
 }
 
 // ── Swipe between sections ──
@@ -2512,6 +2529,7 @@ function refreshPill() {
   }
 }
 refreshPill();
+setWaterMode('hivernage');
 moveTabPill(document.getElementById('doc-tabs'));
 new ResizeObserver(function(){
   var pill = document.getElementById('nav-pill');
