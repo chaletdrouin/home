@@ -1019,11 +1019,18 @@
               <circle cx="225" cy="264" r="4.5" fill="var(--bg2)" stroke="var(--text2)" stroke-width="2"/>
               <circle cx="120" cy="188" r="4.5" fill="var(--bg2)" stroke="#4f8ef7" stroke-width="2"/>
 
-              <!-- Purges : points rouges sur le tuyau -->
-              <g fill="#ff3b30">
-                <circle cx="120" cy="160" r="5"/>
-                <circle cx="155" cy="264" r="5"/>
-                <circle cx="225" cy="272" r="5"/>
+              <!-- Purges : robinets à clapet (arc ouvert + point) -->
+              <g>
+                <path d="M 115 154 A 8 8 0 1 0 125 154" fill="none" stroke="#ff3b30" stroke-width="2" stroke-linecap="round"/>
+                <circle cx="125" cy="154" r="2.5" fill="#ff3b30"/>
+              </g>
+              <g>
+                <path d="M 150 258 A 8 8 0 1 0 160 258" fill="none" stroke="#ff3b30" stroke-width="2" stroke-linecap="round"/>
+                <circle cx="160" cy="258" r="2.5" fill="#ff3b30"/>
+              </g>
+              <g>
+                <path d="M 220 266 A 8 8 0 1 0 230 266" fill="none" stroke="#ff3b30" stroke-width="2" stroke-linecap="round"/>
+                <circle cx="230" cy="266" r="2.5" fill="#ff3b30"/>
               </g>
 
               <!-- Vanne 2 : robinet 90° (ligne rouge horizontale des deux côtés du badge) -->
