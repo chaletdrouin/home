@@ -1560,6 +1560,19 @@ function repaintToggles() {
   document.querySelectorAll('.inv-toggle').forEach(function(t){ t.style.display = 'none'; t.offsetHeight; t.style.display = ''; });
 }
 
+function updateInvDate() {
+  if (!invUpdatedAt) return;
+  var d = new Date(invUpdatedAt);
+  var txt = 'Modifié le ' + d.toLocaleDateString('fr-FR', { day: 'numeric', month: 'long', year: 'numeric' }) + ' à ' + d.toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' });
+  var el = document.querySelector('.inv-updated');
+  if (!el) {
+    el = document.createElement('div');
+    el.className = 'inv-updated';
+    document.getElementById('inv-body').appendChild(el);
+  }
+  el.textContent = txt;
+}
+
 function invAddClick() {
   const existing = document.querySelector('.inv-add-row');
   if (existing) { existing.querySelector('input').focus(); return; }
@@ -1643,11 +1656,7 @@ async function setInvQty(id, level, btn) {
       body: JSON.stringify({ qty: level })
     });
     invUpdatedAt = new Date().toISOString();
-    var el = document.querySelector('.inv-updated');
-    if (el) {
-      var d = new Date(invUpdatedAt);
-      el.textContent = 'Modifié le ' + d.toLocaleDateString('fr-FR', { day: 'numeric', month: 'long', year: 'numeric' }) + ' à ' + d.toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' });
-    }
+    updateInvDate();
   } catch {}
 }
 
