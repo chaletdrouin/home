@@ -1007,17 +1007,18 @@
 <div class="doc-card" style="padding:10px 8px">
             <div class="pipe-layout">
             <svg id="pipe-svg" viewBox="0 0 320 460" fill="none" style="width:100%;max-width:320px;display:block">
-              <!-- Tuyaux bordures -->
+              <!-- Tuyaux Y : bordures d'abord -->
               <path d="M225 24 L225 264" stroke="#333" stroke-width="15" stroke-linecap="round" fill="none"/>
               <path d="M120 90 L120 258 Q120 264 126 264 L225 264" stroke="#333" stroke-width="15" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
               <path d="M225 264 L225 440" stroke="#333" stroke-width="15" stroke-linecap="round" fill="none"/>
-              <path d="M120 188 L38 188 Q32 188 32 194 L32 366 Q32 372 38 372 L290 372" stroke="#333" stroke-width="15" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
-              <path d="M100 406 L285 406" stroke="#333" stroke-width="15" stroke-linecap="round" fill="none"/>
-              <!-- Tuyaux remplissage -->
+              <!-- Tuyaux Y : remplissage par-dessus (couvre les bordures aux Y) -->
               <path d="M225 24 L225 264" stroke="#999" stroke-width="11" stroke-linecap="round" fill="none"/>
               <path d="M120 90 L120 258 Q120 264 126 264 L225 264" stroke="#999" stroke-width="11" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
               <path d="M225 264 L225 440" stroke="#999" stroke-width="11" stroke-linecap="round" fill="none"/>
+              <!-- Tuyaux 6 et 7 : paires bordure+remplissage PAR-DESSUS tuyau 3 (croisements) -->
+              <path d="M120 188 L38 188 Q32 188 32 194 L32 366 Q32 372 38 372 L290 372" stroke="#333" stroke-width="15" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
               <path d="M120 188 L38 188 Q32 188 32 194 L32 366 Q32 372 38 372 L290 372" stroke="#999" stroke-width="11" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+              <path d="M100 406 L285 406" stroke="#333" stroke-width="15" stroke-linecap="round" fill="none"/>
               <path d="M100 406 L285 406" stroke="#999" stroke-width="11" stroke-linecap="round" fill="none"/>
 
               <!-- Eau (bleu, sous les éléments de vanne) -->
