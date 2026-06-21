@@ -2142,9 +2142,9 @@ function setWaterMode(mode) {
   });
 
   var modes = {
-    ete:      { v1:'open', v2:'open', v3:'closed', v4:'open', v5:'open', v6:'open', v7:'closed', purges:'closed' },
-    hiver:    { v1:'open', v2:'open', v3:'open',   v4:'closed', v5:'open', v6:'open', v7:'open', purges:'closed' },
-    hivernage:{ v1:'closed', v2:'open', v3:'open', v4:'open', v5:'open', v6:'open', v7:'open', purges:'open' }
+    ete:      { v1:'open', v2:'open', v3:'closed', v4:'open', v5:'open', v6:'open', v7:'closed', p1:'closed', p5:'closed', p4:'closed', p3:'closed' },
+    hiver:    { v1:'open', v2:'open', v3:'open',   v4:'closed', v5:'open', v6:'open', v7:'open', p1:'closed', p5:'closed', p4:'open', p3:'closed' },
+    hivernage:{ v1:'closed', v2:'open', v3:'open', v4:'open', v5:'open', v6:'open', v7:'open', p1:'open', p5:'open', p4:'open', p3:'open' }
   };
   var s = modes[mode];
 
@@ -2188,19 +2188,16 @@ function setWaterMode(mode) {
   }
 
   // Purges
-  var purgeOpen = s.purges==='open';
-  ['purge1','purge5','purge4','purge3'].forEach(function(id) {
-    var g = document.getElementById(id);
-    if (!g) return;
-    g.querySelectorAll('.valve-color').forEach(function(el) {
+  [['purge1','p1-dot','p1'],['purge5','p5-dot','p5'],['purge4','p4-dot','p4'],['purge3','p3-dot','p3']].forEach(function(t) {
+    var g = document.getElementById(t[0]);
+    var open = s[t[2]]==='open';
+    if (g) g.querySelectorAll('.valve-color').forEach(function(el) {
       var tag = el.tagName.toLowerCase();
-      if (tag === 'path') el.setAttribute('stroke', purgeOpen ? openColor : closedColor);
-      if (tag === 'circle') el.setAttribute('fill', purgeOpen ? openColor : closedColor);
+      if (tag === 'path') el.setAttribute('stroke', open ? openColor : closedColor);
+      if (tag === 'circle') el.setAttribute('fill', open ? openColor : closedColor);
     });
-  });
-  ['p1-dot','p5-dot','p4-dot','p3-dot'].forEach(function(id) {
-    var dot = document.getElementById(id);
-    if (dot) dot.style.transform = purgeOpen ? 'rotate(-283deg)' : '';
+    var dot = document.getElementById(t[1]);
+    if (dot) dot.style.transform = open ? 'rotate(-283deg)' : '';
   });
 
   // Water flow
