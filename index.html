@@ -798,19 +798,27 @@
       display: flex; gap: 8px; align-items: flex-start; margin-bottom: 10px;
     }
     .doc-warn svg { flex-shrink: 0; margin-top: 1px; }
-    .doc-gauge {
-      display: flex; flex-direction: column; gap: 0;
-      border-radius: 10px; overflow: hidden; margin: 8px 0;
+    .doc-gauge { margin: 8px 0; }
+    .doc-gauge-bar-full {
+      height: 28px; border-radius: 14px; position: relative;
+      background: linear-gradient(to right, #ff3b30 0%, #ff9f0a 25%, #ffcc00 50%, #30d158 75%, #34c759 100%);
     }
-    .doc-gauge-row {
-      display: flex; align-items: center; padding: 8px 12px;
-      font-size: 13px; font-weight: 600;
+    .doc-gauge-marker {
+      position: absolute; top: 0; bottom: 0; width: 2px; background: rgba(0,0,0,.5);
     }
-    .doc-gauge-row:not(:last-child) { border-bottom: 1px solid rgba(255,255,255,.06); }
-    .doc-gauge-pct { width: 40px; }
-    .doc-gauge-v { width: 55px; text-align: right; font-variant-numeric: tabular-nums; }
-    .doc-gauge-bar { flex: 1; height: 6px; border-radius: 3px; background: rgba(255,255,255,.06); margin: 0 10px; position: relative; overflow: hidden; }
-    .doc-gauge-fill { position: absolute; left: 0; top: 0; bottom: 0; border-radius: 3px; }
+    .doc-gauge-labels {
+      display: flex; justify-content: space-between; padding: 6px 2px 0;
+      font-size: 11px; font-weight: 600; color: var(--text2);
+    }
+    .doc-gauge-labels span { text-align: center; font-variant-numeric: tabular-nums; }
+    .doc-gauge-labels .doc-gl-v { font-size: 10px; color: var(--text3); }
+    .doc-gauge-zones {
+      display: flex; margin-top: 8px; gap: 4px;
+    }
+    .doc-gauge-zone {
+      flex: 1; border-radius: 8px; padding: 6px 0; text-align: center;
+      font-size: 11px; font-weight: 600;
+    }
     .doc-link {
       display: flex; align-items: center; gap: 10px;
       background: var(--bg2); border-radius: 12px; padding: 12px 14px;
@@ -942,30 +950,23 @@
           <div class="doc-card">
             <div class="doc-card-label">Seuils de tension — Batteries 12V</div>
             <div class="doc-gauge">
-              <div class="doc-gauge-row">
-                <span class="doc-gauge-pct" style="color:#34c759">100%</span>
-                <span class="doc-gauge-bar"><span class="doc-gauge-fill" style="width:100%;background:#34c759"></span></span>
-                <span class="doc-gauge-v">12.7 V</span>
+              <div class="doc-gauge-bar-full">
+                <div class="doc-gauge-marker" style="left:25%"></div>
+                <div class="doc-gauge-marker" style="left:50%"></div>
+                <div class="doc-gauge-marker" style="left:75%"></div>
               </div>
-              <div class="doc-gauge-row">
-                <span class="doc-gauge-pct" style="color:#30d158">75%</span>
-                <span class="doc-gauge-bar"><span class="doc-gauge-fill" style="width:75%;background:#30d158"></span></span>
-                <span class="doc-gauge-v">12.5 V</span>
+              <div class="doc-gauge-labels">
+                <span>11.8 V<br><span class="doc-gl-v">0%</span></span>
+                <span>12.1 V<br><span class="doc-gl-v">25%</span></span>
+                <span>12.3 V<br><span class="doc-gl-v">50%</span></span>
+                <span>12.5 V<br><span class="doc-gl-v">75%</span></span>
+                <span>12.7 V<br><span class="doc-gl-v">100%</span></span>
               </div>
-              <div class="doc-gauge-row">
-                <span class="doc-gauge-pct" style="color:#ffcc00">50%</span>
-                <span class="doc-gauge-bar"><span class="doc-gauge-fill" style="width:50%;background:#ffcc00"></span></span>
-                <span class="doc-gauge-v">12.3 V</span>
-              </div>
-              <div class="doc-gauge-row">
-                <span class="doc-gauge-pct" style="color:#ff9f0a">25%</span>
-                <span class="doc-gauge-bar"><span class="doc-gauge-fill" style="width:25%;background:#ff9f0a"></span></span>
-                <span class="doc-gauge-v">12.1 V</span>
-              </div>
-              <div class="doc-gauge-row">
-                <span class="doc-gauge-pct" style="color:#ff3b30">0%</span>
-                <span class="doc-gauge-bar"><span class="doc-gauge-fill" style="width:8%;background:#ff3b30"></span></span>
-                <span class="doc-gauge-v">11.8 V</span>
+              <div class="doc-gauge-zones">
+                <div class="doc-gauge-zone" style="background:rgba(255,59,48,.15);color:#ff3b30">Critique</div>
+                <div class="doc-gauge-zone" style="background:rgba(255,159,10,.15);color:#ff9f0a">Faible</div>
+                <div class="doc-gauge-zone" style="background:rgba(255,204,0,.15);color:#ffcc00">Correct</div>
+                <div class="doc-gauge-zone" style="background:rgba(52,199,89,.15);color:#34c759">Optimal</div>
               </div>
             </div>
           </div>
