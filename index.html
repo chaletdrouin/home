@@ -811,16 +811,18 @@
       display: flex; align-items: center; justify-content: center;
       font-size: 10px; font-weight: 700; color: #fff;
     }
-    .doc-valve-state {
-      display: grid; grid-template-columns: repeat(4, 1fr); gap: 5px;
-      margin-top: 8px;
+    .pipe-layout { display: flex; gap: 8px; align-items: flex-start; }
+    .pipe-btns { display: flex; flex-direction: column; gap: 6px; flex-shrink: 0; }
+    .pipe-btn {
+      width: 40px; height: 40px; border-radius: 10px; border: 2px solid var(--border);
+      background: var(--bg2); display: flex; align-items: center; justify-content: center;
+      cursor: pointer; transition: border-color .2s, background .2s;
     }
-    .doc-valve-state > div {
-      display: flex; align-items: center; gap: 5px;
-      font-size: 10.5px; color: var(--text2); line-height: 1.2;
-    }
-    .doc-valve-state .v-open { color: #34c759; font-weight: 700; font-size: 9px; }
-    .doc-valve-state .v-closed { color: #ff3b30; font-weight: 700; font-size: 9px; }
+    .pipe-btn.active { border-color: #4f8ef7; background: rgba(79,142,247,.12); }
+    .pipe-btn svg { width: 20px; height: 20px; }
+    .valve-part { transition: transform .5s ease; }
+    .valve-color { transition: stroke .5s ease, fill .5s ease; }
+    .water-path { transition: opacity .5s ease; }
     .doc-gauge { margin: 8px 0; }
     .doc-gauge-bar-full {
       height: 28px; border-radius: 14px; position: relative;
@@ -959,16 +961,6 @@
             <p><strong>1.</strong> Fermer les robinets intérieurs<br>
             <strong>2.</strong> Fermer la vanne du tuyau hiver<br>
             <strong>3.</strong> Ouvrir au réservoir et fermer la purge</p>
-            <div class="doc-valve-state">
-              <div><span class="doc-valve-dot" style="background:#34c759;width:16px;height:16px;font-size:9px">1</span> <span class="v-open">ouvert</span></div>
-              <div><span class="doc-valve-dot" style="background:#34c759;width:16px;height:16px;font-size:9px">2</span> <span class="v-open">ouvert</span></div>
-              <div><span class="doc-valve-dot" style="background:#ff9f0a;width:16px;height:16px;font-size:9px">3</span> <span class="v-closed">fermé</span></div>
-              <div><span class="doc-valve-dot" style="background:#4f8ef7;width:16px;height:16px;font-size:9px">4</span> <span class="v-open">ouvert</span></div>
-              <div><span class="doc-valve-dot" style="background:#4f8ef7;width:16px;height:16px;font-size:9px">5</span> <span class="v-open">ouvert</span></div>
-              <div><span class="doc-valve-dot" style="background:#4f8ef7;width:16px;height:16px;font-size:9px">6</span> <span class="v-open">ouvert</span></div>
-              <div><span class="doc-valve-dot" style="background:#ff3b30;width:16px;height:16px;font-size:9px">7</span> <span class="v-closed">fermé</span></div>
-              <div><span style="font-size:10.5px;color:var(--text2)">Purges : <span class="v-closed">fermées</span></span></div>
-            </div>
           </div>
         </div>
 
@@ -983,16 +975,6 @@
             <p><strong>1.</strong> Fermer la vanne du chalet et du bachal<br>
             <strong>2.</strong> Déneiger au besoin le tuyau hiver - piquet sous le chalet<br>
             <strong>3.</strong> Ouvrir au réservoir et fermer la purge</p>
-            <div class="doc-valve-state">
-              <div><span class="doc-valve-dot" style="background:#34c759;width:16px;height:16px;font-size:9px">1</span> <span class="v-open">ouvert</span></div>
-              <div><span class="doc-valve-dot" style="background:#34c759;width:16px;height:16px;font-size:9px">2</span> <span class="v-open">ouvert</span></div>
-              <div><span class="doc-valve-dot" style="background:#ff9f0a;width:16px;height:16px;font-size:9px">3</span> <span class="v-open">ouvert</span></div>
-              <div><span class="doc-valve-dot" style="background:#4f8ef7;width:16px;height:16px;font-size:9px">4</span> <span class="v-open">ouvert</span></div>
-              <div><span class="doc-valve-dot" style="background:#4f8ef7;width:16px;height:16px;font-size:9px">5</span> <span class="v-closed">fermé</span></div>
-              <div><span class="doc-valve-dot" style="background:#4f8ef7;width:16px;height:16px;font-size:9px">6</span> <span class="v-closed">fermé</span></div>
-              <div><span class="doc-valve-dot" style="background:#ff3b30;width:16px;height:16px;font-size:9px">7</span> <span class="v-closed">fermé</span></div>
-              <div><span style="font-size:10.5px;color:var(--text2)">Purges : <span class="v-closed">fermées</span></span></div>
-            </div>
           </div>
         </div>
 
@@ -1008,16 +990,6 @@
             <strong>2.</strong> Vidanger le ballon d'eau chaude<br>
             <strong>3.</strong> Ouvrir toutes les vannes<br>
             <strong>4.</strong> Ouvrir tous les robinets</p>
-            <div class="doc-valve-state">
-              <div><span class="doc-valve-dot" style="background:#34c759;width:16px;height:16px;font-size:9px">1</span> <span class="v-closed">fermé</span></div>
-              <div><span class="doc-valve-dot" style="background:#34c759;width:16px;height:16px;font-size:9px">2</span> <span class="v-open">ouvert</span></div>
-              <div><span class="doc-valve-dot" style="background:#ff9f0a;width:16px;height:16px;font-size:9px">3</span> <span class="v-open">ouvert</span></div>
-              <div><span class="doc-valve-dot" style="background:#4f8ef7;width:16px;height:16px;font-size:9px">4</span> <span class="v-open">ouvert</span></div>
-              <div><span class="doc-valve-dot" style="background:#4f8ef7;width:16px;height:16px;font-size:9px">5</span> <span class="v-open">ouvert</span></div>
-              <div><span class="doc-valve-dot" style="background:#4f8ef7;width:16px;height:16px;font-size:9px">6</span> <span class="v-open">ouvert</span></div>
-              <div><span class="doc-valve-dot" style="background:#ff3b30;width:16px;height:16px;font-size:9px">7</span> <span class="v-open">ouvert</span></div>
-              <div><span style="font-size:10.5px;color:var(--text2)">Purges : <span class="v-open">ouvertes</span></span></div>
-            </div>
           </div>
           <div class="doc-warn">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
@@ -1037,86 +1009,94 @@
             <p>Dévisser la marche de la terrasse (tournevis sur le meuble d'entrée à droite).</p>
           </div>
           <div class="doc-card" style="padding:10px 8px">
-            <svg viewBox="0 0 320 460" fill="none" style="width:100%;max-width:320px;display:block;margin:0 auto">
+            <div class="pipe-layout">
+            <svg id="pipe-svg" viewBox="0 0 320 460" fill="none" style="width:100%;max-width:320px;display:block">
               <text x="225" y="14" fill="var(--text3)" font-size="9" text-anchor="middle" font-weight="600">Arrivée réservoir</text>
 
-              <!-- Tuyau 2 (arrivée réservoir) -->
+              <!-- Tuyaux (bordure + remplissage) -->
               <path d="M225 24 L225 264" stroke="#333" stroke-width="15" stroke-linecap="round" fill="none"/>
               <path d="M225 24 L225 264" stroke="#999" stroke-width="11" stroke-linecap="round" fill="none"/>
-
-              <!-- Tuyau 5 + 4 -->
               <path d="M120 90 L120 258 Q120 264 126 264 L225 264" stroke="#333" stroke-width="15" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
               <path d="M120 90 L120 258 Q120 264 126 264 L225 264" stroke="#999" stroke-width="11" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
-
-              <!-- Tuyau 3 (passe SOUS 6 et 7, dessiné avant) -->
               <path d="M225 264 L225 440" stroke="#333" stroke-width="15" stroke-linecap="round" fill="none"/>
               <path d="M225 264 L225 440" stroke="#999" stroke-width="11" stroke-linecap="round" fill="none"/>
-
-              <!-- Tuyau 6 (droit, PAR-DESSUS 3) -->
               <path d="M120 188 L38 188 Q32 188 32 194 L32 366 Q32 372 38 372 L290 372" stroke="#333" stroke-width="15" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
               <path d="M120 188 L38 188 Q32 188 32 194 L32 366 Q32 372 38 372 L290 372" stroke="#999" stroke-width="11" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
-
-              <!-- Tuyau 7 (droit, PAR-DESSUS 3) -->
               <path d="M100 406 L285 406" stroke="#333" stroke-width="15" stroke-linecap="round" fill="none"/>
               <path d="M100 406 L285 406" stroke="#999" stroke-width="11" stroke-linecap="round" fill="none"/>
 
-              <!-- Ligne pointillée séparant réservoir / sous la marche -->
+              <!-- Eau (bleu, sous les éléments de vanne) -->
+              <path id="w2" class="water-path" d="M225 24 L225 264" stroke="#4f8ef7" stroke-width="6" stroke-linecap="round" fill="none" opacity="0"/>
+              <path id="w54" class="water-path" d="M120 90 L120 258 Q120 264 126 264 L225 264" stroke="#4f8ef7" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" fill="none" opacity="0"/>
+              <path id="w3" class="water-path" d="M225 264 L225 440" stroke="#4f8ef7" stroke-width="6" stroke-linecap="round" fill="none" opacity="0"/>
+              <path id="w6" class="water-path" d="M120 188 L38 188 Q32 188 32 194 L32 366 Q32 372 38 372 L290 372" stroke="#4f8ef7" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" fill="none" opacity="0"/>
+              <path id="w7" class="water-path" d="M100 406 L285 406" stroke="#4f8ef7" stroke-width="5" stroke-linecap="round" fill="none" opacity="0"/>
+
+              <!-- Ligne pointillée réservoir / sous la marche -->
               <line x1="10" y1="72" x2="310" y2="72" stroke="var(--text3)" stroke-width="1.5" stroke-dasharray="6 4"/>
               <text x="30" y="66" fill="var(--text3)" font-size="8" font-weight="600">Réservoir</text>
               <text x="30" y="82" fill="var(--text3)" font-size="8" font-weight="600">Sous la marche</text>
 
-              <!-- Raccords (jonctions Y, masquent les bordures fermantes) -->
+              <!-- Raccords Y -->
               <circle cx="225" cy="264" r="8" fill="#999"/>
               <circle cx="120" cy="188" r="8" fill="#999"/>
 
-              <!-- Purges : extension tuyau perpendiculaire + clapet (arc centré sur point rouge + point au bout) -->
-              <!-- Purge 1 (pipe 2, 7px sous badge 1) -->
-              <g>
-                <line x1="230" y1="58" x2="245" y2="58" stroke="#333" stroke-width="8" stroke-linecap="round"/>
-                <line x1="225" y1="58" x2="245" y2="58" stroke="#999" stroke-width="5" stroke-linecap="round"/>
-                <path d="M 240 64 A 8 8 0 1 1 250 64" fill="none" stroke="#ff3b30" stroke-width="2" stroke-linecap="round"/>
-                <circle cx="250" cy="64" r="2.5" fill="#ff3b30"/>
-                <circle cx="245" cy="58" r="3" fill="#ff3b30"/>
+              <!-- Extensions de purge (tuyaux) -->
+              <line x1="230" y1="58" x2="245" y2="58" stroke="#333" stroke-width="8" stroke-linecap="round"/>
+              <line x1="225" y1="58" x2="245" y2="58" stroke="#999" stroke-width="5" stroke-linecap="round"/>
+              <line x1="125" y1="155" x2="140" y2="155" stroke="#333" stroke-width="8" stroke-linecap="round"/>
+              <line x1="120" y1="155" x2="140" y2="155" stroke="#999" stroke-width="5" stroke-linecap="round"/>
+              <line x1="155" y1="269" x2="155" y2="284" stroke="#333" stroke-width="8" stroke-linecap="round"/>
+              <line x1="155" y1="264" x2="155" y2="284" stroke="#999" stroke-width="5" stroke-linecap="round"/>
+              <line x1="230" y1="302" x2="245" y2="302" stroke="#333" stroke-width="8" stroke-linecap="round"/>
+              <line x1="225" y1="302" x2="245" y2="302" stroke="#999" stroke-width="5" stroke-linecap="round"/>
+
+              <!-- Purges (clapet arc + points) -->
+              <g id="purge1">
+                <path class="valve-color" d="M 240 64 A 8 8 0 1 1 250 64" fill="none" stroke="#ff3b30" stroke-width="2" stroke-linecap="round"/>
+                <circle class="valve-color" id="p1-dot" cx="250" cy="64" r="2.5" fill="#ff3b30"/>
+                <circle class="valve-color" cx="245" cy="58" r="3" fill="#ff3b30"/>
               </g>
-              <!-- Purge 5 (pipe 5, 7px sous badge 5) -->
-              <g>
-                <line x1="125" y1="155" x2="140" y2="155" stroke="#333" stroke-width="8" stroke-linecap="round"/>
-                <line x1="120" y1="155" x2="140" y2="155" stroke="#999" stroke-width="5" stroke-linecap="round"/>
-                <path d="M 135 161 A 8 8 0 1 1 145 161" fill="none" stroke="#ff3b30" stroke-width="2" stroke-linecap="round"/>
-                <circle cx="145" cy="161" r="2.5" fill="#ff3b30"/>
-                <circle cx="140" cy="155" r="3" fill="#ff3b30"/>
+              <g id="purge5">
+                <path class="valve-color" d="M 135 161 A 8 8 0 1 1 145 161" fill="none" stroke="#ff3b30" stroke-width="2" stroke-linecap="round"/>
+                <circle class="valve-color" id="p5-dot" cx="145" cy="161" r="2.5" fill="#ff3b30"/>
+                <circle class="valve-color" cx="140" cy="155" r="3" fill="#ff3b30"/>
               </g>
-              <!-- Purge 4 (pipe horizontale, 7px à gauche de badge 4) -->
-              <g>
-                <line x1="155" y1="269" x2="155" y2="284" stroke="#333" stroke-width="8" stroke-linecap="round"/>
-                <line x1="155" y1="264" x2="155" y2="284" stroke="#999" stroke-width="5" stroke-linecap="round"/>
-                <path d="M 150 290 A 8 8 0 1 1 160 290" fill="none" stroke="#ff3b30" stroke-width="2" stroke-linecap="round"/>
-                <circle cx="160" cy="290" r="2.5" fill="#ff3b30"/>
-                <circle cx="155" cy="284" r="3" fill="#ff3b30"/>
+              <g id="purge4">
+                <path class="valve-color" d="M 150 290 A 8 8 0 1 1 160 290" fill="none" stroke="#ff3b30" stroke-width="2" stroke-linecap="round"/>
+                <circle class="valve-color" id="p4-dot" cx="160" cy="290" r="2.5" fill="#ff3b30"/>
+                <circle class="valve-color" cx="155" cy="284" r="3" fill="#ff3b30"/>
               </g>
-              <!-- Purge 3 (pipe 3, 10px au-dessus de badge 3 clapet) -->
-              <g>
-                <line x1="230" y1="302" x2="245" y2="302" stroke="#333" stroke-width="8" stroke-linecap="round"/>
-                <line x1="225" y1="302" x2="245" y2="302" stroke="#999" stroke-width="5" stroke-linecap="round"/>
-                <path d="M 240 308 A 8 8 0 1 1 250 308" fill="none" stroke="#ff3b30" stroke-width="2" stroke-linecap="round"/>
-                <circle cx="250" cy="308" r="2.5" fill="#ff3b30"/>
-                <circle cx="245" cy="302" r="3" fill="#ff3b30"/>
+              <g id="purge3">
+                <path class="valve-color" d="M 240 308 A 8 8 0 1 1 250 308" fill="none" stroke="#ff3b30" stroke-width="2" stroke-linecap="round"/>
+                <circle class="valve-color" id="p3-dot" cx="250" cy="308" r="2.5" fill="#ff3b30"/>
+                <circle class="valve-color" cx="245" cy="302" r="3" fill="#ff3b30"/>
               </g>
 
-              <!-- Vanne 2 : robinet 1/4 tour (lignes rouges des deux côtés) -->
-              <line x1="210" y1="115" x2="198" y2="115" stroke="#ff3b30" stroke-width="6" stroke-linecap="round"/>
-              <line x1="240" y1="115" x2="252" y2="115" stroke="#ff3b30" stroke-width="6" stroke-linecap="round"/>
-
-              <!-- Poignées de vanne (leviers rouges) -->
-              <g stroke="#ff3b30" stroke-width="6" stroke-linecap="round">
-                <line x1="210" y1="38" x2="192" y2="38"/>
-                <line x1="105" y1="135" x2="87" y2="135"/>
-                <line x1="175" y1="249" x2="175" y2="231"/>
-                <line x1="76" y1="203" x2="76" y2="221"/>
-                <line x1="108" y1="421" x2="108" y2="439"/>
+              <!-- Vanne 2 : 1/4 tour -->
+              <g id="v2-lever" class="valve-part" style="transform-origin:225px 115px">
+                <line class="valve-color" x1="210" y1="115" x2="198" y2="115" stroke="#ff3b30" stroke-width="6" stroke-linecap="round"/>
+                <line class="valve-color" x1="240" y1="115" x2="252" y2="115" stroke="#ff3b30" stroke-width="6" stroke-linecap="round"/>
               </g>
 
-              <!-- Corps des vannes (badges numérotés) -->
+              <!-- Leviers de vannes -->
+              <g id="v1-lever" class="valve-part" style="transform-origin:225px 38px">
+                <line class="valve-color" x1="210" y1="38" x2="192" y2="38" stroke="#ff3b30" stroke-width="6" stroke-linecap="round"/>
+              </g>
+              <g id="v5-lever" class="valve-part" style="transform-origin:120px 135px">
+                <line class="valve-color" x1="105" y1="135" x2="87" y2="135" stroke="#ff3b30" stroke-width="6" stroke-linecap="round"/>
+              </g>
+              <g id="v4-lever" class="valve-part" style="transform-origin:175px 264px">
+                <line class="valve-color" x1="175" y1="249" x2="175" y2="231" stroke="#ff3b30" stroke-width="6" stroke-linecap="round"/>
+              </g>
+              <g id="v6-lever" class="valve-part" style="transform-origin:76px 188px">
+                <line class="valve-color" x1="76" y1="203" x2="76" y2="221" stroke="#ff3b30" stroke-width="6" stroke-linecap="round"/>
+              </g>
+              <g id="v7-lever" class="valve-part" style="transform-origin:108px 406px">
+                <line class="valve-color" x1="108" y1="421" x2="108" y2="439" stroke="#ff3b30" stroke-width="6" stroke-linecap="round"/>
+              </g>
+
+              <!-- Badges numérotés -->
               <g font-size="12" font-weight="700" text-anchor="middle">
                 <circle cx="225" cy="38" r="13" fill="var(--bg2)"/><circle cx="225" cy="38" r="11" fill="#34c759"/><text x="225" y="42" fill="#fff">1</text>
                 <circle cx="225" cy="115" r="13" fill="var(--bg2)"/><circle cx="225" cy="115" r="11" fill="#34c759"/><text x="225" y="119" fill="#fff">2</text>
@@ -1127,10 +1107,24 @@
                 <circle cx="108" cy="406" r="13" fill="var(--bg2)"/><circle cx="108" cy="406" r="11" fill="#ff3b30"/><text x="108" y="410" fill="#fff">7</text>
               </g>
 
-              <!-- Vanne 3 : robinet à clapet -->
-              <path d="M 213 339 A 18 18 0 1 1 237 339" fill="none" stroke="#ff3b30" stroke-width="2.5" stroke-linecap="round"/>
-              <circle cx="237" cy="339" r="3.5" fill="#ff3b30"/>
+              <!-- Vanne 3 : clapet -->
+              <g id="v3-clapet">
+                <path class="valve-color" d="M 213 339 A 18 18 0 1 1 237 339" fill="none" stroke="#ff3b30" stroke-width="2.5" stroke-linecap="round"/>
+                <circle class="valve-color" id="v3-dot" cx="237" cy="339" r="3.5" fill="#ff3b30"/>
+              </g>
             </svg>
+            <div class="pipe-btns">
+              <button class="pipe-btn" data-mode="ete" onclick="setWaterMode('ete')" title="Été">
+                <svg viewBox="0 0 24 24" fill="none" stroke="#34c759" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 8C8 10 5.9 16.17 3.82 21.34l1.89.66.95-2.3c.48.17.98.3 1.34.3C19 20 22 3 22 3c-1 2-8 2.25-13.5 2.25S2 11.5 2 13.5s1.5 3.5 1.5 3.5"/></svg>
+              </button>
+              <button class="pipe-btn" data-mode="hiver" onclick="setWaterMode('hiver')" title="Hiver">
+                <svg viewBox="0 0 24 24" fill="none" stroke="#4f8ef7" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="2" x2="12" y2="22"/><line x1="3.5" y1="7" x2="20.5" y2="17"/><line x1="3.5" y1="17" x2="20.5" y2="7"/><line x1="12" y1="5" x2="9.5" y2="3.5"/><line x1="12" y1="5" x2="14.5" y2="3.5"/><line x1="12" y1="19" x2="9.5" y2="20.5"/><line x1="12" y1="19" x2="14.5" y2="20.5"/><line x1="6" y1="8" x2="4" y2="9.5"/><line x1="6" y1="8" x2="5" y2="5.5"/><line x1="18" y1="16" x2="20" y2="14.5"/><line x1="18" y1="16" x2="19" y2="18.5"/><line x1="6" y1="16" x2="4" y2="14.5"/><line x1="6" y1="16" x2="5" y2="18.5"/><line x1="18" y1="8" x2="20" y2="9.5"/><line x1="18" y1="8" x2="19" y2="5.5"/></svg>
+              </button>
+              <button class="pipe-btn" data-mode="hivernage" onclick="setWaterMode('hivernage')" title="Hivernage">
+                <svg viewBox="0 0 24 24" fill="none" stroke="#ff3b30" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+              </button>
+            </div>
+            </div>
             <div class="doc-valve-legend">
               <div><span class="doc-valve-dot" style="background:#34c759">1</span> Réservoir</div>
               <div><span class="doc-valve-dot" style="background:#34c759">2</span> Arrivée réservoir</div>
@@ -2126,6 +2120,83 @@ function switchDocTab(idx) {
     b.classList.toggle('active', i === idx);
     b.classList.remove('sec-slide-left', 'sec-slide-right');
     if (i === idx) b.classList.add(dir > 0 ? 'sec-slide-right' : 'sec-slide-left');
+  });
+}
+
+// ── Water pipe diagram modes ──
+function setWaterMode(mode) {
+  document.querySelectorAll('.pipe-btn').forEach(function(b) {
+    b.classList.toggle('active', b.dataset.mode === mode);
+  });
+
+  var modes = {
+    ete:      { v1:'open', v2:'open', v3:'closed', v4:'open', v5:'open', v6:'open', v7:'closed', purges:'closed' },
+    hiver:    { v1:'open', v2:'open', v3:'open',   v4:'open', v5:'closed', v6:'closed', v7:'closed', purges:'closed' },
+    hivernage:{ v1:'closed', v2:'open', v3:'open', v4:'open', v5:'open', v6:'open', v7:'open', purges:'open' }
+  };
+  var s = modes[mode];
+
+  var openColor = '#34c759', closedColor = '#ff3b30';
+
+  function setLever(id, open, angle) {
+    var g = document.getElementById(id);
+    if (!g) return;
+    g.style.transform = open ? 'rotate(' + angle + 'deg)' : '';
+    g.querySelectorAll('.valve-color').forEach(function(el) {
+      el.setAttribute('stroke', open ? openColor : closedColor);
+    });
+  }
+
+  setLever('v1-lever', s.v1==='open', -90);
+  setLever('v5-lever', s.v5==='open', -90);
+  setLever('v4-lever', s.v4==='open', 90);
+  setLever('v6-lever', s.v6==='open', -90);
+  setLever('v7-lever', s.v7==='open', -90);
+
+  // v2 (1/4 turn)
+  var v2g = document.getElementById('v2-lever');
+  if (v2g) {
+    v2g.style.transform = s.v2==='open' ? 'rotate(-90deg)' : '';
+    v2g.querySelectorAll('.valve-color').forEach(function(el) {
+      el.setAttribute('stroke', s.v2==='open' ? openColor : closedColor);
+    });
+  }
+
+  // v3 (clapet)
+  var v3c = document.getElementById('v3-clapet');
+  if (v3c) {
+    var v3open = s.v3==='open';
+    v3c.querySelectorAll('.valve-color').forEach(function(el) {
+      var tag = el.tagName.toLowerCase();
+      if (tag === 'path') el.setAttribute('stroke', v3open ? openColor : closedColor);
+      if (tag === 'circle') el.setAttribute('fill', v3open ? openColor : closedColor);
+    });
+    var v3dot = document.getElementById('v3-dot');
+    if (v3dot) v3dot.setAttribute('cx', v3open ? '213' : '237');
+  }
+
+  // Purges
+  ['purge1','purge5','purge4','purge3'].forEach(function(id) {
+    var g = document.getElementById(id);
+    if (!g) return;
+    var open = s.purges==='open';
+    g.querySelectorAll('.valve-color').forEach(function(el) {
+      var tag = el.tagName.toLowerCase();
+      if (tag === 'path') el.setAttribute('stroke', open ? openColor : closedColor);
+      if (tag === 'circle') el.setAttribute('fill', open ? openColor : closedColor);
+    });
+  });
+
+  // Water flow
+  var water = {
+    ete:      { w2:1, w54:1, w3:0, w6:1, w7:0 },
+    hiver:    { w2:1, w54:0, w3:1, w6:0, w7:0 },
+    hivernage:{ w2:0, w54:0, w3:0, w6:0, w7:0 }
+  };
+  var wf = water[mode];
+  ['w2','w54','w3','w6','w7'].forEach(function(id) {
+    var el = document.getElementById(id);
+    if (el) el.setAttribute('opacity', wf[id] ? '0.7' : '0');
   });
 }
 
