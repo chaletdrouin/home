@@ -1930,7 +1930,11 @@ function setAppHeight() {
   }
 }
 setAppHeight();
-window.addEventListener('resize', setAppHeight);
+window.addEventListener('resize', function() {
+  setAppHeight();
+  setTimeout(setAppHeight, 100);
+  setTimeout(setAppHeight, 300);
+});
 
 // Init nav pill
 var pillInited = false;
