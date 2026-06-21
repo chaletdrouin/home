@@ -1023,19 +1023,12 @@
               <g fill="#ff3b30">
                 <circle cx="120" cy="160" r="5"/>
                 <circle cx="155" cy="264" r="5"/>
-                <circle cx="225" cy="280" r="5"/>
+                <circle cx="225" cy="272" r="5"/>
               </g>
 
               <!-- Vanne 2 : robinet 90° (ligne rouge horizontale des deux côtés du badge) -->
               <line x1="208" y1="115" x2="196" y2="115" stroke="#ff3b30" stroke-width="6" stroke-linecap="round"/>
               <line x1="242" y1="115" x2="254" y2="115" stroke="#ff3b30" stroke-width="6" stroke-linecap="round"/>
-
-              <!-- Vanne 3 : robinet à clapet (noeud papillon / sablier) -->
-              <g fill="#ff9f0a" stroke="#ff9f0a" stroke-width="1.5">
-                <polygon points="217,290 233,290 225,298"/>
-                <polygon points="217,306 233,306 225,298"/>
-              </g>
-              <line x1="225" y1="289" x2="225" y2="280" stroke="#ff9f0a" stroke-width="3" stroke-linecap="round"/>
 
               <!-- Poignées de vanne (leviers rouges agrandis) -->
               <g stroke="#ff3b30" stroke-width="6" stroke-linecap="round">
@@ -1051,14 +1044,20 @@
                 <circle cx="108" cy="400" r="4.5"/>
               </g>
 
-              <!-- Corps des vannes (badges numérotés, comme les pastilles de la photo) -->
+              <!-- Corps des vannes (badges numérotés) -->
               <g font-size="12" font-weight="700" text-anchor="middle">
                 <circle cx="225" cy="115" r="13" fill="var(--bg2)"/><circle cx="225" cy="115" r="11" fill="#34c759"/><text x="225" y="119" fill="#fff">2</text>
                 <circle cx="120" cy="140" r="13" fill="var(--bg2)"/><circle cx="120" cy="140" r="11" fill="#4f8ef7"/><text x="120" y="144" fill="#fff">5</text>
                 <circle cx="175" cy="264" r="13" fill="var(--bg2)"/><circle cx="175" cy="264" r="11" fill="#4f8ef7"/><text x="175" y="268" fill="#fff">4</text>
                 <circle cx="76" cy="188" r="13" fill="var(--bg2)"/><circle cx="76" cy="188" r="11" fill="#4f8ef7"/><text x="76" y="192" fill="#fff">6</text>
-                <circle cx="225" cy="298" r="13" fill="var(--bg2)"/><circle cx="225" cy="298" r="11" fill="#ff9f0a"/><text x="225" y="302" fill="#fff">3</text>
+                <circle cx="225" cy="305" r="13" fill="var(--bg2)"/><circle cx="225" cy="305" r="11" fill="#ff9f0a"/><text x="225" y="309" fill="#fff">3</text>
                 <circle cx="108" cy="366" r="13" fill="var(--bg2)"/><circle cx="108" cy="366" r="11" fill="#ff3b30"/><text x="108" y="370" fill="#fff">7</text>
+              </g>
+
+              <!-- Vanne 3 : robinet à clapet (noeud papillon au-dessus du badge) -->
+              <g fill="#ff9f0a" stroke="#ff9f0a" stroke-width="1">
+                <polygon points="216,284 234,284 225,291"/>
+                <polygon points="216,298 234,298 225,291"/>
               </g>
             </svg>
             <div class="doc-valve-legend">
