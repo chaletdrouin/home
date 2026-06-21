@@ -1021,31 +1021,33 @@
 
               <!-- Purges : points rouges sur le tuyau -->
               <g fill="#ff3b30">
-                <circle cx="120" cy="105" r="5"/>
-                <circle cx="195" cy="264" r="5"/>
-                <circle cx="225" cy="340" r="5"/>
+                <circle cx="120" cy="160" r="5"/>
+                <circle cx="155" cy="264" r="5"/>
+                <circle cx="225" cy="280" r="5"/>
               </g>
 
-              <!-- Vanne 2 : robinet 90° (ligne rouge verticale au-dessus du badge) -->
-              <line x1="225" y1="88" x2="225" y2="100" stroke="#ff3b30" stroke-width="6" stroke-linecap="round"/>
+              <!-- Vanne 2 : robinet 90° (ligne rouge horizontale des deux côtés du badge) -->
+              <line x1="208" y1="115" x2="196" y2="115" stroke="#ff3b30" stroke-width="6" stroke-linecap="round"/>
+              <line x1="242" y1="115" x2="254" y2="115" stroke="#ff3b30" stroke-width="6" stroke-linecap="round"/>
 
-              <!-- Vanne 3 : robinet (croix/volant au-dessus du badge) -->
-              <g stroke="#ff3b30" stroke-width="4" stroke-linecap="round">
-                <line x1="225" y1="271" x2="225" y2="283"/>
-                <line x1="218" y1="271" x2="232" y2="271"/>
+              <!-- Vanne 3 : robinet à clapet (noeud papillon / sablier) -->
+              <g fill="#ff9f0a" stroke="#ff9f0a" stroke-width="1.5">
+                <polygon points="217,290 233,290 225,298"/>
+                <polygon points="217,306 233,306 225,298"/>
               </g>
+              <line x1="225" y1="289" x2="225" y2="280" stroke="#ff9f0a" stroke-width="3" stroke-linecap="round"/>
 
               <!-- Poignées de vanne (leviers rouges agrandis) -->
               <g stroke="#ff3b30" stroke-width="6" stroke-linecap="round">
                 <line x1="100" y1="140" x2="82" y2="140"/>
                 <line x1="175" y1="248" x2="175" y2="232"/>
-                <line x1="76" y1="172" x2="76" y2="156"/>
+                <line x1="76" y1="204" x2="76" y2="220"/>
                 <line x1="108" y1="378" x2="108" y2="396"/>
               </g>
               <g fill="#ff3b30">
                 <circle cx="78" cy="140" r="4.5"/>
                 <circle cx="175" cy="228" r="4.5"/>
-                <circle cx="76" cy="152" r="4.5"/>
+                <circle cx="76" cy="224" r="4.5"/>
                 <circle cx="108" cy="400" r="4.5"/>
               </g>
 
