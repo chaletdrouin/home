@@ -811,6 +811,16 @@
       display: flex; align-items: center; justify-content: center;
       font-size: 10px; font-weight: 700; color: #fff;
     }
+    .doc-valve-state {
+      display: grid; grid-template-columns: repeat(4, 1fr); gap: 5px;
+      margin-top: 8px;
+    }
+    .doc-valve-state > div {
+      display: flex; align-items: center; gap: 5px;
+      font-size: 10.5px; color: var(--text2); line-height: 1.2;
+    }
+    .doc-valve-state .v-open { color: #34c759; font-weight: 700; font-size: 9px; }
+    .doc-valve-state .v-closed { color: #ff3b30; font-weight: 700; font-size: 9px; }
     .doc-gauge { margin: 8px 0; }
     .doc-gauge-bar-full {
       height: 28px; border-radius: 14px; position: relative;
@@ -949,6 +959,16 @@
             <p><strong>1.</strong> Fermer les robinets intérieurs<br>
             <strong>2.</strong> Fermer la vanne du tuyau hiver<br>
             <strong>3.</strong> Ouvrir au réservoir et fermer la purge</p>
+            <div class="doc-valve-state">
+              <div><span class="doc-valve-dot" style="background:#34c759;width:16px;height:16px;font-size:9px">1</span> <span class="v-open">ouvert</span></div>
+              <div><span class="doc-valve-dot" style="background:#34c759;width:16px;height:16px;font-size:9px">2</span> <span class="v-open">ouvert</span></div>
+              <div><span class="doc-valve-dot" style="background:#ff9f0a;width:16px;height:16px;font-size:9px">3</span> <span class="v-closed">fermé</span></div>
+              <div><span class="doc-valve-dot" style="background:#4f8ef7;width:16px;height:16px;font-size:9px">4</span> <span class="v-open">ouvert</span></div>
+              <div><span class="doc-valve-dot" style="background:#4f8ef7;width:16px;height:16px;font-size:9px">5</span> <span class="v-open">ouvert</span></div>
+              <div><span class="doc-valve-dot" style="background:#4f8ef7;width:16px;height:16px;font-size:9px">6</span> <span class="v-open">ouvert</span></div>
+              <div><span class="doc-valve-dot" style="background:#ff3b30;width:16px;height:16px;font-size:9px">7</span> <span class="v-closed">fermé</span></div>
+              <div><span style="font-size:10.5px;color:var(--text2)">Purges : <span class="v-closed">fermées</span></span></div>
+            </div>
           </div>
         </div>
 
@@ -963,6 +983,16 @@
             <p><strong>1.</strong> Fermer la vanne du chalet et du bachal<br>
             <strong>2.</strong> Déneiger au besoin le tuyau hiver - piquet sous le chalet<br>
             <strong>3.</strong> Ouvrir au réservoir et fermer la purge</p>
+            <div class="doc-valve-state">
+              <div><span class="doc-valve-dot" style="background:#34c759;width:16px;height:16px;font-size:9px">1</span> <span class="v-open">ouvert</span></div>
+              <div><span class="doc-valve-dot" style="background:#34c759;width:16px;height:16px;font-size:9px">2</span> <span class="v-open">ouvert</span></div>
+              <div><span class="doc-valve-dot" style="background:#ff9f0a;width:16px;height:16px;font-size:9px">3</span> <span class="v-open">ouvert</span></div>
+              <div><span class="doc-valve-dot" style="background:#4f8ef7;width:16px;height:16px;font-size:9px">4</span> <span class="v-open">ouvert</span></div>
+              <div><span class="doc-valve-dot" style="background:#4f8ef7;width:16px;height:16px;font-size:9px">5</span> <span class="v-closed">fermé</span></div>
+              <div><span class="doc-valve-dot" style="background:#4f8ef7;width:16px;height:16px;font-size:9px">6</span> <span class="v-closed">fermé</span></div>
+              <div><span class="doc-valve-dot" style="background:#ff3b30;width:16px;height:16px;font-size:9px">7</span> <span class="v-closed">fermé</span></div>
+              <div><span style="font-size:10.5px;color:var(--text2)">Purges : <span class="v-closed">fermées</span></span></div>
+            </div>
           </div>
         </div>
 
@@ -978,6 +1008,16 @@
             <strong>2.</strong> Vidanger le ballon d'eau chaude<br>
             <strong>3.</strong> Ouvrir toutes les vannes<br>
             <strong>4.</strong> Ouvrir tous les robinets</p>
+            <div class="doc-valve-state">
+              <div><span class="doc-valve-dot" style="background:#34c759;width:16px;height:16px;font-size:9px">1</span> <span class="v-closed">fermé</span></div>
+              <div><span class="doc-valve-dot" style="background:#34c759;width:16px;height:16px;font-size:9px">2</span> <span class="v-open">ouvert</span></div>
+              <div><span class="doc-valve-dot" style="background:#ff9f0a;width:16px;height:16px;font-size:9px">3</span> <span class="v-open">ouvert</span></div>
+              <div><span class="doc-valve-dot" style="background:#4f8ef7;width:16px;height:16px;font-size:9px">4</span> <span class="v-open">ouvert</span></div>
+              <div><span class="doc-valve-dot" style="background:#4f8ef7;width:16px;height:16px;font-size:9px">5</span> <span class="v-open">ouvert</span></div>
+              <div><span class="doc-valve-dot" style="background:#4f8ef7;width:16px;height:16px;font-size:9px">6</span> <span class="v-open">ouvert</span></div>
+              <div><span class="doc-valve-dot" style="background:#ff3b30;width:16px;height:16px;font-size:9px">7</span> <span class="v-open">ouvert</span></div>
+              <div><span style="font-size:10.5px;color:var(--text2)">Purges : <span class="v-open">ouvertes</span></span></div>
+            </div>
           </div>
           <div class="doc-warn">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
