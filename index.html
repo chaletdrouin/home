@@ -1028,7 +1028,9 @@
               <!-- Eau (bleu, sous les éléments de vanne) -->
               <path id="w2" class="water-path" d="M225 24 L225 264" stroke="#4f8ef7" stroke-width="6" stroke-linecap="round" fill="none" opacity="0"/>
               <path id="w54" class="water-path" d="M120 90 L120 258 Q120 264 126 264 L225 264" stroke="#4f8ef7" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" fill="none" opacity="0"/>
-              <path id="w3" class="water-path" d="M225 264 L225 440" stroke="#4f8ef7" stroke-width="6" stroke-linecap="round" fill="none" opacity="0"/>
+              <path id="w3a" class="water-path" d="M225 264 L225 365" stroke="#4f8ef7" stroke-width="6" stroke-linecap="butt" fill="none" opacity="0"/>
+              <path id="w3b" class="water-path" d="M225 380 L225 399" stroke="#4f8ef7" stroke-width="6" stroke-linecap="butt" fill="none" opacity="0"/>
+              <path id="w3c" class="water-path" d="M225 414 L225 440" stroke="#4f8ef7" stroke-width="6" stroke-linecap="butt" fill="none" opacity="0"/>
               <path id="w6" class="water-path" d="M120 188 L38 188 Q32 188 32 194 L32 366 Q32 372 38 372 L290 372" stroke="#4f8ef7" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" fill="none" opacity="0"/>
               <path id="w7" class="water-path" d="M100 406 L285 406" stroke="#4f8ef7" stroke-width="5" stroke-linecap="round" fill="none" opacity="0"/>
 
@@ -1040,6 +1042,8 @@
               <!-- Raccords Y -->
               <circle cx="225" cy="264" r="8" fill="#999"/>
               <circle cx="120" cy="188" r="8" fill="#999"/>
+              <circle id="wj1" class="water-path" cx="225" cy="264" r="6" fill="#4f8ef7" opacity="0"/>
+              <circle id="wj2" class="water-path" cx="120" cy="188" r="6" fill="#4f8ef7" opacity="0"/>
 
               <!-- Extensions de purge (tuyaux) -->
               <line x1="230" y1="58" x2="245" y2="58" stroke="#333" stroke-width="8" stroke-linecap="round"/>
@@ -2131,7 +2135,7 @@ function setWaterMode(mode) {
 
   var modes = {
     ete:      { v1:'open', v2:'open', v3:'closed', v4:'open', v5:'open', v6:'open', v7:'closed', purges:'closed' },
-    hiver:    { v1:'open', v2:'open', v3:'open',   v4:'open', v5:'closed', v6:'closed', v7:'closed', purges:'closed' },
+    hiver:    { v1:'open', v2:'open', v3:'open',   v4:'closed', v5:'closed', v6:'closed', v7:'closed', purges:'closed' },
     hivernage:{ v1:'closed', v2:'open', v3:'open', v4:'open', v5:'open', v6:'open', v7:'open', purges:'open' }
   };
   var s = modes[mode];
@@ -2189,12 +2193,12 @@ function setWaterMode(mode) {
 
   // Water flow
   var water = {
-    ete:      { w2:1, w54:1, w3:0, w6:1, w7:0 },
-    hiver:    { w2:1, w54:0, w3:1, w6:0, w7:0 },
-    hivernage:{ w2:0, w54:0, w3:0, w6:0, w7:0 }
+    ete:      { w2:1, w54:1, w3a:0, w3b:0, w3c:0, w6:1, w7:0, wj1:1, wj2:1 },
+    hiver:    { w2:1, w54:0, w3a:1, w3b:1, w3c:1, w6:0, w7:0, wj1:1, wj2:0 },
+    hivernage:{ w2:0, w54:0, w3a:0, w3b:0, w3c:0, w6:0, w7:0, wj1:0, wj2:0 }
   };
   var wf = water[mode];
-  ['w2','w54','w3','w6','w7'].forEach(function(id) {
+  ['w2','w54','w3a','w3b','w3c','w6','w7','wj1','wj2'].forEach(function(id) {
     var el = document.getElementById(id);
     if (el) el.setAttribute('opacity', wf[id] ? '0.7' : '0');
   });
