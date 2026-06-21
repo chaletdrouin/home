@@ -1647,7 +1647,7 @@ async function setInvQty(id, level, btn) {
     pill.style.transition = 'left .25s cubic-bezier(.4,0,.2,1)';
     pill.setAttribute('data-v', level);
     toggle.querySelectorAll('.inv-opt').forEach((o, i) => o.classList.toggle('on', i === level));
-    requestAnimationFrame(repaintToggles);
+    setTimeout(repaintToggles, 300);
   }
   try {
     await fetch(API + '/inventory/' + id, {
