@@ -1001,23 +1001,23 @@
               <text x="225" y="14" fill="var(--text3)" font-size="9" text-anchor="middle" font-weight="600">Arrivée réservoir</text>
 
               <!-- Tuyau 2 (arrivée réservoir) -->
-              <path d="M225 24 L225 264" stroke="#666" stroke-width="10" stroke-linecap="round" fill="none"/>
+              <path d="M225 24 L225 264" stroke="#444" stroke-width="10" stroke-linecap="round" fill="none"/>
               <path d="M225 24 L225 264" stroke="#999" stroke-width="7" stroke-linecap="round" fill="none"/>
 
               <!-- Tuyau 5 + 4 -->
-              <path d="M120 70 L120 258 Q120 264 126 264 L225 264" stroke="#666" stroke-width="9" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+              <path d="M120 70 L120 258 Q120 264 126 264 L225 264" stroke="#444" stroke-width="9" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
               <path d="M120 70 L120 258 Q120 264 126 264 L225 264" stroke="#999" stroke-width="6" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
 
               <!-- Tuyau 3 (passe SOUS 6 et 7, dessiné avant) -->
-              <path d="M225 264 L225 440" stroke="#666" stroke-width="10" stroke-linecap="round" fill="none"/>
+              <path d="M225 264 L225 440" stroke="#444" stroke-width="10" stroke-linecap="round" fill="none"/>
               <path d="M225 264 L225 440" stroke="#999" stroke-width="7" stroke-linecap="round" fill="none"/>
 
               <!-- Tuyau 6 (droit, PAR-DESSUS 3) -->
-              <path d="M120 188 L38 188 Q32 188 32 194 L32 366 Q32 372 38 372 L290 372" stroke="#666" stroke-width="9" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+              <path d="M120 188 L38 188 Q32 188 32 194 L32 366 Q32 372 38 372 L290 372" stroke="#444" stroke-width="9" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
               <path d="M120 188 L38 188 Q32 188 32 194 L32 366 Q32 372 38 372 L290 372" stroke="#999" stroke-width="6" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
 
               <!-- Tuyau 7 (droit, PAR-DESSUS 3) -->
-              <path d="M100 406 L285 406" stroke="#666" stroke-width="9" stroke-linecap="round" fill="none"/>
+              <path d="M100 406 L285 406" stroke="#444" stroke-width="9" stroke-linecap="round" fill="none"/>
               <path d="M100 406 L285 406" stroke="#999" stroke-width="6" stroke-linecap="round" fill="none"/>
 
               <!-- Ligne pointillée séparant réservoir / sous la marche -->
@@ -1029,30 +1029,34 @@
               <circle cx="225" cy="264" r="4.5" fill="var(--bg2)" stroke="var(--text2)" stroke-width="2"/>
               <circle cx="120" cy="188" r="4.5" fill="var(--bg2)" stroke="#999" stroke-width="2"/>
 
-              <!-- Purges : robinets à clapet (arc + point au bout + rond rouge au centre) -->
-              <!-- Purge 1 (sous badge 1) -->
+              <!-- Purges : extension perpendiculaire + clapet (arc + point au bout + rond rouge au centre) -->
+              <!-- Purge 1 (pipe 2, extension droite à y=56) -->
               <g>
-                <path d="M 220 70 A 8 8 0 1 1 230 70" fill="none" stroke="#ff3b30" stroke-width="2" stroke-linecap="round"/>
-                <circle cx="230" cy="70" r="2.5" fill="#ff3b30"/>
-                <circle cx="225" cy="64" r="3" fill="#ff3b30"/>
+                <line x1="225" y1="56" x2="238" y2="56" stroke="#ff3b30" stroke-width="2.5" stroke-linecap="round"/>
+                <path d="M 241 49 A 7 7 0 1 1 241 63" fill="none" stroke="#ff3b30" stroke-width="2" stroke-linecap="round"/>
+                <circle cx="241" cy="63" r="2" fill="#ff3b30"/>
+                <circle cx="245" cy="56" r="3" fill="#ff3b30"/>
               </g>
-              <!-- Purge 5 (sous badge 5) -->
+              <!-- Purge 5 (pipe 5, extension droite à y=160) -->
               <g>
-                <path d="M 115 167 A 8 8 0 1 1 125 167" fill="none" stroke="#ff3b30" stroke-width="2" stroke-linecap="round"/>
-                <circle cx="125" cy="167" r="2.5" fill="#ff3b30"/>
-                <circle cx="120" cy="161" r="3" fill="#ff3b30"/>
+                <line x1="120" y1="160" x2="133" y2="160" stroke="#ff3b30" stroke-width="2.5" stroke-linecap="round"/>
+                <path d="M 136 153 A 7 7 0 1 1 136 167" fill="none" stroke="#ff3b30" stroke-width="2" stroke-linecap="round"/>
+                <circle cx="136" cy="167" r="2" fill="#ff3b30"/>
+                <circle cx="140" cy="160" r="3" fill="#ff3b30"/>
               </g>
-              <!-- Purge 4 (à gauche de badge 4) -->
+              <!-- Purge 4 (pipe horizontale, extension vers le bas à x=155) -->
               <g>
-                <path d="M 144 270 A 8 8 0 1 1 154 270" fill="none" stroke="#ff3b30" stroke-width="2" stroke-linecap="round"/>
-                <circle cx="154" cy="270" r="2.5" fill="#ff3b30"/>
-                <circle cx="149" cy="264" r="3" fill="#ff3b30"/>
+                <line x1="155" y1="264" x2="155" y2="277" stroke="#ff3b30" stroke-width="2.5" stroke-linecap="round"/>
+                <path d="M 148 280 A 7 7 0 1 1 162 280" fill="none" stroke="#ff3b30" stroke-width="2" stroke-linecap="round"/>
+                <circle cx="162" cy="280" r="2" fill="#ff3b30"/>
+                <circle cx="155" cy="284" r="3" fill="#ff3b30"/>
               </g>
-              <!-- Purge 3 (au-dessus de badge 3) -->
+              <!-- Purge 3 (pipe 3, extension droite à y=298) -->
               <g>
-                <path d="M 220 307 A 8 8 0 1 1 230 307" fill="none" stroke="#ff3b30" stroke-width="2" stroke-linecap="round"/>
-                <circle cx="230" cy="307" r="2.5" fill="#ff3b30"/>
-                <circle cx="225" cy="301" r="3" fill="#ff3b30"/>
+                <line x1="225" y1="298" x2="238" y2="298" stroke="#ff3b30" stroke-width="2.5" stroke-linecap="round"/>
+                <path d="M 241 291 A 7 7 0 1 1 241 305" fill="none" stroke="#ff3b30" stroke-width="2" stroke-linecap="round"/>
+                <circle cx="241" cy="305" r="2" fill="#ff3b30"/>
+                <circle cx="245" cy="298" r="3" fill="#ff3b30"/>
               </g>
 
               <!-- Vanne 2 : robinet 90° (ligne rouge horizontale des deux côtés du badge) -->
