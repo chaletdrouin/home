@@ -2724,19 +2724,19 @@ window.addEventListener('resize', function(){
   let sx=0,sy=0,active=false,locked=null,swipeArrow=null,swipeDir=0;
   var THRESHOLD=50, MAX_DRAG=120;
   var title=document.getElementById('month-lbl');
+  var calEl=document.getElementById('view-cal');
   function getArrows(){ return document.querySelectorAll('.hdr-nav-row .hdr-nav'); }
   function resetTitle(){
     title.style.transition='';
     title.style.marginLeft=''; title.style.paddingLeft='';
     title.style.marginRight=''; title.style.paddingRight='';
   }
-  document.addEventListener('touchstart',function(e){
+  calEl.addEventListener('touchstart',function(e){
     if(e.target.closest('.sheet')||e.target.closest('.overlay'))return;
-    if(!document.getElementById('view-cal').classList.contains('slide-active'))return;
     sx=e.touches[0].clientX; sy=e.touches[0].clientY;
     active=true; locked=null; swipeArrow=null; swipeDir=0;
   },{passive:true});
-  document.addEventListener('touchmove',function(e){
+  calEl.addEventListener('touchmove',function(e){
     if(!active)return;
     var cx=e.touches[0].clientX, cy=e.touches[0].clientY;
     var dx=cx-sx, dy=cy-sy;
@@ -2774,7 +2774,7 @@ window.addEventListener('resize', function(){
       title.style.paddingRight=(12+extend)+'px';
     }
   },{passive:false});
-  document.addEventListener('touchend',function(e){
+  calEl.addEventListener('touchend',function(e){
     if(!active)return;
     active=false;
     var dx=e.changedTouches[0].clientX-sx;
