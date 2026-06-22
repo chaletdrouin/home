@@ -1120,13 +1120,13 @@
               </g>
             </svg>
             <div class="pipe-btns">
-              <button class="pipe-btn" data-mode="ete" onclick="setWaterMode('ete')" title="Été">
+              <button class="pipe-btn" data-mode="ete" onclick="setBothModes('ete')" title="Été">
                 <svg viewBox="0 0 24 24" fill="none" stroke="#34c759" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 8C8 10 5.9 16.17 3.82 21.34l1.89.66.95-2.3c.48.17.98.3 1.34.3C19 20 22 3 22 3c-1 2-8 2.25-13.5 2.25S2 11.5 2 13.5s1.5 3.5 1.5 3.5"/></svg>
               </button>
-              <button class="pipe-btn" data-mode="hiver" onclick="setWaterMode('hiver')" title="Hiver">
+              <button class="pipe-btn" data-mode="hiver" onclick="setBothModes('hiver')" title="Hiver">
                 <svg viewBox="0 0 24 24" fill="none" stroke="#4f8ef7" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="2" x2="12" y2="22"/><line x1="3.5" y1="7" x2="20.5" y2="17"/><line x1="3.5" y1="17" x2="20.5" y2="7"/><line x1="12" y1="5" x2="9.5" y2="3.5"/><line x1="12" y1="5" x2="14.5" y2="3.5"/><line x1="12" y1="19" x2="9.5" y2="20.5"/><line x1="12" y1="19" x2="14.5" y2="20.5"/><line x1="6" y1="8" x2="4" y2="9.5"/><line x1="6" y1="8" x2="5" y2="5.5"/><line x1="18" y1="16" x2="20" y2="14.5"/><line x1="18" y1="16" x2="19" y2="18.5"/><line x1="6" y1="16" x2="4" y2="14.5"/><line x1="6" y1="16" x2="5" y2="18.5"/><line x1="18" y1="8" x2="20" y2="9.5"/><line x1="18" y1="8" x2="19" y2="5.5"/></svg>
               </button>
-              <button class="pipe-btn" data-mode="hivernage" onclick="setWaterMode('hivernage')" title="Hivernage">
+              <button class="pipe-btn" data-mode="hivernage" onclick="setBothModes('hivernage')" title="Hivernage">
                 <svg viewBox="0 0 24 24" fill="none" stroke="#ff3b30" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
               </button>
             </div>
@@ -1214,13 +1214,13 @@
               </g>
             </svg>
             <div class="pipe-btns">
-              <button class="pipe-btn ce-btn" data-mode="ete" onclick="setCeMode('ete')" title="Été">
+              <button class="pipe-btn ce-btn" data-mode="ete" onclick="setBothModes('ete')" title="Été">
                 <svg viewBox="0 0 24 24" fill="none" stroke="#34c759" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 8C8 10 5.9 16.17 3.82 21.34l1.89.66.95-2.3c.48.17.98.3 1.34.3C19 20 22 3 22 3c-1 2-8 2.25-13.5 2.25S2 11.5 2 13.5s1.5 3.5 1.5 3.5"/></svg>
               </button>
-              <button class="pipe-btn ce-btn" data-mode="hiver" onclick="setCeMode('hiver')" title="Hiver">
+              <button class="pipe-btn ce-btn" data-mode="hiver" onclick="setBothModes('hiver')" title="Hiver">
                 <svg viewBox="0 0 24 24" fill="none" stroke="#4f8ef7" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="2" x2="12" y2="22"/><line x1="3.5" y1="7" x2="20.5" y2="17"/><line x1="3.5" y1="17" x2="20.5" y2="7"/><line x1="12" y1="5" x2="9.5" y2="3.5"/><line x1="12" y1="5" x2="14.5" y2="3.5"/><line x1="12" y1="19" x2="9.5" y2="20.5"/><line x1="12" y1="19" x2="14.5" y2="20.5"/><line x1="6" y1="8" x2="4" y2="9.5"/><line x1="6" y1="8" x2="5" y2="5.5"/><line x1="18" y1="16" x2="20" y2="14.5"/><line x1="18" y1="16" x2="19" y2="18.5"/><line x1="6" y1="16" x2="4" y2="14.5"/><line x1="6" y1="16" x2="5" y2="18.5"/><line x1="18" y1="8" x2="20" y2="9.5"/><line x1="18" y1="8" x2="19" y2="5.5"/></svg>
               </button>
-              <button class="pipe-btn ce-btn" data-mode="hivernage" onclick="setCeMode('hivernage')" title="Hivernage">
+              <button class="pipe-btn ce-btn" data-mode="hivernage" onclick="setBothModes('hivernage')" title="Hivernage">
                 <svg viewBox="0 0 24 24" fill="none" stroke="#ff3b30" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
               </button>
             </div>
@@ -2181,6 +2181,11 @@ function openMap(e, lat, lng, label) {
   }
 }
 
+function setBothModes(mode) {
+  setWaterMode(mode);
+  setCeMode(mode);
+}
+
 var waterModeInited = false;
 function setWaterMode(mode) {
   var svg = document.getElementById('pipe-svg');
@@ -2621,8 +2626,7 @@ function refreshPill() {
   }
 }
 refreshPill();
-setWaterMode('hivernage');
-setCeMode('hivernage');
+setBothModes('hivernage');
 moveTabPill(document.getElementById('doc-tabs'));
 new ResizeObserver(function(){
   var pill = document.getElementById('nav-pill');
