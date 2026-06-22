@@ -817,11 +817,11 @@
     }
     .pipe-diagrams-row { display: flex; flex-direction: column; gap: 6px; }
     @media (min-width: 1100px) {
-      .pipe-diagrams-row { display: grid; grid-template-columns: 240px 1fr 1fr; gap: 16px; align-items: start; }
+      .pipe-diagrams-row { display: grid; grid-template-columns: 240px 300px 300px; gap: 16px; align-items: start; }
       .pipe-controls-col { grid-column: 1; grid-row: 1; }
       .pipe-photo-col { grid-column: 1; grid-row: 2; }
-      .pipe-diagram-section:first-of-type { grid-column: 2; grid-row: 1 / 3; }
-      .pipe-diagram-section:last-of-type { grid-column: 3; grid-row: 1 / 3; }
+      .pipe-diagrams-row > :nth-child(2) { grid-column: 2; grid-row: 1 / 3; }
+      .pipe-diagrams-row > :nth-child(3) { grid-column: 3; grid-row: 1 / 3; }
     }
     .pipe-mode-btns { display: flex; gap: 6px; margin-bottom: 8px; }
     .pipe-mode-btns .pipe-btn { flex-direction: row; gap: 5px; width: auto; height: 34px; padding: 0 10px; }
