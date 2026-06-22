@@ -2889,7 +2889,7 @@ window.addEventListener('resize', function(){
 })();
 </script>
 <div id="pdf-viewer" style="display:none;position:fixed;inset:0;z-index:9999;background:#111;overflow-y:auto;-webkit-overflow-scrolling:touch;overscroll-behavior:contain">
-  <div style="padding:8px 4px 60px;display:flex;flex-direction:column;align-items:center;gap:6px">
+  <div style="padding:calc(env(safe-area-inset-top,8px) + 8px) 4px 60px;display:flex;flex-direction:column;align-items:center;gap:6px">
     <img src="pdf-pages/page-01.jpg" loading="lazy" style="width:100%;max-width:800px;display:block">
     <img src="pdf-pages/page-02.jpg" loading="lazy" style="width:100%;max-width:800px;display:block">
     <img src="pdf-pages/page-03.jpg" loading="lazy" style="width:100%;max-width:800px;display:block">
