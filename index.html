@@ -959,8 +959,8 @@
           </div>
           <div class="doc-card">
             <p><strong>1.</strong> Fermer les robinets intérieurs<br>
-            <strong>2.</strong> Fermer la vanne du tuyau hiver<br>
-            <strong>3.</strong> Ouvrir au réservoir et fermer la purge</p>
+            <strong>2.</strong> Fermer la vanne du tuyau hiver (3)<br>
+            <strong>3.</strong> Ouvrir la vanne réservoir (1) et fermer la purge</p>
           </div>
         </div>
 
@@ -972,9 +972,9 @@
             Mise en service hiver
           </div>
           <div class="doc-card">
-            <p><strong>1.</strong> Fermer la vanne du chalet et du bachal<br>
-            <strong>2.</strong> Déneiger au besoin le tuyau hiver - piquet sous le chalet<br>
-            <strong>3.</strong> Ouvrir au réservoir et fermer la purge</p>
+            <p><strong>1.</strong> Fermer la vanne du chalet + bachal (4)<br>
+            <strong>2.</strong> Déneiger au besoin le tuyau hiver — piquet sous le chalet<br>
+            <strong>3.</strong> Ouvrir la vanne réservoir (1) et fermer la purge</p>
           </div>
         </div>
 
@@ -986,8 +986,8 @@
             Hivernage
           </div>
           <div class="doc-card">
-            <p><strong>1.</strong> Fermer le réservoir et ouvrir la purge<br>
-            <strong>2.</strong> Vidanger le ballon d'eau chaude<br>
+            <p><strong>1.</strong> Fermer la vanne réservoir (1) et ouvrir la purge<br>
+            <strong>2.</strong> Vidanger le ballon d'eau chaude (7)<br>
             <strong>3.</strong> Ouvrir toutes les vannes<br>
             <strong>4.</strong> Ouvrir tous les robinets</p>
           </div>
@@ -1139,7 +1139,6 @@
               <div><span class="doc-valve-dot" style="background:#ff3b30">7</span> Purge ballon eau chaude</div>
               <div><span style="flex-shrink:0;width:12px;height:12px;border-radius:50%;background:#ff3b30;display:inline-block;margin:0 3px"></span> Purge de vidange (3, 4, 5)</div>
             </div>
-            <div id="water-mode-desc" style="margin-top:10px;font-size:13px;color:var(--text2);line-height:1.5"></div>
           </div>
         </div>
 
@@ -2252,14 +2251,6 @@ function setWaterMode(mode) {
     var el = document.getElementById(id);
     if (el) el.setAttribute('opacity', wf[id] ? '0.7' : '0');
   });
-
-  var descs = {
-    ete: '<strong>Été</strong><ol style="margin:4px 0 0;padding-left:20px"><li>Fermer les robinets intérieurs</li><li>Fermer la vanne du tuyau hiver (3)</li><li>Ouvrir la vanne réservoir (1) et fermer la purge</li></ol>',
-    hiver: '<strong>Hiver</strong><ol style="margin:4px 0 0;padding-left:20px"><li>Fermer la vanne du chalet + bachal (4)</li><li>Déneiger au besoin le tuyau hiver — piquet sous le chalet</li><li>Ouvrir la vanne réservoir (1) et fermer la purge</li></ol>',
-    hivernage: '<strong>Hivernage</strong><ol style="margin:4px 0 0;padding-left:20px"><li>Fermer la vanne réservoir (1) et ouvrir la purge</li><li>Vidanger le ballon d\'eau chaude (7)</li></ol>'
-  };
-  var descEl = document.getElementById('water-mode-desc');
-  if (descEl) descEl.innerHTML = descs[mode];
 
   if (!waterModeInited && svg) {
     requestAnimationFrame(function(){ requestAnimationFrame(function(){
