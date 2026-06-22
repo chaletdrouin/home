@@ -817,9 +817,11 @@
     }
     .pipe-diagrams-row { display: flex; flex-direction: column; gap: 6px; }
     @media (min-width: 1100px) {
-      .pipe-diagrams-row { flex-direction: row; gap: 16px; align-items: flex-start; }
-      .pipe-controls-col { flex: 0 0 240px; }
-      .pipe-diagram-section { flex: 1; min-width: 0; }
+      .pipe-diagrams-row { display: grid; grid-template-columns: 240px 1fr 1fr; gap: 16px; align-items: start; }
+      .pipe-controls-col { grid-column: 1; grid-row: 1; }
+      .pipe-photo-col { grid-column: 1; grid-row: 2; }
+      .pipe-diagram-section:first-of-type { grid-column: 2; grid-row: 1 / 3; }
+      .pipe-diagram-section:last-of-type { grid-column: 3; grid-row: 1 / 3; }
     }
     .pipe-mode-btns { display: flex; gap: 6px; margin-bottom: 8px; }
     .pipe-mode-btns .pipe-btn { flex-direction: row; gap: 5px; width: auto; height: 34px; padding: 0 10px; }
@@ -1001,11 +1003,6 @@
               <strong>3.</strong> Ouvrir toutes les vannes<br>
               <strong>4.</strong> Ouvrir tous les robinets</p>
             </div>
-          </div>
-          <img src="marche-fermee.jpg" alt="Vis de la marche" style="width:100%;max-width:400px;border-radius:8px;margin-top:8px">
-          <div class="doc-tip" style="margin-top:8px">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
-            <span>Dévisser la vis encerclée pour ouvrir la marche. Tournevis sur le meuble de rangement dans l'entrée à droite.</span>
           </div>
         </div>
         <div class="doc-section pipe-diagram-section">
@@ -1227,6 +1224,13 @@
               <div><span class="doc-valve-dot" style="background:#4f8ef7">11</span> By-pass chauffe-eau / ballon</div>
               <div><span class="doc-valve-dot" style="background:#4f8ef7">12</span> Retour chauffe-eau</div>
             </div>
+          </div>
+        </div>
+        <div class="pipe-photo-col">
+          <img src="marche-fermee.jpg" alt="Vis de la marche" style="width:100%;max-width:400px;border-radius:8px">
+          <div class="doc-tip" style="margin-top:8px">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+            <span>Dévisser la vis encerclée pour ouvrir la marche. Tournevis sur le meuble de rangement dans l'entrée à droite.</span>
           </div>
         </div>
         </div>
