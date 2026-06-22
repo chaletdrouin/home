@@ -37,6 +37,7 @@
     body {
       display: flex; flex-direction: row;
       position: fixed; inset: 0;
+      overflow: hidden;
       overscroll-behavior: none;
     }
     .main {
@@ -2807,19 +2808,15 @@ window.addEventListener('resize', function(){
   },{passive:true});
 })();
 
-// Prevent iOS overscroll bounce on scrollable containers
+// Prevent iOS viewport bounce — block vertical touchmove outside scrollable areas
 (function(){
-  var containers = ['.doc-body','.inv-content'];
-  containers.forEach(function(sel){
-    var el = document.querySelector(sel);
-    if(!el) return;
-    el.addEventListener('touchmove', function(e){
-      if(el.scrollHeight <= el.clientHeight) { e.preventDefault(); return; }
-      if(el.scrollTop <= 0 && e.touches[0].clientY > el._touchY) e.preventDefault();
-      else if(el.scrollTop + el.clientHeight >= el.scrollHeight && e.touches[0].clientY < el._touchY) e.preventDefault();
-    }, {passive:false});
-    el.addEventListener('touchstart', function(e){ el._touchY = e.touches[0].clientY; }, {passive:true});
-  });
+  var sx=0,sy=0;
+  document.addEventListener('touchstart',function(e){sx=e.touches[0].clientX;sy=e.touches[0].clientY;},{passive:true});
+  document.addEventListener('touchmove',function(e){
+    if(e.target.closest('.doc-body,.inv-content,.sheet,#pdf-viewer')) return;
+    var dx=Math.abs(e.touches[0].clientX-sx), dy=Math.abs(e.touches[0].clientY-sy);
+    if(dy>dx) e.preventDefault();
+  },{passive:false});
 })();
 
 // Pull to refresh
