@@ -2813,7 +2813,8 @@ window.addEventListener('resize', function(){
   var sx=0,sy=0;
   document.addEventListener('touchstart',function(e){sx=e.touches[0].clientX;sy=e.touches[0].clientY;},{passive:true});
   document.addEventListener('touchmove',function(e){
-    if(e.target.closest('.doc-body,.inv-content,.sheet,#pdf-viewer')) return;
+    var sc=e.target.closest('.doc-body,.inv-content,.sheet,#pdf-viewer');
+    if(sc && sc.scrollHeight > sc.clientHeight) return;
     var dx=Math.abs(e.touches[0].clientX-sx), dy=Math.abs(e.touches[0].clientY-sy);
     if(dy>dx) e.preventDefault();
   },{passive:false});
