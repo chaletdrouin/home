@@ -2811,8 +2811,7 @@ window.addEventListener('resize', function(){
   var startY = 0, pulling = false, triggered = false;
   var THRESHOLD = 80, MAX = 120;
   document.addEventListener('touchstart', function(e) {
-    if (e.target.closest('.sheet') || e.target.closest('.overlay')) return;
-    if (e.target.closest('.inv-cols') || e.target.closest('.doc-body')) return;
+    if (!e.target.closest('.hdr')) return;
     startY = e.touches[0].clientY;
     pulling = true; triggered = false;
   }, {passive: true});
