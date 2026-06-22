@@ -1150,7 +1150,8 @@
             Robinets du ballon et chauffe-eau
           </div>
           <div class="doc-card" style="padding:10px 8px">
-            <svg viewBox="0 0 310 420" fill="none" style="width:100%;max-width:320px;display:block">
+            <div class="pipe-layout">
+            <svg id="ce-svg" viewBox="0 0 310 420" fill="none" style="width:100%;max-width:320px;display:block">
 
               <!-- Tuyaux bordures -->
               <path d="M130 345 L260 345" stroke="#333" stroke-width="15" stroke-linecap="round" fill="none"/>
@@ -1174,20 +1175,20 @@
               <text x="245" y="70" fill="var(--text2)" font-size="11" text-anchor="middle" font-weight="600">gaz</text>
 
               <!-- Leviers de vannes -->
-              <g style="transform-origin:70px 80px">
-                <line x1="55" y1="80" x2="37" y2="80" stroke="#4f8ef7" stroke-width="6" stroke-linecap="round"/>
+              <g class="valve-part" data-valve="v8" data-angle="-90" style="transform-origin:70px 80px">
+                <line class="valve-color" x1="55" y1="80" x2="37" y2="80" stroke="#4f8ef7" stroke-width="6" stroke-linecap="round"/>
               </g>
-              <g style="transform-origin:130px 80px">
-                <line x1="115" y1="80" x2="97" y2="80" stroke="#4f8ef7" stroke-width="6" stroke-linecap="round"/>
+              <g class="valve-part" data-valve="v9" data-angle="-90" style="transform-origin:130px 80px">
+                <line class="valve-color" x1="115" y1="80" x2="97" y2="80" stroke="#4f8ef7" stroke-width="6" stroke-linecap="round"/>
               </g>
-              <g style="transform-origin:172px 200px">
-                <line x1="172" y1="185" x2="172" y2="167" stroke="#4f8ef7" stroke-width="6" stroke-linecap="round"/>
+              <g class="valve-part" data-valve="v10" data-angle="-90" style="transform-origin:172px 200px">
+                <line class="valve-color" x1="172" y1="185" x2="172" y2="167" stroke="#4f8ef7" stroke-width="6" stroke-linecap="round"/>
               </g>
-              <g style="transform-origin:130px 272px">
-                <line x1="115" y1="272" x2="97" y2="272" stroke="#4f8ef7" stroke-width="6" stroke-linecap="round"/>
+              <g class="valve-part" data-valve="v11" data-angle="-90" style="transform-origin:130px 272px">
+                <line class="valve-color" x1="115" y1="272" x2="97" y2="272" stroke="#4f8ef7" stroke-width="6" stroke-linecap="round"/>
               </g>
-              <g style="transform-origin:172px 345px">
-                <line x1="172" y1="330" x2="172" y2="312" stroke="#4f8ef7" stroke-width="6" stroke-linecap="round"/>
+              <g class="valve-part" data-valve="v12" data-angle="-90" style="transform-origin:172px 345px">
+                <line class="valve-color" x1="172" y1="330" x2="172" y2="312" stroke="#4f8ef7" stroke-width="6" stroke-linecap="round"/>
               </g>
 
               <!-- Badges numérotés -->
@@ -1199,6 +1200,18 @@
                 <circle cx="172" cy="345" r="13" fill="var(--bg2)"/><circle cx="172" cy="345" r="11" fill="#4f8ef7"/><text x="172" y="349" fill="#fff" font-size="10">12</text>
               </g>
             </svg>
+            <div class="pipe-btns">
+              <button class="pipe-btn ce-btn" data-mode="ete" onclick="setCeMode('ete')" title="Été">
+                <svg viewBox="0 0 24 24" fill="none" stroke="#34c759" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 8C8 10 5.9 16.17 3.82 21.34l1.89.66.95-2.3c.48.17.98.3 1.34.3C19 20 22 3 22 3c-1 2-8 2.25-13.5 2.25S2 11.5 2 13.5s1.5 3.5 1.5 3.5"/></svg>
+              </button>
+              <button class="pipe-btn ce-btn" data-mode="hiver" onclick="setCeMode('hiver')" title="Hiver">
+                <svg viewBox="0 0 24 24" fill="none" stroke="#4f8ef7" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="2" x2="12" y2="22"/><line x1="3.5" y1="7" x2="20.5" y2="17"/><line x1="3.5" y1="17" x2="20.5" y2="7"/><line x1="12" y1="5" x2="9.5" y2="3.5"/><line x1="12" y1="5" x2="14.5" y2="3.5"/><line x1="12" y1="19" x2="9.5" y2="20.5"/><line x1="12" y1="19" x2="14.5" y2="20.5"/><line x1="6" y1="8" x2="4" y2="9.5"/><line x1="6" y1="8" x2="5" y2="5.5"/><line x1="18" y1="16" x2="20" y2="14.5"/><line x1="18" y1="16" x2="19" y2="18.5"/><line x1="6" y1="16" x2="4" y2="14.5"/><line x1="6" y1="16" x2="5" y2="18.5"/><line x1="18" y1="8" x2="20" y2="9.5"/><line x1="18" y1="8" x2="19" y2="5.5"/></svg>
+              </button>
+              <button class="pipe-btn ce-btn" data-mode="hivernage" onclick="setCeMode('hivernage')" title="Hivernage">
+                <svg viewBox="0 0 24 24" fill="none" stroke="#ff3b30" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+              </button>
+            </div>
+            </div>
             <div class="doc-valve-legend">
               <div><span class="doc-valve-dot" style="background:#4f8ef7">8</span> Arrivée ballon</div>
               <div><span class="doc-valve-dot" style="background:#4f8ef7">9</span> Retour ballon</div>
@@ -2249,6 +2262,45 @@ function setWaterMode(mode) {
   }
 }
 
+var ceModeInited = false;
+function setCeMode(mode) {
+  var svg = document.getElementById('ce-svg');
+  if (!ceModeInited && svg) {
+    svg.querySelectorAll('.valve-part, .valve-color').forEach(function(el) {
+      el.style.transition = 'none';
+    });
+  }
+  document.querySelectorAll('.ce-btn').forEach(function(b) {
+    b.classList.toggle('active', b.dataset.mode === mode);
+  });
+
+  var modes = {
+    ete:      { v8:'open', v9:'open', v10:'open', v11:'closed', v12:'open' },
+    hiver:    { v8:'open', v9:'open', v10:'closed', v11:'open', v12:'closed' },
+    hivernage:{ v8:'closed', v9:'closed', v10:'closed', v11:'open', v12:'closed' }
+  };
+  var s = modes[mode];
+  var openColor = '#34c759', closedColor = '#ff3b30';
+
+  document.querySelectorAll('#ce-svg [data-valve]').forEach(function(g) {
+    var id = g.dataset.valve;
+    var open = s[id] === 'open';
+    g.style.transform = open ? 'rotate(' + (g.dataset.angle || 90) + 'deg)' : '';
+    g.querySelectorAll('.valve-color').forEach(function(el) {
+      el.setAttribute('stroke', open ? openColor : closedColor);
+    });
+  });
+
+  if (!ceModeInited && svg) {
+    requestAnimationFrame(function(){ requestAnimationFrame(function(){
+      svg.querySelectorAll('.valve-part, .valve-color').forEach(function(el) {
+        el.style.transition = '';
+      });
+      ceModeInited = true;
+    }); });
+  }
+}
+
 // ── Swipe between sections ──
 function addSectionSwipe(el, getCats, getActive, onSwipe) {
   var sx, sy, locked;
@@ -2554,6 +2606,7 @@ function refreshPill() {
 }
 refreshPill();
 setWaterMode('hivernage');
+setCeMode('hivernage');
 moveTabPill(document.getElementById('doc-tabs'));
 new ResizeObserver(function(){
   var pill = document.getElementById('nav-pill');
