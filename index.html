@@ -814,7 +814,16 @@
       display: inline-flex; align-items: center; justify-content: center;
       font-size: 10px; font-weight: 700; color: #fff; vertical-align: middle;
     }
-    .pipe-layout { display: flex; gap: 8px; align-items: flex-start; max-width: 500px; }
+    .pipe-diagrams-row { display: flex; flex-direction: column; gap: 14px; }
+    @media (min-width: 800px) {
+      .pipe-diagrams-row { flex-direction: row; gap: 20px; }
+      .pipe-diagram-section { flex: 1; min-width: 0; }
+    }
+    .pipe-mode-btns { display: flex; gap: 8px; margin-bottom: 10px; }
+    .pipe-mode-btns .pipe-btn { flex-direction: row; gap: 6px; width: auto; padding: 0 12px; }
+    .pipe-mode-btns .pipe-btn span { font-size: 12px; font-weight: 600; color: var(--text2); }
+    .pipe-mode-btns .pipe-btn.active span { color: #fff; }
+    .pipe-layout { display: flex; gap: 8px; align-items: flex-start; }
     .pipe-btns { display: flex; flex-direction: column; gap: 6px; flex-shrink: 0; }
     .pipe-btn {
       width: 40px; height: 40px; border-radius: 10px; border: 2px solid var(--border);
@@ -956,7 +965,44 @@
     <div class="doc-body">
       <div class="doc-block active" data-doc="0">
 
-        <div class="doc-section">
+        <div class="pipe-mode-btns">
+          <button class="pipe-btn" data-mode="ete" onclick="setBothModes('ete')" title="Été">
+            <svg viewBox="0 0 24 24" fill="none" stroke="#34c759" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 8C8 10 5.9 16.17 3.82 21.34l1.89.66.95-2.3c.48.17.98.3 1.34.3C19 20 22 3 22 3c-1 2-8 2.25-13.5 2.25S2 11.5 2 13.5s1.5 3.5 1.5 3.5"/></svg>
+            <span>Été</span>
+          </button>
+          <button class="pipe-btn" data-mode="hiver" onclick="setBothModes('hiver')" title="Hiver">
+            <svg viewBox="0 0 24 24" fill="none" stroke="#4f8ef7" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="2" x2="12" y2="22"/><line x1="3.5" y1="7" x2="20.5" y2="17"/><line x1="3.5" y1="17" x2="20.5" y2="7"/><line x1="12" y1="5" x2="9.5" y2="3.5"/><line x1="12" y1="5" x2="14.5" y2="3.5"/><line x1="12" y1="19" x2="9.5" y2="20.5"/><line x1="12" y1="19" x2="14.5" y2="20.5"/><line x1="6" y1="8" x2="4" y2="9.5"/><line x1="6" y1="8" x2="5" y2="5.5"/><line x1="18" y1="16" x2="20" y2="14.5"/><line x1="18" y1="16" x2="19" y2="18.5"/><line x1="6" y1="16" x2="4" y2="14.5"/><line x1="6" y1="16" x2="5" y2="18.5"/><line x1="18" y1="8" x2="20" y2="9.5"/><line x1="18" y1="8" x2="19" y2="5.5"/></svg>
+            <span>Hiver</span>
+          </button>
+          <button class="pipe-btn" data-mode="hivernage" onclick="setBothModes('hivernage')" title="Hivernage">
+            <svg viewBox="0 0 24 24" fill="none" stroke="#ff3b30" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+            <span>Hivernage</span>
+          </button>
+        </div>
+        <div id="mode-desc">
+          <div class="mode-desc-item" data-mode="ete" style="display:none">
+            <p><strong>1.</strong> Fermer les robinets intérieurs<br>
+            <strong>2.</strong> Fermer la vanne du tuyau hiver <span class="doc-valve-dot" style="background:#ff9f0a">3</span><br>
+            <strong>3.</strong> Ouvrir la vanne réservoir <span class="doc-valve-dot" style="background:#34c759">1</span> et fermer la purge</p>
+          </div>
+          <div class="mode-desc-item" data-mode="hiver" style="display:none">
+            <p><strong>1.</strong> Fermer la vanne du chalet + bachal <span class="doc-valve-dot" style="background:#4f8ef7">4</span><br>
+            <strong>2.</strong> Déneiger au besoin le tuyau hiver - piquet sous le chalet<br>
+            <strong>3.</strong> Ouvrir la vanne réservoir <span class="doc-valve-dot" style="background:#34c759">1</span> et fermer la purge</p>
+          </div>
+          <div class="mode-desc-item" data-mode="hivernage" style="display:none">
+            <p><strong>1.</strong> Fermer la vanne réservoir <span class="doc-valve-dot" style="background:#34c759">1</span> et ouvrir la purge<br>
+            <strong>2.</strong> Vidanger le ballon d'eau chaude <span class="doc-valve-dot" style="background:#ff3b30">7</span><br>
+            <strong>3.</strong> Ouvrir toutes les vannes<br>
+            <strong>4.</strong> Ouvrir tous les robinets</p>
+            <div class="doc-warn">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+              <span>Ne pas oublier l'hivernage - le gel peut faire éclater les tuyaux et causer des dégâts importants.</span>
+            </div>
+          </div>
+        </div>
+        <div class="pipe-diagrams-row">
+        <div class="doc-section pipe-diagram-section">
           <div class="doc-section-title">
             <div class="doc-section-icon" style="background:rgba(79,142,247,.15)">
               <svg viewBox="0 0 24 24" fill="none" stroke="#4f8ef7" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z"/></svg>
@@ -1087,59 +1133,11 @@
                 <circle class="valve-color" id="v3-dot" cx="237" cy="299" r="3.5" fill="#ff3b30" style="transform-origin:225px 285.6px"/>
               </g>
             </svg>
-            <div class="pipe-btns">
-              <button class="pipe-btn" data-mode="ete" onclick="setBothModes('ete')" title="Été">
-                <svg viewBox="0 0 24 24" fill="none" stroke="#34c759" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 8C8 10 5.9 16.17 3.82 21.34l1.89.66.95-2.3c.48.17.98.3 1.34.3C19 20 22 3 22 3c-1 2-8 2.25-13.5 2.25S2 11.5 2 13.5s1.5 3.5 1.5 3.5"/></svg>
-              </button>
-              <button class="pipe-btn" data-mode="hiver" onclick="setBothModes('hiver')" title="Hiver">
-                <svg viewBox="0 0 24 24" fill="none" stroke="#4f8ef7" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="2" x2="12" y2="22"/><line x1="3.5" y1="7" x2="20.5" y2="17"/><line x1="3.5" y1="17" x2="20.5" y2="7"/><line x1="12" y1="5" x2="9.5" y2="3.5"/><line x1="12" y1="5" x2="14.5" y2="3.5"/><line x1="12" y1="19" x2="9.5" y2="20.5"/><line x1="12" y1="19" x2="14.5" y2="20.5"/><line x1="6" y1="8" x2="4" y2="9.5"/><line x1="6" y1="8" x2="5" y2="5.5"/><line x1="18" y1="16" x2="20" y2="14.5"/><line x1="18" y1="16" x2="19" y2="18.5"/><line x1="6" y1="16" x2="4" y2="14.5"/><line x1="6" y1="16" x2="5" y2="18.5"/><line x1="18" y1="8" x2="20" y2="9.5"/><line x1="18" y1="8" x2="19" y2="5.5"/></svg>
-              </button>
-              <button class="pipe-btn" data-mode="hivernage" onclick="setBothModes('hivernage')" title="Hivernage">
-                <svg viewBox="0 0 24 24" fill="none" stroke="#ff3b30" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
-              </button>
             </div>
-            </div>
-            <div id="mode-desc">
-              <div class="mode-desc-item" data-mode="ete" style="display:none">
-                <p><strong>1.</strong> Fermer les robinets intérieurs<br>
-                <strong>2.</strong> Fermer la vanne du tuyau hiver <span class="doc-valve-dot" style="background:#ff9f0a">3</span><br>
-                <strong>3.</strong> Ouvrir la vanne réservoir <span class="doc-valve-dot" style="background:#34c759">1</span> et fermer la purge</p>
-              </div>
-              <div class="mode-desc-item" data-mode="hiver" style="display:none">
-                <p><strong>1.</strong> Fermer la vanne du chalet + bachal <span class="doc-valve-dot" style="background:#4f8ef7">4</span><br>
-                <strong>2.</strong> Déneiger au besoin le tuyau hiver - piquet sous le chalet<br>
-                <strong>3.</strong> Ouvrir la vanne réservoir <span class="doc-valve-dot" style="background:#34c759">1</span> et fermer la purge</p>
-              </div>
-              <div class="mode-desc-item" data-mode="hivernage" style="display:none">
-                <p><strong>1.</strong> Fermer la vanne réservoir <span class="doc-valve-dot" style="background:#34c759">1</span> et ouvrir la purge<br>
-                <strong>2.</strong> Vidanger le ballon d'eau chaude <span class="doc-valve-dot" style="background:#ff3b30">7</span><br>
-                <strong>3.</strong> Ouvrir toutes les vannes<br>
-                <strong>4.</strong> Ouvrir tous les robinets</p>
-                <div class="doc-warn">
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
-                  <span>Ne pas oublier l'hivernage - le gel peut faire éclater les tuyaux et causer des dégâts importants.</span>
-                </div>
-              </div>
-            </div>
-            <div class="doc-valve-legend">
-              <div><span class="doc-valve-dot" style="background:#34c759">1</span> Réservoir</div>
-              <div><span class="doc-valve-dot" style="background:#34c759">2</span> Arrivée réservoir</div>
-              <div><span class="doc-valve-dot" style="background:#ff9f0a">3</span> Robinet extérieur (hiver)</div>
-              <div><span class="doc-valve-dot" style="background:#4f8ef7">4</span> Vers chalet + bachal</div>
-              <div><span class="doc-valve-dot" style="background:#4f8ef7">5</span> Bachal</div>
-              <div><span class="doc-valve-dot" style="background:#4f8ef7">6</span> Chalet</div>
-              <div><span class="doc-valve-dot" style="background:#ff3b30">7</span> Purge ballon eau chaude</div>
-              <div><span style="flex-shrink:0;width:12px;height:12px;border-radius:50%;background:#ff3b30;display:inline-block;margin:0 3px"></span> Purge de vidange (3, 4, 5)</div>
-            </div>
-          </div>
-          <img src="marche-fermee.jpg" alt="Vis de la marche" style="width:100%;border-radius:8px;margin-top:8px">
-          <div class="doc-tip" style="margin-top:8px">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
-            <span>Dévisser la vis encerclée pour ouvrir la marche. Tournevis sur le meuble de rangement dans l'entrée à droite.</span>
           </div>
         </div>
 
-        <div class="doc-section">
+        <div class="doc-section pipe-diagram-section">
           <div class="doc-section-title">
             <div class="doc-section-icon" style="background:rgba(255,159,10,.15)">
               <svg viewBox="0 0 24 24" fill="none" stroke="#ff9f0a" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z"/></svg>
@@ -1216,17 +1214,6 @@
                 <circle cx="147" cy="345" r="13" fill="var(--bg2)"/><circle cx="147" cy="345" r="11" fill="#4f8ef7"/><text x="147" y="349" fill="#fff" font-size="10">12</text>
               </g>
             </svg>
-            <div class="pipe-btns">
-              <button class="pipe-btn ce-btn" data-mode="ete" onclick="setBothModes('ete')" title="Été">
-                <svg viewBox="0 0 24 24" fill="none" stroke="#34c759" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 8C8 10 5.9 16.17 3.82 21.34l1.89.66.95-2.3c.48.17.98.3 1.34.3C19 20 22 3 22 3c-1 2-8 2.25-13.5 2.25S2 11.5 2 13.5s1.5 3.5 1.5 3.5"/></svg>
-              </button>
-              <button class="pipe-btn ce-btn" data-mode="hiver" onclick="setBothModes('hiver')" title="Hiver">
-                <svg viewBox="0 0 24 24" fill="none" stroke="#4f8ef7" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="2" x2="12" y2="22"/><line x1="3.5" y1="7" x2="20.5" y2="17"/><line x1="3.5" y1="17" x2="20.5" y2="7"/><line x1="12" y1="5" x2="9.5" y2="3.5"/><line x1="12" y1="5" x2="14.5" y2="3.5"/><line x1="12" y1="19" x2="9.5" y2="20.5"/><line x1="12" y1="19" x2="14.5" y2="20.5"/><line x1="6" y1="8" x2="4" y2="9.5"/><line x1="6" y1="8" x2="5" y2="5.5"/><line x1="18" y1="16" x2="20" y2="14.5"/><line x1="18" y1="16" x2="19" y2="18.5"/><line x1="6" y1="16" x2="4" y2="14.5"/><line x1="6" y1="16" x2="5" y2="18.5"/><line x1="18" y1="8" x2="20" y2="9.5"/><line x1="18" y1="8" x2="19" y2="5.5"/></svg>
-              </button>
-              <button class="pipe-btn ce-btn" data-mode="hivernage" onclick="setBothModes('hivernage')" title="Hivernage">
-                <svg viewBox="0 0 24 24" fill="none" stroke="#ff3b30" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
-              </button>
-            </div>
             </div>
             <div class="doc-valve-legend">
               <div><span class="doc-valve-dot" style="background:#4f8ef7">8</span> Arrivée ballon</div>
@@ -1236,6 +1223,23 @@
               <div><span class="doc-valve-dot" style="background:#4f8ef7">12</span> Retour chauffe-eau</div>
             </div>
           </div>
+        </div>
+        </div>
+
+        <div class="doc-valve-legend">
+          <div><span class="doc-valve-dot" style="background:#34c759">1</span> Réservoir</div>
+          <div><span class="doc-valve-dot" style="background:#34c759">2</span> Arrivée réservoir</div>
+          <div><span class="doc-valve-dot" style="background:#ff9f0a">3</span> Robinet extérieur (hiver)</div>
+          <div><span class="doc-valve-dot" style="background:#4f8ef7">4</span> Vers chalet + bachal</div>
+          <div><span class="doc-valve-dot" style="background:#4f8ef7">5</span> Bachal</div>
+          <div><span class="doc-valve-dot" style="background:#4f8ef7">6</span> Chalet</div>
+          <div><span class="doc-valve-dot" style="background:#ff3b30">7</span> Purge ballon eau chaude</div>
+          <div><span style="flex-shrink:0;width:12px;height:12px;border-radius:50%;background:#ff3b30;display:inline-block;margin:0 3px"></span> Purge de vidange (3, 4, 5)</div>
+        </div>
+        <img src="marche-fermee.jpg" alt="Vis de la marche" style="width:100%;max-width:400px;border-radius:8px;margin-top:8px">
+        <div class="doc-tip" style="margin-top:8px">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+          <span>Dévisser la vis encerclée pour ouvrir la marche. Tournevis sur le meuble de rangement dans l'entrée à droite.</span>
         </div>
 
         <div class="doc-section">
@@ -2361,7 +2365,7 @@ function setCeMode(mode) {
       el.style.transition = 'none';
     });
   }
-  document.querySelectorAll('.ce-btn').forEach(function(b) {
+  document.querySelectorAll('.pipe-mode-btns .pipe-btn').forEach(function(b) {
     b.classList.toggle('active', b.dataset.mode === mode);
   });
 
