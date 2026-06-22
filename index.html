@@ -1026,13 +1026,15 @@
               <path d="M210 406 L240 406" stroke="#999" stroke-width="11" stroke-linecap="butt" fill="none"/>
 
               <!-- Eau (bleu, sous les éléments de vanne) -->
-              <path id="w2" class="water-path" d="M225 24 L225 264" stroke="#2563eb" stroke-width="8" stroke-linecap="round" fill="none" opacity="0"/>
-              <path id="w54" class="water-path" d="M120 90 L120 258 Q120 264 126 264 L225 264" stroke="#2563eb" stroke-width="7" stroke-linecap="round" stroke-linejoin="round" fill="none" opacity="0"/>
-              <path id="w3a" class="water-path" d="M225 264 L225 365" stroke="#2563eb" stroke-width="8" stroke-linecap="butt" fill="none" opacity="0"/>
-              <path id="w3b" class="water-path" d="M225 380 L225 399" stroke="#2563eb" stroke-width="8" stroke-linecap="butt" fill="none" opacity="0"/>
-              <path id="w3c" class="water-path" d="M225 414 L225 440" stroke="#2563eb" stroke-width="8" stroke-linecap="butt" fill="none" opacity="0"/>
-              <path id="w6" class="water-path" d="M120 188 L38 188 Q32 188 32 194 L32 366 Q32 372 38 372 L290 372" stroke="#2563eb" stroke-width="7" stroke-linecap="round" stroke-linejoin="round" fill="none" opacity="0"/>
-              <path id="w7" class="water-path" d="M100 406 L285 406" stroke="#2563eb" stroke-width="7" stroke-linecap="round" fill="none" opacity="0"/>
+              <g opacity="0.7">
+              <path id="w2" class="water-path" d="M225 24 L225 264" stroke="#2563eb" stroke-width="8" stroke-linecap="round" fill="none" style="display:none"/>
+              <path id="w54" class="water-path" d="M120 90 L120 258 Q120 264 126 264 L225 264" stroke="#2563eb" stroke-width="7" stroke-linecap="round" stroke-linejoin="round" fill="none" style="display:none"/>
+              <path id="w3a" class="water-path" d="M225 264 L225 365" stroke="#2563eb" stroke-width="8" stroke-linecap="butt" fill="none" style="display:none"/>
+              <path id="w3b" class="water-path" d="M225 380 L225 399" stroke="#2563eb" stroke-width="8" stroke-linecap="butt" fill="none" style="display:none"/>
+              <path id="w3c" class="water-path" d="M225 414 L225 440" stroke="#2563eb" stroke-width="8" stroke-linecap="butt" fill="none" style="display:none"/>
+              <path id="w6" class="water-path" d="M120 188 L38 188 Q32 188 32 194 L32 366 Q32 372 38 372 L290 372" stroke="#2563eb" stroke-width="7" stroke-linecap="round" stroke-linejoin="round" fill="none" style="display:none"/>
+              <path id="w7" class="water-path" d="M100 406 L285 406" stroke="#2563eb" stroke-width="7" stroke-linecap="round" fill="none" style="display:none"/>
+              </g>
 
               <!-- Ligne pointillée réservoir / sous la marche -->
               <line x1="10" y1="72" x2="310" y2="72" stroke="var(--text3)" stroke-width="1.5" stroke-dasharray="6 4"/>
@@ -1169,13 +1171,15 @@
               <path d="M260 100 L260 345" stroke="#999" stroke-width="11" stroke-linecap="round" fill="none"/>
 
               <!-- Eau -->
-              <path id="ce-w8" class="water-path" d="M70 25 L70 400" stroke="#2563eb" stroke-width="8" stroke-linecap="round" fill="none" opacity="0"/>
-              <path id="ce-w9t" class="water-path" d="M130 25 L130 200" stroke="#2563eb" stroke-width="8" stroke-linecap="round" fill="none" opacity="0"/>
-              <path id="ce-w9b" class="water-path" d="M130 345 L130 400" stroke="#2563eb" stroke-width="8" stroke-linecap="round" fill="none" opacity="0"/>
-              <path id="ce-w10" class="water-path" d="M130 200 L230 200" stroke="#2563eb" stroke-width="7" stroke-linecap="round" fill="none" opacity="0"/>
-              <path id="ce-w12" class="water-path" d="M130 345 L260 345" stroke="#2563eb" stroke-width="7" stroke-linecap="round" fill="none" opacity="0"/>
-              <path id="ce-wCL" class="water-path" d="M230 100 L230 200" stroke="#2563eb" stroke-width="7" stroke-linecap="round" fill="none" opacity="0"/>
-              <path id="ce-wCR" class="water-path" d="M260 100 L260 345" stroke="#2563eb" stroke-width="7" stroke-linecap="round" fill="none" opacity="0"/>
+              <g id="ce-water" opacity="0" style="transition:opacity .5s ease">
+              <path d="M70 25 L70 400" stroke="#2563eb" stroke-width="8" stroke-linecap="round" fill="none"/>
+              <path d="M130 25 L130 200" stroke="#2563eb" stroke-width="8" stroke-linecap="round" fill="none"/>
+              <path d="M130 345 L130 400" stroke="#2563eb" stroke-width="8" stroke-linecap="round" fill="none"/>
+              <path d="M130 200 L230 200" stroke="#2563eb" stroke-width="7" stroke-linecap="round" fill="none"/>
+              <path d="M130 345 L260 345" stroke="#2563eb" stroke-width="7" stroke-linecap="round" fill="none"/>
+              <path d="M230 100 L230 200" stroke="#2563eb" stroke-width="7" stroke-linecap="round" fill="none"/>
+              <path d="M260 100 L260 345" stroke="#2563eb" stroke-width="7" stroke-linecap="round" fill="none"/>
+              </g>
 
               <!-- Chauffe-eau box -->
               <rect x="190" y="15" width="110" height="85" rx="10" fill="var(--bg2)"/>
@@ -2258,7 +2262,7 @@ function setWaterMode(mode) {
   var wf = water[mode];
   ['w2','w54','w3a','w3b','w3c','w6','w7'].forEach(function(id) {
     var el = document.getElementById(id);
-    if (el) el.setAttribute('opacity', wf[id] ? '0.7' : '0');
+    if (el) el.style.display = wf[id] ? '' : 'none';
   });
 
   if (!waterModeInited && svg) {
@@ -2300,16 +2304,8 @@ function setCeMode(mode) {
     });
   });
 
-  var ceWater = {
-    ete:      { 'ce-w8':1, 'ce-w9t':1, 'ce-w9b':1, 'ce-w10':1, 'ce-w12':1, 'ce-wCL':1, 'ce-wCR':1 },
-    hiver:    { 'ce-w8':0, 'ce-w9t':0, 'ce-w9b':0, 'ce-w10':0, 'ce-w12':0, 'ce-wCL':0, 'ce-wCR':0 },
-    hivernage:{ 'ce-w8':0, 'ce-w9t':0, 'ce-w9b':0, 'ce-w10':0, 'ce-w12':0, 'ce-wCL':0, 'ce-wCR':0 }
-  };
-  var cw = ceWater[mode];
-  Object.keys(cw).forEach(function(id) {
-    var el = document.getElementById(id);
-    if (el) el.setAttribute('opacity', cw[id] ? '0.7' : '0');
-  });
+  var ceWaterEl = document.getElementById('ce-water');
+  if (ceWaterEl) ceWaterEl.setAttribute('opacity', mode === 'ete' ? '0.7' : '0');
 
   if (!ceModeInited && svg) {
     requestAnimationFrame(function(){ requestAnimationFrame(function(){
