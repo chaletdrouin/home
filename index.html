@@ -2732,7 +2732,7 @@ window.addEventListener('resize', function(){
   }
   document.addEventListener('touchstart',function(e){
     if(e.target.closest('.sheet')||e.target.closest('.overlay'))return;
-    if(!document.getElementById('view-cal').classList.contains('active'))return;
+    if(!document.getElementById('view-cal').classList.contains('slide-active'))return;
     sx=e.touches[0].clientX; sy=e.touches[0].clientY;
     active=true; locked=null; swipeArrow=null; swipeDir=0;
   },{passive:true});
