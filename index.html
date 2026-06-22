@@ -1232,7 +1232,7 @@
               <div class="doc-card-label">Coordonnées GPS</div>
               <p><strong>46.02576° N &nbsp; 6.90966° E</strong></p>
             </div>
-            <a href="#" onclick="openMap(46.02576,6.90966,'Réservoir');return false" style="flex-shrink:0;width:36px;height:36px;border-radius:10px;background:#34c759;display:flex;align-items:center;justify-content:center;text-decoration:none">
+            <a href="https://www.google.com/maps?q=46.02576,6.90966" target="_blank" rel="noopener" onclick="openMap(event,46.02576,6.90966,'Réservoir')" style="flex-shrink:0;width:36px;height:36px;border-radius:10px;background:#34c759;display:flex;align-items:center;justify-content:center;text-decoration:none">
               <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
             </a>
           </div>
@@ -1250,7 +1250,7 @@
               <div class="doc-card-label">Coordonnées GPS</div>
               <p><strong>46.02559° N &nbsp; 6.90348° E</strong></p>
             </div>
-            <a href="#" onclick="openMap(46.02559,6.90348,'Source');return false" style="flex-shrink:0;width:36px;height:36px;border-radius:10px;background:#34c759;display:flex;align-items:center;justify-content:center;text-decoration:none">
+            <a href="https://www.google.com/maps?q=46.02559,6.90348" target="_blank" rel="noopener" onclick="openMap(event,46.02559,6.90348,'Source')" style="flex-shrink:0;width:36px;height:36px;border-radius:10px;background:#34c759;display:flex;align-items:center;justify-content:center;text-decoration:none">
               <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
             </a>
           </div>
@@ -2159,12 +2159,10 @@ function switchDocTab(idx) {
 }
 
 // ── Water pipe diagram modes ──
-function openMap(lat, lng, label) {
-  var ua = navigator.userAgent;
-  if (/Android/.test(ua)) {
+function openMap(e, lat, lng, label) {
+  if (/Android/.test(navigator.userAgent)) {
+    e.preventDefault();
     location.href = 'geo:' + lat + ',' + lng + '?q=' + lat + ',' + lng + '(' + encodeURIComponent(label) + ')';
-  } else {
-    window.open('https://www.google.com/maps?q=' + lat + ',' + lng, '_blank');
   }
 }
 
