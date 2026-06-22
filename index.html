@@ -2161,9 +2161,7 @@ function switchDocTab(idx) {
 // ── Water pipe diagram modes ──
 function openMap(lat, lng, label) {
   var ua = navigator.userAgent;
-  if (/iPhone|iPad|iPod/.test(ua)) {
-    location.href = 'maps:?ll=' + lat + ',' + lng + '&q=' + encodeURIComponent(label);
-  } else if (/Android/.test(ua)) {
+  if (/Android/.test(ua)) {
     location.href = 'geo:' + lat + ',' + lng + '?q=' + lat + ',' + lng + '(' + encodeURIComponent(label) + ')';
   } else {
     window.open('https://www.google.com/maps?q=' + lat + ',' + lng, '_blank');
