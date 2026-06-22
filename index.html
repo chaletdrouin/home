@@ -761,7 +761,7 @@
     .doc-view.active { display:flex; }
     .doc-tabs-always { display: flex !important; padding: 4px !important; flex: 1; }
     .doc-tabs-always .inv-tab { flex: 1; }
-    .doc-body { flex: 1; overflow-y: auto; overflow-x: hidden; padding: 14px; overscroll-behavior: contain; scrollbar-width: none; }
+    .doc-body { flex: 1; overflow-y: auto; overflow-x: hidden; padding: 10px; overscroll-behavior: contain; scrollbar-width: none; }
     .doc-body::-webkit-scrollbar { display: none; }
     .doc-block {
       display: none;
@@ -770,7 +770,8 @@
     .doc-block p {
       font-size: 14px; color: var(--text2); line-height: 1.6; margin: 0;
     }
-    .doc-section { margin-bottom: 20px; }
+    .doc-section { margin-bottom: 16px; }
+    .pipe-diagram-section { margin-bottom: 10px; }
     .doc-section-title {
       font-size: 15px; font-weight: 700; color: var(--text);
       margin: 0 0 8px; display: flex; align-items: center; gap: 8px;
@@ -814,13 +815,13 @@
       display: inline-flex; align-items: center; justify-content: center;
       font-size: 10px; font-weight: 700; color: #fff; vertical-align: middle;
     }
-    .pipe-diagrams-row { display: flex; flex-direction: column; gap: 14px; }
+    .pipe-diagrams-row { display: flex; flex-direction: column; gap: 6px; }
     @media (min-width: 800px) {
       .pipe-diagrams-row { flex-direction: row; gap: 20px; max-width: 700px; }
       .pipe-diagram-section { flex: 1; min-width: 0; }
     }
-    .pipe-mode-btns { display: flex; gap: 8px; margin-bottom: 10px; }
-    .pipe-mode-btns .pipe-btn { flex-direction: row; gap: 6px; width: auto; padding: 0 12px; }
+    .pipe-mode-btns { display: flex; gap: 6px; margin-bottom: 4px; }
+    .pipe-mode-btns .pipe-btn { flex-direction: row; gap: 5px; width: auto; height: 34px; padding: 0 10px; }
     .pipe-mode-btns .pipe-btn span { font-size: 12px; font-weight: 600; color: var(--text2); }
     .pipe-mode-btns .pipe-btn.active span { color: #fff; }
     .pipe-layout { display: flex; gap: 8px; align-items: flex-start; }
@@ -832,7 +833,7 @@
     }
     .pipe-btn.active { border-color: #4f8ef7; background: rgba(79,142,247,.12); }
     .pipe-btn svg { width: 20px; height: 20px; }
-    .mode-desc-item { padding: 8px 10px; border-radius: 8px; background: var(--bg2); font-size: 13px; line-height: 1.6; margin-top: 10px; }
+    .mode-desc-item { padding: 6px 10px; border-radius: 8px; background: var(--bg2); font-size: 13px; line-height: 1.5; margin-bottom: 8px; }
     .mode-desc-item p { margin: 0; }
     .mode-desc-item .doc-warn { margin-top: 8px; }
     .valve-part { transition: transform .5s ease; }
@@ -1000,7 +1001,7 @@
               <strong>4.</strong> Ouvrir tous les robinets</p>
             </div>
           </div>
-<div class="doc-card" style="padding:10px 8px">
+<div class="doc-card" style="padding:6px 6px">
             <div class="pipe-layout">
             <svg id="pipe-svg" viewBox="0 0 350 460" fill="none" style="width:100%;display:block">
               <text x="8" y="16" fill="var(--text)" font-size="13" font-weight="700">Sous la marche</text>
@@ -1140,7 +1141,7 @@
         </div>
 
         <div class="doc-section pipe-diagram-section">
-          <div class="doc-card" style="padding:10px 8px">
+          <div class="doc-card" style="padding:6px 6px">
             <div class="pipe-layout">
             <svg id="ce-svg" viewBox="0 0 310 420" fill="none" style="width:100%;display:block">
               <text x="8" y="16" fill="var(--text)" font-size="13" font-weight="700">Ballon et chauffe-eau</text>
