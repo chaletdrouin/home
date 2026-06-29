@@ -1970,14 +1970,12 @@ async function showView(name) {
   document.querySelectorAll('.hdr-content').forEach(function(c) { c.classList.remove('active'); });
   document.getElementById('hdr-' + name).classList.add('active');
 
+  document.getElementById('view-year').classList.remove('active');
+  document.getElementById('views-slider').style.display = '';
   if (name === 'cal') {
     var now = new Date();
     cY = now.getFullYear(); cM = now.getMonth();
-    document.getElementById('view-year').classList.remove('active');
-    document.getElementById('views-slider').style.display = '';
     render();
-  } else {
-    document.getElementById('view-year').classList.remove('active');
   }
 
   const panels = document.querySelectorAll('.view-panel');
@@ -2810,7 +2808,7 @@ window.addEventListener('resize', function(){
   var sx=0,sy=0;
   document.addEventListener('touchstart',function(e){sx=e.touches[0].clientX;sy=e.touches[0].clientY;},{passive:true});
   document.addEventListener('touchmove',function(e){
-    var sc=e.target.closest('.doc-body,.inv-content,.sheet,#pdf-viewer');
+    var sc=e.target.closest('.doc-body,.inv-content,.sheet,#pdf-viewer,.year-view');
     if(sc && sc.scrollHeight > sc.clientHeight) return;
     var dx=Math.abs(e.touches[0].clientX-sx), dy=Math.abs(e.touches[0].clientY-sy);
     if(dy>dx) e.preventDefault();
