@@ -645,6 +645,17 @@
       color: var(--text3); font-size: 16px; cursor: pointer;
     }
     .inv-del:hover { color: var(--red); }
+    .inv-move {
+      display: flex; flex-direction: column; flex-shrink: 0;
+    }
+    .inv-move-btn {
+      padding: 0; width: 22px; height: 16px; background: none; border: none;
+      color: var(--text3); cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .inv-move-btn svg { width: 14px; height: 14px; }
+    .inv-move-btn:disabled { opacity: .25; cursor: default; }
+    .inv-move-btn:not(:disabled):hover { color: var(--text); }
     .inv-add-input {
       flex: 1; font-size: 16px; padding: 6px 10px;
       background: var(--bg2); border: 1px solid var(--border); border-radius: 8px;
@@ -1369,7 +1380,7 @@
           </div>
           <div class="doc-card">
             <div class="doc-card-label">En arrivant</div>
-            <p>Verser un sachet d'<strong>Eparcyl</strong> dans la cuvette et tirer la chasse pour remettre en service la fosse septique.</p>
+            <p>Verser un ou deux sachets d'<strong>Eparcyl</strong> dans la cuvette et tirer la chasse pour remettre en service la fosse septique.</p>
           </div>
           <div class="doc-card">
             <div class="doc-card-label">En partant</div>
@@ -1397,7 +1408,7 @@
           </div>
           <div class="doc-tip">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
-            <span>Les bouteilles pleines sont en bas de l'escalier. <strong>Mêmes bouteilles</strong> pour la cuisinière et le chauffe-eau.</span>
+            <span>Quand une bouteille manque de pression pour le chauffe-eau, on peut l'utiliser pour la gazinière.</span>
           </div>
         </div>
 
@@ -2089,11 +2100,20 @@ function renderInventory(animate, slideDir) {
     hdr.className = 'inv-cat';
     hdr.textContent = cat;
     section.appendChild(hdr);
-    groups[cat].forEach(item => {
+    groups[cat].forEach((item, ii) => {
       const row = document.createElement('div');
       row.className = 'inv-item';
       const q = Math.min(2, Math.max(0, item.qty));
+      const isFirst = ii === 0, isLast = ii === groups[cat].length - 1;
       row.innerHTML = `
+        <div class="inv-move">
+          <button class="inv-move-btn" ${isFirst ? 'disabled' : ''} onclick="moveInvItem('${item.id}',-1)" title="Monter">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="18 15 12 9 6 15"/></svg>
+          </button>
+          <button class="inv-move-btn" ${isLast ? 'disabled' : ''} onclick="moveInvItem('${item.id}',1)" title="Descendre">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+          </button>
+        </div>
         <div class="inv-name">${esc(item.name)}</div>
         <div class="inv-toggle">
           <div class="inv-pill" data-v="${q}"></div>
@@ -2214,6 +2234,34 @@ async function setInvQty(id, level, btn) {
       method: 'PUT',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ qty: level })
+    });
+    invUpdatedAt = new Date().toISOString();
+    updateInvDate();
+  } catch {}
+}
+
+function moveInvItem(id, dir) {
+  const idx = inventory.findIndex(i => i.id === id);
+  if (idx === -1) return;
+  const cat = inventory[idx].cat || 'Épicerie';
+  let swapIdx = -1;
+  if (dir < 0) {
+    for (let i = idx - 1; i >= 0; i--) { if ((inventory[i].cat || 'Épicerie') === cat) { swapIdx = i; break; } }
+  } else {
+    for (let i = idx + 1; i < inventory.length; i++) { if ((inventory[i].cat || 'Épicerie') === cat) { swapIdx = i; break; } }
+  }
+  if (swapIdx === -1) return;
+  [inventory[idx], inventory[swapIdx]] = [inventory[swapIdx], inventory[idx]];
+  renderInventory();
+  persistInvOrder();
+}
+
+async function persistInvOrder() {
+  try {
+    await fetch(API + '/inventory/reorder', {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ ids: inventory.map(i => i.id) })
     });
     invUpdatedAt = new Date().toISOString();
     updateInvDate();

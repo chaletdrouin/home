@@ -302,6 +302,20 @@ export default {
       return json(item, 201);
     }
 
+    // PUT /inventory/reorder
+    if (req.method === 'PUT' && path === '/inventory/reorder') {
+      let body;
+      try { body = await req.json(); } catch { return json({ error: 'Invalid JSON' }, 400); }
+      if (!Array.isArray(body.ids)) return json({ error: 'ids required' }, 400);
+      const items = await getInventory();
+      const byId = new Map(items.map(i => [i.id, i]));
+      const newItems = body.ids.map(id => byId.get(id)).filter(Boolean);
+      items.forEach(i => { if (!body.ids.includes(i.id)) newItems.push(i); });
+      await env.BOOKINGS.put('inventory', JSON.stringify(newItems));
+      await env.BOOKINGS.put('inventory_updated', new Date().toISOString());
+      return json({ items: newItems });
+    }
+
     // PUT /inventory/:id
     const mInvPut = path.match(/^\/inventory\/([0-9a-f-]+)$/i);
     if (req.method === 'PUT' && mInvPut) {
