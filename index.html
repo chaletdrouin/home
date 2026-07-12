@@ -2254,10 +2254,48 @@ let invDragState = null;
 
 function attachInvDragHandlers(row) {
   const grip = row.querySelector('.inv-grip');
-  if (!grip) return;
-  grip.addEventListener('pointerdown', function(e) {
+  const name = row.querySelector('.inv-name');
+  if (grip) {
+    grip.addEventListener('pointerdown', function(e) {
+      if (e.pointerType === 'mouse' && e.button !== 0) return;
+      startInvDrag(row, grip, e);
+    });
+  }
+  if (name) attachInvLongPressDrag(row, name);
+}
+
+// Sur le nom, on attend une courte pression immobile avant de démarrer le glisser,
+// pour ne pas empêcher de faire défiler la liste en touchant le nom d'un article.
+function attachInvLongPressDrag(row, handleEl) {
+  const HOLD_MS = 180, MOVE_TOLERANCE = 8;
+  handleEl.addEventListener('pointerdown', function(e) {
     if (e.pointerType === 'mouse' && e.button !== 0) return;
-    startInvDrag(row, grip, e);
+    const pointerId = e.pointerId;
+    const startX = e.clientX, startY = e.clientY;
+    const timer = setTimeout(function() {
+      cleanup();
+      startInvDrag(row, handleEl, e);
+    }, HOLD_MS);
+    function onMove(ev) {
+      if (ev.pointerId !== pointerId) return;
+      if (Math.abs(ev.clientX - startX) > MOVE_TOLERANCE || Math.abs(ev.clientY - startY) > MOVE_TOLERANCE) {
+        clearTimeout(timer);
+        cleanup();
+      }
+    }
+    function onUp(ev) {
+      if (ev.pointerId !== pointerId) return;
+      clearTimeout(timer);
+      cleanup();
+    }
+    function cleanup() {
+      window.removeEventListener('pointermove', onMove);
+      window.removeEventListener('pointerup', onUp);
+      window.removeEventListener('pointercancel', onUp);
+    }
+    window.addEventListener('pointermove', onMove);
+    window.addEventListener('pointerup', onUp);
+    window.addEventListener('pointercancel', onUp);
   });
 }
 
@@ -2305,6 +2343,7 @@ function startInvDrag(row, grip, e) {
 
   function onMove(ev) {
     if (ev.pointerId !== pointerId) return;
+    ev.preventDefault();
     const dy = ev.clientY - startY;
     row.style.top = (originTop + dy) + 'px';
     const rowRect = row.getBoundingClientRect();
@@ -2549,9 +2588,11 @@ function setCeMode(mode) {
 function addSectionSwipe(el, getCats, getActive, onSwipe) {
   var sx, sy, locked;
   el.addEventListener('touchstart', function(e) {
+    if (invDragState) { locked = null; return; }
     sx = e.touches[0].clientX; sy = e.touches[0].clientY; locked = null;
   }, { passive: true });
   el.addEventListener('touchmove', function(e) {
+    if (invDragState) return; // un glisser d'article est en cours : pas de changement d'onglet
     if (locked === 'v') return;
     var dx = e.touches[0].clientX - sx, dy = e.touches[0].clientY - sy;
     if (locked === null && (Math.abs(dx) > 8 || Math.abs(dy) > 8)) {
@@ -2560,6 +2601,7 @@ function addSectionSwipe(el, getCats, getActive, onSwipe) {
     if (locked === 'h') e.preventDefault();
   }, { passive: false });
   el.addEventListener('touchend', function(e) {
+    if (invDragState) return;
     if (locked !== 'h') return;
     var dx = e.changedTouches[0].clientX - sx;
     if (Math.abs(dx) < 30) return;
