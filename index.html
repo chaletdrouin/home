@@ -645,17 +645,21 @@
       color: var(--text3); font-size: 16px; cursor: pointer;
     }
     .inv-del:hover { color: var(--red); }
-    .inv-move {
-      display: flex; flex-direction: column; flex-shrink: 0;
-    }
-    .inv-move-btn {
-      padding: 0; width: 22px; height: 16px; background: none; border: none;
-      color: var(--text3); cursor: pointer;
+    .inv-grip {
+      flex-shrink: 0; width: 24px; height: 32px;
       display: flex; align-items: center; justify-content: center;
+      color: var(--text3); cursor: grab; touch-action: none;
+      -webkit-tap-highlight-color: transparent;
     }
-    .inv-move-btn svg { width: 14px; height: 14px; }
-    .inv-move-btn:disabled { opacity: .25; cursor: default; }
-    .inv-move-btn:not(:disabled):hover { color: var(--text); }
+    .inv-grip svg { width: 18px; height: 18px; }
+    .inv-item.inv-dragging {
+      z-index: 1000; pointer-events: none; cursor: grabbing;
+      background: var(--bg2); border-radius: 10px;
+      box-shadow: 0 8px 24px rgba(0,0,0,.35);
+    }
+    .inv-item-placeholder {
+      border-bottom: 1px dashed var(--border);
+    }
     .inv-add-input {
       flex: 1; font-size: 16px; padding: 6px 10px;
       background: var(--bg2); border: 1px solid var(--border); border-radius: 8px;
@@ -2100,19 +2104,14 @@ function renderInventory(animate, slideDir) {
     hdr.className = 'inv-cat';
     hdr.textContent = cat;
     section.appendChild(hdr);
-    groups[cat].forEach((item, ii) => {
+    groups[cat].forEach((item) => {
       const row = document.createElement('div');
       row.className = 'inv-item';
+      row.dataset.id = item.id;
       const q = Math.min(2, Math.max(0, item.qty));
-      const isFirst = ii === 0, isLast = ii === groups[cat].length - 1;
       row.innerHTML = `
-        <div class="inv-move">
-          <button class="inv-move-btn" ${isFirst ? 'disabled' : ''} onclick="moveInvItem('${item.id}',-1)" title="Monter">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="18 15 12 9 6 15"/></svg>
-          </button>
-          <button class="inv-move-btn" ${isLast ? 'disabled' : ''} onclick="moveInvItem('${item.id}',1)" title="Descendre">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
-          </button>
+        <div class="inv-grip" title="Glisser pour réordonner">
+          <svg viewBox="0 0 24 24" fill="currentColor"><circle cx="9" cy="6" r="1.5"/><circle cx="15" cy="6" r="1.5"/><circle cx="9" cy="12" r="1.5"/><circle cx="15" cy="12" r="1.5"/><circle cx="9" cy="18" r="1.5"/><circle cx="15" cy="18" r="1.5"/></svg>
         </div>
         <div class="inv-name">${esc(item.name)}</div>
         <div class="inv-toggle">
@@ -2123,6 +2122,7 @@ function renderInventory(animate, slideDir) {
         </div>
         <button class="inv-del" onclick="deleteInvItem('${item.id}')" title="Supprimer">✕</button>`;
       section.appendChild(row);
+      attachInvDragHandlers(row);
     });
     body.appendChild(section);
   });
@@ -2240,19 +2240,93 @@ async function setInvQty(id, level, btn) {
   } catch {}
 }
 
-function moveInvItem(id, dir) {
-  const idx = inventory.findIndex(i => i.id === id);
-  if (idx === -1) return;
-  const cat = inventory[idx].cat || 'Épicerie';
-  let swapIdx = -1;
-  if (dir < 0) {
-    for (let i = idx - 1; i >= 0; i--) { if ((inventory[i].cat || 'Épicerie') === cat) { swapIdx = i; break; } }
-  } else {
-    for (let i = idx + 1; i < inventory.length; i++) { if ((inventory[i].cat || 'Épicerie') === cat) { swapIdx = i; break; } }
+function attachInvDragHandlers(row) {
+  const grip = row.querySelector('.inv-grip');
+  if (!grip) return;
+  grip.addEventListener('pointerdown', function(e) {
+    if (e.pointerType === 'mouse' && e.button !== 0) return;
+    startInvDrag(row, grip, e);
+  });
+}
+
+function startInvDrag(row, grip, e) {
+  e.preventDefault();
+  const section = row.closest('.inv-col-section');
+  if (!section) return;
+  const rect = row.getBoundingClientRect();
+  const placeholder = document.createElement('div');
+  placeholder.className = 'inv-item-placeholder';
+  placeholder.style.height = rect.height + 'px';
+  row.parentNode.insertBefore(placeholder, row);
+
+  row.classList.add('inv-dragging');
+  row.style.position = 'fixed';
+  row.style.left = rect.left + 'px';
+  row.style.top = rect.top + 'px';
+  row.style.width = rect.width + 'px';
+
+  const startY = e.clientY;
+  const originTop = rect.top;
+  const pointerId = e.pointerId;
+  grip.setPointerCapture(pointerId);
+
+  function onMove(ev) {
+    const dy = ev.clientY - startY;
+    row.style.top = (originTop + dy) + 'px';
+    const rowRect = row.getBoundingClientRect();
+    const rowCenter = rowRect.top + rowRect.height / 2;
+    const siblings = Array.from(section.querySelectorAll('.inv-item'));
+    for (const sib of siblings) {
+      const sr = sib.getBoundingClientRect();
+      const sibCenter = sr.top + sr.height / 2;
+      const placeholderBeforeSib = !!(placeholder.compareDocumentPosition(sib) & Node.DOCUMENT_POSITION_FOLLOWING);
+      if (rowCenter < sibCenter && !placeholderBeforeSib) {
+        section.insertBefore(placeholder, sib);
+        break;
+      } else if (rowCenter > sibCenter && placeholderBeforeSib) {
+        section.insertBefore(placeholder, sib.nextSibling);
+        break;
+      }
+    }
   }
-  if (swapIdx === -1) return;
-  [inventory[idx], inventory[swapIdx]] = [inventory[swapIdx], inventory[idx]];
-  renderInventory();
+
+  function onUp() {
+    grip.releasePointerCapture(pointerId);
+    grip.removeEventListener('pointermove', onMove);
+    grip.removeEventListener('pointerup', onUp);
+    grip.removeEventListener('pointercancel', onUp);
+    section.insertBefore(row, placeholder);
+    placeholder.remove();
+    row.classList.remove('inv-dragging');
+    row.style.position = '';
+    row.style.left = '';
+    row.style.top = '';
+    row.style.width = '';
+    commitInvDragOrder(section);
+  }
+
+  grip.addEventListener('pointermove', onMove);
+  grip.addEventListener('pointerup', onUp);
+  grip.addEventListener('pointercancel', onUp);
+}
+
+function commitInvDragOrder(section) {
+  const cat = section.querySelector('.inv-cat').textContent;
+  const ids = Array.from(section.querySelectorAll('.inv-item')).map(r => r.dataset.id);
+  const byId = new Map(inventory.map(i => [i.id, i]));
+  const reordered = ids.map(id => byId.get(id)).filter(Boolean);
+  const rest = [];
+  let insertAt = -1;
+  inventory.forEach(it => {
+    if ((it.cat || 'Épicerie') === cat) {
+      if (insertAt === -1) insertAt = rest.length;
+    } else {
+      rest.push(it);
+    }
+  });
+  if (insertAt === -1) insertAt = rest.length;
+  rest.splice(insertAt, 0, ...reordered);
+  inventory = rest;
   persistInvOrder();
 }
 
