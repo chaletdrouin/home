@@ -2121,7 +2121,7 @@ function renderInventory(animate, slideDir) {
       const q = Math.min(2, Math.max(0, item.qty));
       row.innerHTML = `
         <div class="inv-grip" title="Glisser pour réordonner">
-          <svg viewBox="0 0 24 24" fill="currentColor"><circle cx="9" cy="6" r="1.5"/><circle cx="15" cy="6" r="1.5"/><circle cx="9" cy="12" r="1.5"/><circle cx="15" cy="12" r="1.5"/><circle cx="9" cy="18" r="1.5"/><circle cx="15" cy="18" r="1.5"/></svg>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><line x1="4" y1="7" x2="20" y2="7"/><line x1="4" y1="12" x2="20" y2="12"/><line x1="4" y1="17" x2="20" y2="17"/></svg>
         </div>
         <div class="inv-name">${esc(item.name)}</div>
         <div class="inv-toggle">
