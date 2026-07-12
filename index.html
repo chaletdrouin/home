@@ -603,6 +603,8 @@
     .inv-item {
       display: flex; align-items: center; gap: 8px;
       padding: 8px 0; border-bottom: 1px solid var(--border);
+      touch-action: manipulation;
+      -webkit-user-select: none; user-select: none; -webkit-touch-callout: none;
     }
     .inv-item:last-child { border-bottom: none; }
     .inv-content { flex: 1; overflow-y: auto; overflow-x: hidden; padding: 0 14px 8px; overscroll-behavior: contain; }
@@ -2067,6 +2069,8 @@ function renderInventory(animate, slideDir) {
     window.removeEventListener('pointermove', invDragState.onMove);
     window.removeEventListener('pointerup', invDragState.onUp);
     window.removeEventListener('pointercancel', invDragState.onUp);
+    invDragState.row.remove();
+    invDragState.placeholder.remove();
     invDragState = null;
   }
   const body = document.getElementById('inv-body');
@@ -2264,7 +2268,7 @@ function endInvDrag() {
   window.removeEventListener('pointerup', onUp);
   window.removeEventListener('pointercancel', onUp);
   try { grip.releasePointerCapture(pointerId); } catch {}
-  const section = row.closest('.inv-col-section');
+  const section = placeholder.parentNode; // row a été déplacé sur document.body, closest() ne le retrouverait pas
   if (placeholder.parentNode) placeholder.parentNode.insertBefore(row, placeholder);
   placeholder.remove();
   row.classList.remove('inv-dragging');
@@ -2288,6 +2292,7 @@ function startInvDrag(row, grip, e) {
   row.parentNode.insertBefore(placeholder, row);
 
   row.classList.add('inv-dragging');
+  document.body.appendChild(row); // évite qu'un ancêtre avec transform (slide de vue) ne casse le position:fixed
   row.style.position = 'fixed';
   row.style.left = rect.left + 'px';
   row.style.top = rect.top + 'px';
