@@ -2063,6 +2063,12 @@ function switchInvCat(cat, dir) {
 }
 
 function renderInventory(animate, slideDir) {
+  if (invDragState) {
+    window.removeEventListener('pointermove', invDragState.onMove);
+    window.removeEventListener('pointerup', invDragState.onUp);
+    window.removeEventListener('pointercancel', invDragState.onUp);
+    invDragState = null;
+  }
   const body = document.getElementById('inv-body');
   const tabsWrap = document.getElementById('inv-tabs');
   body.innerHTML = '';
@@ -2240,6 +2246,8 @@ async function setInvQty(id, level, btn) {
   } catch {}
 }
 
+let invDragState = null;
+
 function attachInvDragHandlers(row) {
   const grip = row.querySelector('.inv-grip');
   if (!grip) return;
@@ -2249,7 +2257,27 @@ function attachInvDragHandlers(row) {
   });
 }
 
+function endInvDrag() {
+  if (!invDragState) return;
+  const { row, placeholder, pointerId, grip, onMove, onUp } = invDragState;
+  window.removeEventListener('pointermove', onMove);
+  window.removeEventListener('pointerup', onUp);
+  window.removeEventListener('pointercancel', onUp);
+  try { grip.releasePointerCapture(pointerId); } catch {}
+  const section = row.closest('.inv-col-section');
+  if (placeholder.parentNode) placeholder.parentNode.insertBefore(row, placeholder);
+  placeholder.remove();
+  row.classList.remove('inv-dragging');
+  row.style.position = '';
+  row.style.left = '';
+  row.style.top = '';
+  row.style.width = '';
+  invDragState = null;
+  if (section) commitInvDragOrder(section);
+}
+
 function startInvDrag(row, grip, e) {
+  endInvDrag(); // filet de sécurité : nettoie un éventuel glisser précédent resté bloqué
   e.preventDefault();
   const section = row.closest('.inv-col-section');
   if (!section) return;
@@ -2268,14 +2296,15 @@ function startInvDrag(row, grip, e) {
   const startY = e.clientY;
   const originTop = rect.top;
   const pointerId = e.pointerId;
-  grip.setPointerCapture(pointerId);
+  try { grip.setPointerCapture(pointerId); } catch {}
 
   function onMove(ev) {
+    if (ev.pointerId !== pointerId) return;
     const dy = ev.clientY - startY;
     row.style.top = (originTop + dy) + 'px';
     const rowRect = row.getBoundingClientRect();
     const rowCenter = rowRect.top + rowRect.height / 2;
-    const siblings = Array.from(section.querySelectorAll('.inv-item'));
+    const siblings = Array.from(section.querySelectorAll('.inv-item')).filter(r => r !== row);
     for (const sib of siblings) {
       const sr = sib.getBoundingClientRect();
       const sibCenter = sr.top + sr.height / 2;
@@ -2290,24 +2319,16 @@ function startInvDrag(row, grip, e) {
     }
   }
 
-  function onUp() {
-    grip.releasePointerCapture(pointerId);
-    grip.removeEventListener('pointermove', onMove);
-    grip.removeEventListener('pointerup', onUp);
-    grip.removeEventListener('pointercancel', onUp);
-    section.insertBefore(row, placeholder);
-    placeholder.remove();
-    row.classList.remove('inv-dragging');
-    row.style.position = '';
-    row.style.left = '';
-    row.style.top = '';
-    row.style.width = '';
-    commitInvDragOrder(section);
+  function onUp(ev) {
+    if (ev.pointerId !== pointerId) return;
+    endInvDrag();
   }
 
-  grip.addEventListener('pointermove', onMove);
-  grip.addEventListener('pointerup', onUp);
-  grip.addEventListener('pointercancel', onUp);
+  window.addEventListener('pointermove', onMove);
+  window.addEventListener('pointerup', onUp);
+  window.addEventListener('pointercancel', onUp);
+
+  invDragState = { row, placeholder, pointerId, grip, onMove, onUp };
 }
 
 function commitInvDragOrder(section) {
